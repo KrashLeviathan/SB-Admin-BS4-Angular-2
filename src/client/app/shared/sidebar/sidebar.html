@@ -6,6 +6,9 @@
         <a routerLink="/dashboard/home" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-dashboard"></i> Dashboard
         </a>
+        <a routerLink="./templatehome" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-dashboard"></i> Template Dashboard
+        </a>
         <a [routerLink]="['chart']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-bar-chart-o"></i> Charts
         </a>
@@ -41,9 +44,6 @@
         </div>
         <a [routerLink]="['blankpage']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-file-o"></i> &nbsp;BlankPage
-        </a>
-        <a class="list-group-item more-themes" href="http://www.strapui.com/" >
-            More Themes
         </a>
     </ul>
 </nav>

@@ -1,9 +1,9 @@
 {
-  "name": "SB-Admin-BS4-Angular-2",
-  "version": "0.0.0",
-  "description": "Modular seed project for Angular 2 apps with fast, statically typed build",
+  "name": "SmartSync-Dashboard",
+  "version": "0.1.0",
+  "description": "The dashboard UI for the SmartSync application, built with Angular 2",
   "repository": {
-    "url": "https://github.com/start-angular/SB-Admin-BS4-Angular-2"
+    "url": "https://github.com/KrashLeviathan/SmartSync-Dashboard"
   },
   "scripts": {
     "build.dev": "gulp build.dev --color --config-env dev",
@@ -33,7 +33,7 @@
     "webdriver-start": "webdriver-manager start",
     "webdriver-update": "webdriver-manager update"
   },
-  "author": "Nitin Kumar Mishra",
+  "author": "Nitin Kumar Mishra, Nathan Karasch",
   "license": "MIT",
   "devDependencies": {
     "@angular/compiler-cli": "0.6.1",
