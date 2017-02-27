@@ -17,7 +17,7 @@ import { DashboardComponent } from './dashboard.component';
 
 import {TopNavComponent} from '../shared/index';
 import {SidebarComponent} from '../shared/index';
-import {MainViewModule} from "./main-view/main-view.module";
+import {MainViewModule} from './main-view/main-view.module';
 
 
 @NgModule({

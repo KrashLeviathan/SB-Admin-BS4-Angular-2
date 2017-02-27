@@ -1,0 +1,70 @@
+* { box-sizing: border-box; }
+
+body { font-family: sans-serif; }
+
+/* ---- grid ---- */
+
+.grid {
+  background: #DDD;
+  /*width: 1200px;*/
+  /*max-width: 1200px;*/
+  min-height: 600px;
+}
+
+/* clear fix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- .grid-item ---- */
+
+.grid-item {
+  width: 100px;
+  height: 100px;
+  float: left;
+  background: #C09;
+  border: 2px solid hsla(0, 0%, 0%, 0.5);
+}
+
+.grid-item--width2 {
+  width: 200px;
+}
+.grid-item--height2 {
+  height: 200px;
+}
+
+.grid-item--large {
+  width: 200px;
+  height: 200px;
+}
+
+.grid-item.is-dragging,
+.grid-item.is-positioning-post-drag {
+  background: #C90;
+  z-index: 2;
+}
+
+.packery-drop-placeholder {
+  outline: 3px dashed hsla(0, 0%, 0%, 0.5);
+  outline-offset: -6px;
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: transform 0.2s;
+}
+
+.grid-item.is-editable {
+  border-style: dashed;
+  /*Not sure if I need these -- double check upon transfer to SB Admin*/
+  /*-webkit-touch-callout: none; !* iOS Safari *!*/
+  /*-webkit-user-select: none; !* Safari *!*/
+  /*-moz-user-select: none; !* Firefox *!*/
+  /*-ms-user-select: none; !* Internet Explorer/Edge *!*/
+  /*user-select: none; !* Non-prefixed version, currently*/
+  /*supported by Chrome and Opera *!*/
+}
+
+.grid-item.is-editable:hover {
+  border-color: hsla(0, 0%, 100%, 0.5);
+  cursor: move;
+}

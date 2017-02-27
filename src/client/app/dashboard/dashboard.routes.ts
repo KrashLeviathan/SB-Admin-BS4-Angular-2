@@ -8,7 +8,7 @@ import { FormRoutes } from './forms/index';
 import { GridRoutes } from './grid/index';
 import { BSComponentRoutes } from './bs-component/index';
 import { BSElementRoutes } from './bs-element/index';
-import { MainViewRoutes } from "./main-view/main-view.routes";
+import { MainViewRoutes } from './main-view/main-view.routes';
 
 import { DashboardComponent } from './index';
 
