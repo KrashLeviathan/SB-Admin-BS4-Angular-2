@@ -1,10 +1,10 @@
-import { Route } from '@angular/router';
+import {Route} from '@angular/router';
 
-import { MainViewComponent } from './index';
+import {MainViewComponent} from './index';
 
 export const MainViewRoutes: Route[] = [
-	{
-		path: 'home',
-		component: MainViewComponent
-	}
+  {
+    path: 'home',
+    component: MainViewComponent
+  }
 ];

@@ -24,7 +24,7 @@ var $grid = $('.grid').packery(packeryOptions);
 var initPositions = getSavedDraggedPositions();
 
 // init layout with saved positions
-$grid.packery( 'initShiftLayout', initPositions, dataItemAttribute);
+$grid.packery('initShiftLayout', initPositions, dataItemAttribute);
 
 // Tiles don't start in edit mode, so we make them static
 initDraggableItems();
@@ -33,11 +33,11 @@ makeItemsStatic();
 
 // ------------------- Event Listeners ----------------------
 
-$grid.on( 'dragItemPositioned', function() {
+$grid.on('dragItemPositioned', function () {
   saveDragPositions();
 });
 
-$('#edit-button').click(function(event) {
+$('#edit-button').click(function (event) {
   if (editModeActive) {
     saveDragPositions();
     makeItemsStatic();
@@ -59,9 +59,9 @@ function getSavedDraggedPositions() {
 }
 
 function initDraggableItems() {
-  $grid.find('.grid-item').each( function( i, itemElem ) {
-    var draggie = new Draggabilly( itemElem, draggabillyOptions );
-    $grid.packery( 'bindDraggabillyEvents', draggie );
+  $grid.find('.grid-item').each(function (i, itemElem) {
+    var draggie = new Draggabilly(itemElem, draggabillyOptions);
+    $grid.packery('bindDraggabillyEvents', draggie);
     draggies[i] = draggie;
   });
 }
@@ -79,6 +79,6 @@ function makeItemsStatic() {
 }
 
 function saveDragPositions() {
-  var positions = $grid.packery( 'getShiftPositions', 'data-item-id' );
-  localStorage.setItem( 'dragPositions', JSON.stringify( positions ) );
+  var positions = $grid.packery('getShiftPositions', 'data-item-id');
+  localStorage.setItem('dragPositions', JSON.stringify(positions));
 }
