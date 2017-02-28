@@ -7,7 +7,6 @@ import {ModalModule} from 'ng2-bootstrap/ng2-bootstrap';
 import {HomeModule} from './home/home.module';
 import {ChartModule} from './charts/chart.module';
 import {BlankPageModule} from './blank-page/blankPage.module';
-import {TableModule} from './tables/table.module';
 import {GridModule} from './grid/grid.module';
 import {BSComponentModule} from './bs-component/bsComponent.module';
 import {BSElementModule} from './bs-element/bsElement.module';
@@ -33,7 +32,6 @@ import {ManageUsersModule} from './manage-users/manage-users.module';
     ModalModule,
     HomeModule,
     ChartModule,
-    TableModule,
     GridModule,
     BSComponentModule,
     BSElementModule,

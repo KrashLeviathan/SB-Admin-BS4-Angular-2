@@ -3,7 +3,6 @@ import {Route} from '@angular/router';
 import {HomeRoutes} from './home/index';
 import {ChartRoutes} from './charts/index';
 import {BlankPageRoutes} from './blank-page/index';
-import {TableRoutes} from './tables/index';
 import {GridRoutes} from './grid/index';
 import {BSComponentRoutes} from './bs-component/index';
 import {BSElementRoutes} from './bs-element/index';
@@ -26,7 +25,6 @@ export const DashboardRoutes: Route[] = [
       ...HomeRoutes,
       ...ChartRoutes,
       ...BSComponentRoutes,
-      ...TableRoutes,
       ...BlankPageRoutes,
       ...GridRoutes,
       ...BSElementRoutes,
