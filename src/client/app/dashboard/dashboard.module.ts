@@ -20,8 +20,10 @@ import {SidebarComponent} from '../shared/index';
 import {MainViewModule} from './main-view/main-view.module';
 import {LogoutModule} from './logout/logout.module';
 import {UserSettingsModule} from './user-settings/userSettings.module';
+import {AccountSettingsModule} from './account-settings/accountSettings.module';
 import {ServicesModule} from './services/services.module';
 import {ManageViewsModule} from './manage-views/manage-views.module';
+import {ManageUsersModule} from './manage-users/manage-users.module';
 
 
 @NgModule({
@@ -41,8 +43,10 @@ import {ManageViewsModule} from './manage-views/manage-views.module';
     MainViewModule,
     LogoutModule,
     UserSettingsModule,
+    AccountSettingsModule,
     ServicesModule,
-    ManageViewsModule
+    ManageViewsModule,
+    ManageUsersModule
   ],
   declarations: [DashboardComponent, TopNavComponent, SidebarComponent],
   exports: [DashboardComponent, TopNavComponent, SidebarComponent]

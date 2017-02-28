@@ -32,10 +32,14 @@
       <li class="nested" [ngClass]="{'expand' : showMenu === 'accountpages' }">
         <ul class="submenu">
           <li>
-            <a href><span><i class="fa fa-fw fa-user-plus"></i> Edit Users</span></a>
+            <a [routerLink]="['manage-users']" [routerLinkActive]="['router-link-active']">
+              <span><i class="fa fa-fw fa-user-plus"></i> Manage Users</span>
+            </a>
           </li>
           <li>
-            <a href><span><i class="fa fa-fw fa-gear"></i> Account Settings</span></a>
+            <a [routerLink]="['account-settings']" [routerLinkActive]="['router-link-active']">
+              <span><i class="fa fa-fw fa-gear"></i> Account Settings</span>
+            </a>
           </li>
         </ul>
       </li>
