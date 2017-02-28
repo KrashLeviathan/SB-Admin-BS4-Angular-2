@@ -19,6 +19,7 @@ import {TopNavComponent} from '../shared/index';
 import {SidebarComponent} from '../shared/index';
 import {MainViewModule} from './main-view/main-view.module';
 import {LogoutModule} from './logout/logout.module';
+import {UserSettingsModule} from './user-settings/userSettings.module';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import {LogoutModule} from './logout/logout.module';
     BSElementModule,
     BlankPageModule,
     MainViewModule,
-    LogoutModule
+    LogoutModule,
+    UserSettingsModule
   ],
   declarations: [DashboardComponent, TopNavComponent, SidebarComponent],
   exports: [DashboardComponent, TopNavComponent, SidebarComponent]

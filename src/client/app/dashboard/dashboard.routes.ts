@@ -10,6 +10,7 @@ import {BSComponentRoutes} from './bs-component/index';
 import {BSElementRoutes} from './bs-element/index';
 import {MainViewRoutes} from './main-view/main-view.routes';
 import {LogoutRoutes} from './logout/logout.routes';
+import {UserSettingsRoutes} from './user-settings/userSettings.routes';
 
 import {DashboardComponent} from './index';
 
@@ -27,7 +28,8 @@ export const DashboardRoutes: Route[] = [
       ...FormRoutes,
       ...GridRoutes,
       ...BSElementRoutes,
-      ...LogoutRoutes
+      ...LogoutRoutes,
+      ...UserSettingsRoutes
     ]
   }
 ];
