@@ -13,10 +13,14 @@
       <li class="nested" [ngClass]="{'expand' : showMenu === 'viewpages' }">
         <ul class="submenu">
           <li>
-            <a href><span><i class="fa fa-fw fa-wrench"></i> Edit Current</span></a>
+            <a routerLink="/dashboard/home" [routerLinkActive]="['router-link-active']">
+              <span><i class="fa fa-fw fa-wrench"></i> Edit Current</span>
+            </a>
           </li>
           <li>
-            <a href><span><i class="fa fa-fw fa-server"></i> Select View</span></a>
+            <a [routerLink]="['manage-views']" [routerLinkActive]="['router-link-active']">
+              <span><i class="fa fa-fw fa-server"></i> Manage Views</span>
+            </a>
           </li>
         </ul>
       </li>

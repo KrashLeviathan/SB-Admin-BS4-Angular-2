@@ -12,6 +12,7 @@ import {MainViewRoutes} from './main-view/main-view.routes';
 import {LogoutRoutes} from './logout/logout.routes';
 import {UserSettingsRoutes} from './user-settings/userSettings.routes';
 import {ServicesRoutes} from './services/services.routes';
+import {ManageViewsRoutes} from './manage-views/manage-views.routes';
 
 import {DashboardComponent} from './index';
 
@@ -31,7 +32,8 @@ export const DashboardRoutes: Route[] = [
       ...BSElementRoutes,
       ...LogoutRoutes,
       ...UserSettingsRoutes,
-      ...ServicesRoutes
+      ...ServicesRoutes,
+      ...ManageViewsRoutes
     ]
   }
 ];

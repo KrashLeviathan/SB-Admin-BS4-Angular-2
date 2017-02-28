@@ -21,6 +21,7 @@ import {MainViewModule} from './main-view/main-view.module';
 import {LogoutModule} from './logout/logout.module';
 import {UserSettingsModule} from './user-settings/userSettings.module';
 import {ServicesModule} from './services/services.module';
+import {ManageViewsModule} from './manage-views/manage-views.module';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import {ServicesModule} from './services/services.module';
     MainViewModule,
     LogoutModule,
     UserSettingsModule,
-    ServicesModule
+    ServicesModule,
+    ManageViewsModule
   ],
   declarations: [DashboardComponent, TopNavComponent, SidebarComponent],
   exports: [DashboardComponent, TopNavComponent, SidebarComponent]
