@@ -1,4 +1,6 @@
-import {Component, Injectable} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Service} from './service';
+import {ServiceService} from './service.service';
 
 @Component({
   moduleId: module.id,
@@ -6,54 +8,28 @@ import {Component, Injectable} from '@angular/core';
   templateUrl: './services.component.html'
 })
 
-@Injectable()
-export class ServicesComponent {
-  services: Service[] = [
-    {
-      serviceId: 1,
-      serviceName: 'OttoLights',
-      description: 'The lights in Otto\'s bedroom',
-      serviceType: 'IoT',
-      status: 'up'
-    },
-    {
-      serviceId: 2,
-      serviceName: 'ThornstonLights',
-      description: 'The lights in Thornston\'s room',
-      serviceType: 'IoT',
-      status: 'up'
-    },
-    {
-      serviceId: 3,
-      serviceName: 'Wunderground',
-      description: 'The Weather Underground service',
-      serviceType: 'Internet',
-      status: 'down'
-    },
-    {
-      serviceId: 4,
-      serviceName: 'OttoGmail',
-      description: 'Otto\'s Gmail account',
-      serviceType: 'Account',
-      status: 'unknown'
-    }
-  ];
+export class ServicesComponent implements OnInit {
+  services: Service[];
 
-  configure(service: Service) {
-    console.log("TODO: configure(service)");
+  constructor(private serviceService: ServiceService) {
+  }
+
+  getServices(): void {
+    this.serviceService.getServices()
+      .then(services => this.services = services);
+  }
+
+  ngOnInit(): void {
+    this.getServices();
+  }
+
+  configure(service: Service): void {
+    console.log('TODO: configure(service)');
     console.log(service);
   }
 
-  delete(service: Service) {
-    console.log("TODO: delete(service)");
+  delete(service: Service): void {
+    console.log('TODO: delete(service)');
     console.log(service);
   }
-}
-
-class Service {
-  serviceId: number;
-  serviceName: string;
-  description: string;
-  serviceType: string;
-  status: string;
 }
