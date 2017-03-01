@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 
 import { ServicesComponent } from './services.component';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
-  imports: [],
+  imports: [CommonModule],
   declarations: [ServicesComponent],
   exports: [ServicesComponent]
 })

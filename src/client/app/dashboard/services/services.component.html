@@ -10,57 +10,58 @@
   <!-- /.row -->
   <div class="row">
     <div class="col-lg-12">
-      <div class="card card-block">
+      <div class="card card-block table-responsive">
         <table class="table table-hover"> <!-- Use table-sm class if necessary to shrink -->
           <thead>
           <tr>
             <th>#</th>
             <th>Service Id</th>
             <th>Description</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th class="text-center">Type</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Actions</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Light1</td>
-            <td>The lights in Otto's room</td>
-            <td>IoT</td>
-            <td><i class="fa fa-lg fa-arrow-up text-success"></i></td>
-            <td>
-              <a href><i class="fa fa-lg fa-gear"></i></a>&nbsp;&nbsp;
-              <a href><i class="fa fa-lg fa-trash"></i></a>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Light2</td>
-            <td>The lights in Thornton's room</td>
-            <td>IoT</td>
-            <td><i class="fa fa-lg fa-arrow-up text-success"></i></td>
-            <td>
-              <a href><i class="fa fa-lg fa-gear"></i></a>&nbsp;&nbsp;
-              <a href><i class="fa fa-lg fa-trash"></i></a>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>WeatherUnderground</td>
-            <td>Provides weather information for the area</td>
-            <td>Online</td>
-            <td><i class="fa fa-lg fa-arrow-down text-danger"></i></td>
-            <td>
-              <a href><i class="fa fa-lg fa-gear"></i></a>&nbsp;&nbsp;
-              <a href><i class="fa fa-lg fa-trash"></i></a>
+          <tr *ngFor="let service of services">
+            <td>{{service.serviceId}}</td>
+            <td>{{service.serviceName}}</td>
+            <td>{{service.description}}</td>
+            <td class="text-center">{{service.serviceType}}</td>
+            <td class="text-center"><i class="fa fa-lg"
+                                       [ngClass]="{
+                   'text-success': service.status === 'up',
+                   'fa-arrow-up': service.status === 'up',
+                   'text-danger': service.status === 'down',
+                   'fa-arrow-down': service.status === 'down',
+                   'fa-question': service.status === 'unknown'
+                   }"></i></td>
+            <td class="text-center">
+              <a href><i class="fa fa-lg fa-gear"
+                         (click)="configure(service)"></i></a>&nbsp;&nbsp;
+              <a href><i class="fa fa-lg fa-trash"
+                         (click)="delete(service)"></i></a>
             </td>
           </tr>
           </tbody>
         </table>
-
-        <button type="button" class="btn btn-secondary pull-right">Add Service</button>
       </div>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-md-6 col-lg-4">
+      <div class="card card-block">
+        <h4>Key</h4>
+        <i class="fa fa-lg fa-fw fa-arrow-up text-success"></i>&nbsp;&nbsp;Service is Up<br>
+        <i class="fa fa-lg fa-fw fa-arrow-down text-danger"></i>&nbsp;&nbsp;Service is Down<br>
+        <i class="fa fa-lg fa-fw fa-question"></i>&nbsp;&nbsp;Unknown Service State<br>
+        <i class="fa fa-lg fa-fw fa-gear text-primary"></i>&nbsp;&nbsp;Configure Service<br>
+        <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Delete Service<br>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-8">
+      <button type="button" class="btn btn-secondary pull-right" href="Javascript:void(0)">Add Service</button>
     </div>
   </div>
 </div>
