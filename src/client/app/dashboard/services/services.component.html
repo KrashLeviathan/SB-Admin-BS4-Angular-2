@@ -14,7 +14,6 @@
         <table class="table table-hover"> <!-- Use table-sm class if necessary to shrink -->
           <thead>
           <tr>
-            <th>#</th>
             <th>Name</th>
             <th>Description</th>
             <th class="text-center">Type</th>
@@ -24,7 +23,6 @@
           </thead>
           <tbody>
           <tr *ngFor="let service of services">
-            <td>{{service.serviceId}}</td>
             <td>{{service.serviceName}}</td>
             <td>{{service.description}}</td>
             <td class="text-center">{{service.serviceType}}</td>

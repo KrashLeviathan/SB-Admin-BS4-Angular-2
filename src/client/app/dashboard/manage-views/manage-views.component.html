@@ -14,7 +14,6 @@
         <table class="table table-hover"> <!-- Use table-sm class if necessary to shrink -->
           <thead>
           <tr>
-            <th>#</th>
             <th>Name</th>
             <th>Description</th>
             <th>Creator</th>
@@ -23,7 +22,6 @@
           </thead>
           <tbody>
           <tr *ngFor="let dbview of dbviews" [class.table-active]="dbview === activeView">
-            <td>{{dbview.viewId}}</td>
             <td>{{dbview.viewName}}</td>
             <td>{{dbview.description}}</td>
             <td>{{dbview.creator}}</td>
