@@ -1,11 +1,15 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
-import { ManageViewsComponent } from './manage-views.component';
+import {ManageViewsComponent} from './manage-views.component';
+import {DBViewService} from '../dbview.service';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
-  imports: [],
+  imports: [CommonModule],
   declarations: [ManageViewsComponent],
-  exports: [ManageViewsComponent]
+  exports: [ManageViewsComponent],
+  providers: [DBViewService]
 })
 
-export class ManageViewsModule { }
+export class ManageViewsModule {
+}

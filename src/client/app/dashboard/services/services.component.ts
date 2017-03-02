@@ -28,8 +28,7 @@ export class ServicesComponent implements OnInit {
     console.log(service);
   }
 
-  delete(service: Service): void {
-    console.log('TODO: delete(service)');
-    console.log(service);
+  delete(serviceId: number): void {
+    console.log('TODO: delete(' + serviceId + ')');
   }
 }

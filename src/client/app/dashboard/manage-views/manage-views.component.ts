@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {DBView} from '../dbview';
+import {DBViewService} from '../dbview.service';
 
 @Component({
   moduleId: module.id,
@@ -6,4 +8,34 @@ import { Component } from '@angular/core';
   templateUrl: './manage-views.component.html'
 })
 
-export class ManageViewsComponent { }
+export class ManageViewsComponent implements OnInit {
+  dbviews: DBView[];
+  activeView: DBView;
+
+  constructor(private dbViewService: DBViewService) {
+  }
+
+  ngOnInit(): void {
+    this.getViews();
+    this.getActiveView();
+  }
+
+  getViews(): void {
+    this.dbViewService.getViews()
+      .then(views => this.dbviews = views);
+  }
+
+  getActiveView(): void {
+    this.dbViewService.getActiveViewId()
+      .then(viewId => this.activeView = this.dbviews
+        .find(view => view.viewId == viewId));
+  }
+
+  applyView(view: DBView): void {
+    this.activeView = view;
+  }
+
+  delete(viewId: number): void {
+    console.log('TODO: delete(' + viewId + ')');
+  }
+}
