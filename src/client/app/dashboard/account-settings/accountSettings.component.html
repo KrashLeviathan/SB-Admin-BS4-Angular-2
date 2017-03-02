@@ -1,3 +1,59 @@
-<h1>Account Settings</h1>
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="row">
+    <div class="col-lg-12">
+      <h2 class="page-header">
+        Account Settings
+      </h2>
+    </div>
+  </div>
+  <!-- /.row -->
 
-TODO
+  <div class="row">
+    <div class="col-md-10 col-lg-8 col-xl-6">
+
+      <form role="form">
+        <fieldset class="form-group" disabled="">
+          <label>Account Name</label>
+          <input class="form-control" id="accountName" type="text" value="{{activeAccount.accountName}}">
+        </fieldset>
+
+        <fieldset class="form-group" disabled="">
+          <label>Street Address</label>
+          <input class="form-control" id="streetAddress" type="text" value="{{activeAccount.streetAddress}}">
+        </fieldset>
+
+        <fieldset class="form-group" disabled="">
+          <label>City</label>
+          <input class="form-control" id="city" type="text" value="{{activeAccount.city}}">
+        </fieldset>
+
+        <fieldset class="form-group" disabled="">
+          <label>State</label>
+          <input class="form-control" id="state" type="text" value="{{activeAccount.state}}">
+        </fieldset>
+
+        <fieldset class="form-group">
+          <label>State</label>
+          <select class="form-control">
+            <option *ngFor="let state of states"
+                    [attr.selected]="state.abbreviation == activeAccount.state">
+              {{state.fullName}} - {{state.abbreviation}}
+            </option>
+          </select>
+        </fieldset>
+
+        <fieldset class="form-group" disabled="">
+          <label>Zip</label>
+          <input class="form-control" id="zip" type="text" value="{{activeAccount.zip}}">
+        </fieldset>
+
+        <button type="submit" class="btn btn-secondary">Submit</button>
+        <button type="button" class="btn btn-secondary">Make Changes</button>
+      </form>
+
+    </div>
+  </div>
+  <!-- /.row -->
+
+</div>
