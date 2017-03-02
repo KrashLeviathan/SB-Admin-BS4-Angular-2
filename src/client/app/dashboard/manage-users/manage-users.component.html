@@ -1,3 +1,56 @@
-<h1>Manage Users</h1>
-
-TODO
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="row">
+    <div class="col-xl-12">
+      <h2 class="page-header">
+        Manage Users
+      </h2>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card card-block table-responsive">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Username</th>
+            <th>Display Name</th>
+            <th class="text-center">Admin</th>
+            <th class="text-center">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{user.userName}}</td>
+            <td>{{user.displayName}}</td>
+            <td class="text-center">
+              <i [ngClass]="{'fa fa-lg fa-key': user.isAdmin}"></i></td>
+            <td class="text-center">
+              <a href="Javascript:void(0)">
+                <i class="fa fa-lg fa-gear"
+                   (click)="configureUser(user)"></i></a>&nbsp;&nbsp;
+              <a href="Javascript:void(0)"><i class="fa fa-lg fa-trash"
+                                              (click)="delete(user.userId)"></i></a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-md-6 col-lg-4">
+      <div class="card card-block">
+        <h4>Key</h4>
+        <i class="fa fa-lg fa-fw fa-key"></i>&nbsp;&nbsp;Admin User<br>
+        <i class="fa fa-lg fa-fw fa-gear text-primary"></i>&nbsp;&nbsp;Configure User<br>
+        <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Delete User<br>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-8">
+      <button type="button" class="btn btn-secondary pull-right" href="Javascript:void(0)">Add User</button>
+    </div>
+  </div>
+</div>

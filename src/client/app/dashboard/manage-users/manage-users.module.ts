@@ -1,11 +1,15 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
-import { ManageUsersComponent } from './manage-users.component';
+import {ManageUsersComponent} from './manage-users.component';
+import {CommonModule} from '@angular/common';
+import {UserService} from '../user.service';
 
 @NgModule({
-  imports: [],
+  imports: [CommonModule],
   declarations: [ManageUsersComponent],
-  exports: [ManageUsersComponent]
+  exports: [ManageUsersComponent],
+  providers: [UserService]
 })
 
-export class ManageUsersModule { }
+export class ManageUsersModule {
+}
