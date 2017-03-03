@@ -10,33 +10,50 @@
   <!-- /.row -->
 
   <div class="row">
-    <div class="col-md-10 col-lg-8 col-xl-6">
+    <div class="col-md-9 col-lg-7 col-xl-6">
 
       <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate>
-        <fieldset class="form-group" [attr.disabled]="formDisabled ? true : null">
-          <label>Account Name</label>
-          <input name="accountName" [ngModel]="activeAccount.accountName" required #accountName="ngModel"
-                 class="form-control" type="text" value="{{accountName.value}}">
+        <fieldset class="form-group"
+                  [class.has-warning]="accountName.errors && (accountName.dirty || accountName.touched)"
+                  [attr.disabled]="formDisabled ? true : null">
+          <label class="form-control-label">Account Name</label>
+          <input name="accountName" [ngModel]="activeAccount.accountName"
+                 required minlength=4 [attr.maxlength]="MAX_NAME_LENGTH" #accountName="ngModel"
+                 class="form-control form-control-warning" type="text" value="{{accountName.value}}">
+        </fieldset>
 
-          <label>Street Address</label>
-          <input name="streetAddress" [ngModel]="activeAccount.streetAddress" required #streetAddress="ngModel"
+        <fieldset class="form-group"
+                  [attr.disabled]="formDisabled ? true : null">
+          <label class="form-control-label">Street Address</label>
+          <input name="streetAddress" [ngModel]="activeAccount.streetAddress"
+                 [attr.maxlength]="MAX_ADDRESS_LENGTH" #streetAddress="ngModel"
                  class="form-control" type="text" value="{{streetAddress.value}}">
+        </fieldset>
 
-          <label>City</label>
-          <input name="city" [ngModel]="activeAccount.city" required #city="ngModel"
+        <fieldset class="form-group"
+                  [attr.disabled]="formDisabled ? true : null">
+          <label class="form-control-label">City</label>
+          <input name="city" [ngModel]="activeAccount.city"
+                 [attr.maxlength]="MAX_CITY_LENGTH" #city="ngModel"
                  class="form-control" type="text" value="{{city.value}}">
+        </fieldset>
 
-          <label>State</label>
+        <fieldset class="form-group" [attr.disabled]="formDisabled ? true : null">
+          <label class="form-control-label">State</label>
           <select name="state" [ngModel]="activeAccount.state" required id="stateOption" class="form-control">
             <option value="" disabled>Choose a state</option>
             <option *ngFor="let state of states" [ngValue]="state.abbreviation">
               {{state.fullName}} - {{state.abbreviation}}
             </option>
           </select>
+        </fieldset>
 
-          <label>Zip</label>
+        <fieldset class="form-group"
+                  [class.has-warning]="zip.value && (zip.value < 10000 || zip.value > 99999)"
+                  [attr.disabled]="formDisabled ? true : null">
+          <label class="form-control-label">Zip</label>
           <input name="zip" [ngModel]="activeAccount.zip" required #zip="ngModel"
-                 class="form-control" type="number" value="{{zip.value}}">
+                 class="form-control form-control-warning" type="number" value="{{zip.value}}">
         </fieldset>
 
         <button type="button" class="btn btn-secondary" *ngIf="!formDisabled"
@@ -52,6 +69,16 @@
         &nbsp;&nbsp;&nbsp;<i class="fa fa-lg fa-cog fa-spin" *ngIf="savingState"></i>
       </form>
 
+    </div>
+    <div [hidden]="!accountName.errors?.minlength" class="col-md-9 col-lg-5 col-xl-6">
+      <div class="alert alert-warning" role="alert">
+        Account name must be greater than 4 characters.
+      </div>
+    </div>
+    <div [hidden]="!accountName.errors?.required" class="col-md-9 col-lg-5 col-xl-6">
+      <div class="alert alert-warning" role="alert">
+        Account name is required.
+      </div>
     </div>
   </div>
   <!-- /.row -->

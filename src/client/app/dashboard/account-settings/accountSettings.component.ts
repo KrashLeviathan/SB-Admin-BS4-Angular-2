@@ -11,6 +11,10 @@ import {STATES, State} from '../../states';
 })
 
 export class AccountSettingsComponent implements OnInit {
+  MAX_NAME_LENGTH: number = Account.MAX_NAME_LENGTH;
+  MAX_ADDRESS_LENGTH: number = Account.MAX_ADDRESS_LENGTH;
+  MAX_CITY_LENGTH: number = Account.MAX_CITY_LENGTH;
+
   activeAccount: Account = {
     accountId: 0,
     accountName: '',
