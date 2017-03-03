@@ -12,44 +12,44 @@
   <div class="row">
     <div class="col-md-10 col-lg-8 col-xl-6">
 
-      <form role="form">
-        <fieldset class="form-group" disabled="">
+      <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate>
+        <fieldset class="form-group" [attr.disabled]="formDisabled ? true : null">
           <label>Account Name</label>
-          <input class="form-control" id="accountName" type="text" value="{{activeAccount.accountName}}">
-        </fieldset>
+          <input name="accountName" [ngModel]="activeAccount.accountName" required #accountName="ngModel"
+                 class="form-control" type="text" value="{{accountName.value}}">
 
-        <fieldset class="form-group" disabled="">
           <label>Street Address</label>
-          <input class="form-control" id="streetAddress" type="text" value="{{activeAccount.streetAddress}}">
-        </fieldset>
+          <input name="streetAddress" [ngModel]="activeAccount.streetAddress" required #streetAddress="ngModel"
+                 class="form-control" type="text" value="{{streetAddress.value}}">
 
-        <fieldset class="form-group" disabled="">
           <label>City</label>
-          <input class="form-control" id="city" type="text" value="{{activeAccount.city}}">
-        </fieldset>
+          <input name="city" [ngModel]="activeAccount.city" required #city="ngModel"
+                 class="form-control" type="text" value="{{city.value}}">
 
-        <fieldset class="form-group" disabled="">
           <label>State</label>
-          <input class="form-control" id="state" type="text" value="{{activeAccount.state}}">
-        </fieldset>
-
-        <fieldset class="form-group">
-          <label>State</label>
-          <select class="form-control">
-            <option *ngFor="let state of states"
-                    [attr.selected]="state.abbreviation == activeAccount.state">
+          <select name="state" [ngModel]="activeAccount.state" required id="stateOption" class="form-control">
+            <option value="" disabled>Choose a state</option>
+            <option *ngFor="let state of states" [ngValue]="state.abbreviation">
               {{state.fullName}} - {{state.abbreviation}}
             </option>
           </select>
-        </fieldset>
 
-        <fieldset class="form-group" disabled="">
           <label>Zip</label>
-          <input class="form-control" id="zip" type="text" value="{{activeAccount.zip}}">
+          <input name="zip" [ngModel]="activeAccount.zip" required #zip="ngModel"
+                 class="form-control" type="number" value="{{zip.value}}">
         </fieldset>
 
-        <button type="submit" class="btn btn-secondary">Submit</button>
-        <button type="button" class="btn btn-secondary">Make Changes</button>
+        <button type="button" class="btn btn-secondary" *ngIf="!formDisabled"
+                (click)="cancelChanges(f)">Cancel
+        </button>
+        <button type="submit" class="btn btn-secondary" *ngIf="!formDisabled"
+                (click)="onSubmit(f)">Submit
+        </button>
+        <button type="button" class="btn btn-secondary" *ngIf="formDisabled"
+                (click)="formDisabled = !formDisabled"
+                [attr.disabled]="savingState ? true : null">Make Changes
+        </button>
+        &nbsp;&nbsp;&nbsp;<i class="fa fa-lg fa-cog fa-spin" *ngIf="savingState"></i>
       </form>
 
     </div>
