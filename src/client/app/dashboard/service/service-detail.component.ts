@@ -4,7 +4,6 @@ import {ServiceService} from '../service.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Location} from '@angular/common';
 
-
 import 'rxjs/add/operator/switchMap';
 
 @Component({
@@ -30,7 +29,13 @@ export class ServiceDetailComponent implements OnInit {
       .subscribe(service => this.service = service);
   }
 
-  done(): void {
+  cancel(): void {
+    this.location.back();
+  }
+
+  save(): void {
+    // TODO: Save service configuration
+    console.log('Service configuration saved!');
     this.location.back();
   }
 }
