@@ -15,6 +15,7 @@ import {ManageViewsRoutes} from './manage-views/manage-views.routes';
 import {ManageUsersRoutes} from './manage-users/manage-users.routes';
 
 import {DashboardComponent} from './index';
+import {ServiceDetailRoutes} from './service/service-detail.routes';
 
 export const DashboardRoutes: Route[] = [
   {
@@ -31,6 +32,7 @@ export const DashboardRoutes: Route[] = [
       ...LogoutRoutes,
       ...UserSettingsRoutes,
       ...AccountSettingsRoutes,
+      ...ServiceDetailRoutes,
       ...ServicesRoutes,
       ...ManageViewsRoutes,
       ...ManageUsersRoutes

@@ -22,6 +22,7 @@ import {AccountSettingsModule} from './account-settings/accountSettings.module';
 import {ServicesModule} from './services/services.module';
 import {ManageViewsModule} from './manage-views/manage-views.module';
 import {ManageUsersModule} from './manage-users/manage-users.module';
+import {ServiceDetailModule} from './service/service-detail.module';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import {ManageUsersModule} from './manage-users/manage-users.module';
     LogoutModule,
     UserSettingsModule,
     AccountSettingsModule,
+    ServiceDetailModule,
     ServicesModule,
     ManageViewsModule,
     ManageUsersModule
