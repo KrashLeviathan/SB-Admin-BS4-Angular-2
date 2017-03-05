@@ -23,11 +23,6 @@ export class ServicesComponent implements OnInit {
     this.getServices();
   }
 
-  configure(service: Service): void {
-    console.log('TODO: configure(service)');
-    console.log(service);
-  }
-
   delete(serviceId: number): void {
     console.log('TODO: delete(' + serviceId + ')');
   }

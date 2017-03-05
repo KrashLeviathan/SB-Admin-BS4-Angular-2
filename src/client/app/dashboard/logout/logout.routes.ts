@@ -4,7 +4,7 @@ import { LogoutComponent } from './index';
 
 export const LogoutRoutes: Route[] = [
   {
-    path: 'logout-cmp',
+    path: 'logout',
     component: LogoutComponent
   }
 ];

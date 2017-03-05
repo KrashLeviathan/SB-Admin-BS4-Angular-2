@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-xl-12">
       <h2 class="page-header">
-        {{service.serviceName}}
+        <span [hidden]="!isEditing">Configure </span>{{service.serviceName}}
       </h2>
     </div>
   </div>
