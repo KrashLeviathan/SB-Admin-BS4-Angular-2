@@ -11,7 +11,7 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="card card-block table-responsive">
-        <table class="table table-hover table-clickable">
+        <table class="table table-hover">
           <thead>
           <tr>
             <th>Name</th>
@@ -22,9 +22,10 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let service of services"
-              [routerLink]="['../','service',service.serviceId]" [routerLinkActive]="['router-link-active']">
-            <td>{{service.serviceName}}</td>
+          <tr *ngFor="let service of services">
+            <td class="clickable text-primary" [routerLink]="['../','service',service.serviceId]"
+                [routerLinkActive]="['router-link-active']">{{service.serviceName}}
+            </td>
             <td>{{service.description}}</td>
             <td class="text-center">{{service.serviceType}}</td>
             <td class="text-center"><i class="fa fa-lg"
@@ -36,6 +37,8 @@
                    'fa-question': service.status === 'unknown'
                    }"></i></td>
             <td class="text-center">
+              <a [routerLink]="['../','service',service.serviceId]" [routerLinkActive]="['router-link-active']">
+                <i class="fa fa-lg fa-eye"></i></a>&nbsp;&nbsp;
               <a [routerLink]="['../','service',service.serviceId,'edit']" [routerLinkActive]="['router-link-active']">
                 <i class="fa fa-lg fa-gear"></i></a>&nbsp;&nbsp;
               <a href="Javascript:void(0)">
@@ -55,6 +58,7 @@
         <i class="fa fa-lg fa-fw fa-arrow-up text-success"></i>&nbsp;&nbsp;Service is Up<br>
         <i class="fa fa-lg fa-fw fa-arrow-down text-danger"></i>&nbsp;&nbsp;Service is Down<br>
         <i class="fa fa-lg fa-fw fa-question"></i>&nbsp;&nbsp;Unknown Service State<br>
+        <i class="fa fa-lg fa-fw fa-eye text-primary"></i>&nbsp;&nbsp;View Service<br>
         <i class="fa fa-lg fa-fw fa-gear text-primary"></i>&nbsp;&nbsp;Configure Service<br>
         <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Delete Service<br>
       </div>
