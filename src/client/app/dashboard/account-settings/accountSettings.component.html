@@ -9,10 +9,10 @@
   </div>
   <!-- /.row -->
 
-  <div class="row">
+  <div *ngIf="activeAccount" class="row">
     <div class="col-md-9 col-lg-7 col-xl-6">
 
-      <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate>
+      <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate style="margin-bottom: 1em;">
         <fieldset class="form-group"
                   [class.has-warning]="accountName.errors && (accountName.dirty || accountName.touched)"
                   [attr.disabled]="formDisabled ? true : null">
@@ -68,22 +68,18 @@
                 [attr.disabled]="savingState ? true : null">Make Changes
         </button>
         &nbsp;&nbsp;&nbsp;<i class="fa fa-lg fa-cog fa-spin" *ngIf="savingState"></i>
-        &nbsp;&nbsp;&nbsp;<span class="text-danger" [hidden]="!errorOnSave">Invalid form data!</span>
+        &nbsp;&nbsp;&nbsp;<span class="text-danger" [hidden]="!errorOnSave">Invalid form!</span>
       </form>
 
     </div>
-    <div [hidden]="!accountName.errors?.minlength" class="col-md-9 col-lg-5 col-xl-6">
-      <div class="alert alert-warning" role="alert">
+    <div class="col-md-9 col-lg-5 col-xl-6">
+      <div [hidden]="!accountName.errors?.minlength" class="alert alert-warning" role="alert">
         Account name must be greater than 4 characters.
       </div>
-    </div>
-    <div [hidden]="!accountName.errors?.required" class="col-md-9 col-lg-5 col-xl-6">
-      <div class="alert alert-warning" role="alert">
+      <div [hidden]="!accountName.errors?.required" class="alert alert-warning" role="alert">
         Account name is required.
       </div>
-    </div>
-    <div [hidden]="!zip.errors" class="col-md-9 col-lg-5 col-xl-6">
-      <div class="alert alert-warning" role="alert">
+      <div [hidden]="!zip.errors" class="alert alert-warning" role="alert">
         Zip codes must be five digits in length.
       </div>
     </div>

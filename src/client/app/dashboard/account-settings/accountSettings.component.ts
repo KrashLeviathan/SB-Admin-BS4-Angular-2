@@ -15,21 +15,12 @@ export class AccountSettingsComponent implements OnInit {
   MAX_ADDRESS_LENGTH: number = Account.MAX_ADDRESS_LENGTH;
   MAX_CITY_LENGTH: number = Account.MAX_CITY_LENGTH;
 
-  activeAccount: Account = {
-    accountId: 0,
-    accountName: '',
-    streetAddress: '',
-    city: '',
-    state: '',
-    zip: 0
-  };
+  activeAccount: Account;
 
   states: State[];
   formDisabled: boolean = true;
   savingState: boolean = false;
   errorOnSave: boolean = false;
-  zipField: HTMLFieldSetElement;
-  zipFieldInput: HTMLInputElement;
 
   constructor(private accountService: AccountService) {
     this.states = STATES;
@@ -38,8 +29,6 @@ export class AccountSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.getActiveAccount()
       .then(account => this.activeAccount = account);
-    this.zipField = <HTMLFieldSetElement>document.getElementById('zip-field');
-    this.zipFieldInput = <HTMLInputElement>this.zipField.getElementsByTagName('input')[0];
   }
 
   getActiveAccount(): Promise<Account> {
@@ -65,6 +54,7 @@ export class AccountSettingsComponent implements OnInit {
           this.activeAccount.zip = form.value.zip;
         } else {
           // TODO: Display error message if the form failed to save on the server
+          this.errorOnSave = true;
           this.formDisabled = false;
         }
       });
