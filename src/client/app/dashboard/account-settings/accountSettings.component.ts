@@ -27,6 +27,9 @@ export class AccountSettingsComponent implements OnInit {
   states: State[];
   formDisabled: boolean = true;
   savingState: boolean = false;
+  errorOnSave: boolean = false;
+  zipField: HTMLFieldSetElement;
+  zipFieldInput: HTMLInputElement;
 
   constructor(private accountService: AccountService) {
     this.states = STATES;
@@ -35,6 +38,8 @@ export class AccountSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.getActiveAccount()
       .then(account => this.activeAccount = account);
+    this.zipField = <HTMLFieldSetElement>document.getElementById('zip-field');
+    this.zipFieldInput = <HTMLInputElement>this.zipField.getElementsByTagName('input')[0];
   }
 
   getActiveAccount(): Promise<Account> {
@@ -43,10 +48,10 @@ export class AccountSettingsComponent implements OnInit {
 
   onSubmit(form: NgForm): void {
     if (!form.valid) {
-      // TODO: Form is invalid! Do something here.
-      console.log('Invalid form data!');
+      this.errorOnSave = true;
       return;
     }
+    this.errorOnSave = false;
     this.formDisabled = true;
     this.savingState = true;
     this.accountService.saveAccount(form.value)
@@ -66,6 +71,7 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   cancelChanges(form: NgForm): void {
+    this.errorOnSave = false;
     this.formDisabled = true;
     form.resetForm({
       accountName: this.activeAccount.accountName,
