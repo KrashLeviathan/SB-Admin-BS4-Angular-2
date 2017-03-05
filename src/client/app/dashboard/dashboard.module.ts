@@ -5,11 +5,6 @@ import {DropdownModule} from 'ng2-bootstrap/ng2-bootstrap';
 import {ModalModule} from 'ng2-bootstrap/ng2-bootstrap';
 
 import {HomeModule} from './home/home.module';
-import {ChartModule} from './charts/chart.module';
-import {BlankPageModule} from './blank-page/blankPage.module';
-import {GridModule} from './grid/grid.module';
-import {BSComponentModule} from './bs-component/bsComponent.module';
-import {BSElementModule} from './bs-element/bsElement.module';
 
 import {DashboardComponent} from './dashboard.component';
 
@@ -32,11 +27,6 @@ import {ServiceDetailModule} from './service/service-detail.module';
     DropdownModule,
     ModalModule,
     HomeModule,
-    ChartModule,
-    GridModule,
-    BSComponentModule,
-    BSElementModule,
-    BlankPageModule,
     MainViewModule,
     LogoutModule,
     UserSettingsModule,

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Service} from '../service';
-import {ServiceService} from '../service.service';
+import {Service} from '../shared/service/service';
+import {ServiceService} from '../shared/service/service.service';
 
 @Component({
   moduleId: module.id,

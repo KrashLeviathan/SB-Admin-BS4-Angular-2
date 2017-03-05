@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Service} from '../service';
-import {ServiceService} from '../service.service';
+import {Service} from '../shared/service/service';
+import {ServiceService} from '../shared/service/service.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {Location} from '@angular/common';
 

@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 
 import {ServiceDetailComponent} from './service-detail.component';
 import {CommonModule} from '@angular/common';
-import {ServiceService} from '../service.service';
+import {ServiceService} from '../shared/service/service.service';
 import {ServiceConfigComponent} from './service-config/service-config.component';
 import {ServiceTileComponent} from '../service-tile/service-tile.component';
 

@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 
 import {ManageViewsComponent} from './manage-views.component';
-import {DBViewService} from '../dbview.service';
+import {DBViewService} from '../shared/dbview/dbview.service';
 import {CommonModule} from '@angular/common';
 
 @NgModule({
