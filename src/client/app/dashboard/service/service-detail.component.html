@@ -12,11 +12,12 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-block">
-          <p>{{service.description}}</p>
-          <span class="font-weight-bold">Status:&nbsp;&nbsp;</span>
-          <i class="fa fa-lg fa-arrow-up text-success" [hidden]="service.status !== 'up'"></i>
-          <i class="fa fa-lg fa-arrow-down text-danger" [hidden]="service.status !=='down'"></i>
-          <i class="fa fa-lg fa-question" [hidden]="service.status !== 'unknown'"></i>
+          <p><span class="font-weight-bold">Description:&nbsp;&nbsp;</span>{{service.description}}</p>
+          <p><span class="font-weight-bold">Type:&nbsp;&nbsp;</span>{{service.serviceType.name}}</p>
+          <p><span class="font-weight-bold">Status:&nbsp;&nbsp;</span>
+            <i class="fa fa-lg fa-arrow-up text-success" [hidden]="service.status !== 'up'"></i>
+            <i class="fa fa-lg fa-arrow-down text-danger" [hidden]="service.status !=='down'"></i>
+            <i class="fa fa-lg fa-question" [hidden]="service.status !== 'unknown'"></i></p>
         </div>
       </div>
     </div>
@@ -30,7 +31,7 @@
           <service-config [hidden]="!isEditing" [service]="service"></service-config>
         </div>
       </div>
-      <button style="margin-left: 1em;" type="button" class="btn btn-secondary pull-right"
+      <button type="button" class="btn btn-secondary pull-right buffer-left"
               (click)="cancel()">{{isEditing ? 'Cancel' : 'Done'}}
       </button>
       <button type="button" class="btn btn-secondary pull-right" [hidden]="!isEditing"

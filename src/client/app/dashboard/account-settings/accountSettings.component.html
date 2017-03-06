@@ -12,7 +12,7 @@
   <div *ngIf="activeAccount" class="row">
     <div class="col-md-9 col-lg-7 col-xl-6">
 
-      <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate style="margin-bottom: 1em;">
+      <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate class="buffer-bottom">
         <fieldset class="form-group"
                   [class.has-warning]="accountName.errors && (accountName.dirty || accountName.touched)"
                   [attr.disabled]="formDisabled ? true : null">
