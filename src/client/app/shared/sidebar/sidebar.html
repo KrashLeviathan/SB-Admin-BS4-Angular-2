@@ -13,7 +13,7 @@
       <li class="nested" [ngClass]="{'expand' : showMenu === 'viewpages' }">
         <ul class="submenu">
           <li>
-            <a routerLink="/dashboard/home" [routerLinkActive]="['router-link-active']">
+            <a [routerLink]="['home','edit']" [routerLinkActive]="['router-link-active']">
               <span><i class="fa fa-fw fa-wrench"></i> Edit Current</span>
             </a>
           </li>

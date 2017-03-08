@@ -8,7 +8,7 @@ import {RouterModule} from '@angular/router';
 @NgModule({
   imports: [CommonModule, RouterModule],
   declarations: [ServicesComponent],
-  exports: [ServicesComponent, RouterModule],
+  exports: [RouterModule],
   providers: [ServiceService]
 })
 

@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import $ = require('jquery');
+import {ActivatedRoute, Router} from '@angular/router';
+import {Service} from '../shared/service/service';
+import {ServiceService} from "../shared/service/service.service";
 
 // Packery  -  http://packery.metafizzy.co/
 declare let Packery: any;
@@ -35,11 +38,25 @@ export class MainViewComponent implements OnInit {
   editModeActive: boolean = false;
   $grid: any;
 
+  // TODO: Fetch real tiles
+  services: Service[];
+
   static getSavedDraggedPositions(): string {
+    console.log('getSavedDraggedPositions');
+    // TODO: Get positions from service
     return localStorage.getItem('dragPositions');
   }
 
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private serviceService: ServiceService) {
+  }
+
   ngOnInit() {
+    console.log('ngOnInit');
+    this.editModeActive = (this.route.data as any).value.editModeActive === true;
+    this.serviceService.getServices()
+      .then(services => this.services = services);
     this.$grid = $('.grid');
     // init Packery
     this.packery = new Packery('.grid', this.packeryOptions);
@@ -47,61 +64,56 @@ export class MainViewComponent implements OnInit {
 
     // init layout with saved positions
     this.packery.initShiftLayout(initPositions, this.dataItemAttribute);
-
-    // Tiles don't start in edit mode, so we make them static
     this.initDraggableItems();
-    this.makeItemsStatic();
+    if (!this.editModeActive) {
+      this.makeItemsStatic();
+    }
 
     // Initialize event listeners (button clicks, etc.)
     this.initListeners();
   }
 
   initListeners() {
+    console.log('initListeners');
     let _this = this;
     this.$grid.on('dragItemPositioned', function () {
       _this.saveDragPositions();
     });
-
-    $('#edit-button').click(function (event) {
-      _this.onEditButtonClicked(_this, event);
-    });
   }
 
-  onEditButtonClicked(_this: any, event: any) {
-    if (_this.editModeActive) {
-      _this.makeItemsStatic();
-      event.target.textContent = 'Edit';
-      _this.editModeActive = false;
-    } else {
-      _this.makeItemsDraggable();
-      event.target.textContent = 'Done';
-      _this.editModeActive = true;
-    }
-    _this.$grid.find('.grid-item').toggleClass('is-editable');
+  onSaveChangesClicked(): void {
+    console.log('onSaveChangesClicked');
+    // TODO: Save changes to dbviewService
+    this.router.navigate(['dashboard/', 'home']);
   }
 
   initDraggableItems() {
+    console.log('initDraggableItems');
     let _this = this;
     this.$grid.find('.grid-item').each(function (i: number, itemElem: any) {
       let draggie = new Draggabilly(itemElem, _this.draggabillyOptions);
       _this.packery.bindDraggabillyEvents(draggie);
       _this.draggies[i] = draggie;
     });
+    console.log(_this.draggies);
   }
 
   makeItemsDraggable() {
+    console.log('makeItemsDraggable');
     for (let i = 0; i < this.draggies.length; i++) {
       this.draggies[i].enable();
     }
   }
 
   makeItemsStatic() {
+    console.log('makeItemsStatic');
     for (let i = 0; i < this.draggies.length; i++) {
       this.draggies[i].disable();
     }
   }
 
   saveDragPositions() {
+    console.log('saveDragPositions');
     let positions = this.packery.getShiftPositions('data-item-id');
     localStorage.setItem('dragPositions', JSON.stringify(positions));
   }

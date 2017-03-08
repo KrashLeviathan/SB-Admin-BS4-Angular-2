@@ -1,10 +1,26 @@
-<h1>Main View</h1>
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="row">
+    <div class="col-xl-12">
+      <h2 class="page-header">
+        Dashboard Home
+      </h2>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="grid">
+        <service-cmp *ngFor="let service of services" [service]="service"
+                      [attr.data-item-id]="service.id"
+                      class="grid-item" [ngClass]="{
+                   'is-editable': editModeActive,
+                   'grid-item--width2': service.wide,
+                   'grid-item--height2': service.tall
+                   }"></service-cmp>
+      </div>
 
-<div class="grid">
-  <div data-item-id="1" class="grid-item grid-item--large">Large</div>
-  <div data-item-id="2" class="grid-item">Small</div>
-  <div data-item-id="3" class="grid-item grid-item--width2">Wide</div>
-  <div data-item-id="4" class="grid-item grid-item--height2">Tall</div>
+      <button [hidden]="!editModeActive" (click)="onSaveChangesClicked()">Save Changes</button>
+    </div>
+  </div>
 </div>
-
-<button id="edit-button">Edit</button>

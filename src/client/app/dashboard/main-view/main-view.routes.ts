@@ -6,5 +6,10 @@ export const MainViewRoutes: Route[] = [
   {
     path: 'home',
     component: MainViewComponent
+  },
+  {
+    path: 'home/edit',
+    component: MainViewComponent,
+    data: {editModeActive: true}
   }
 ];

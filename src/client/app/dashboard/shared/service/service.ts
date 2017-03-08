@@ -4,6 +4,8 @@ export class Service {
   description: string;
   serviceType: ServiceType;
   status: string;
+  wide: boolean = false;
+  tall: boolean = false;
 }
 
 export class ServiceType {
