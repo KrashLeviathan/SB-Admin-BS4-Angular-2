@@ -34,7 +34,7 @@ Packery.prototype.initShiftLayout = function (positions, attr) {
   this._resetLayout();
   // set item order and horizontal position from saved positions
   this.items = positions.map(function (itemPosition) {
-    var selector = '[' + attr + '="' + itemPosition.attr + '"]'
+    var selector = '[' + attr + '="' + itemPosition.attr + '"]';
     var itemElem = this.element.querySelector(selector);
     var item = this.getItem(itemElem);
     item.rect.x = itemPosition.x * this.packer.width;

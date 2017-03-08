@@ -4,14 +4,6 @@ import {Service} from '../shared/service/service';
 import {ServiceService} from '../shared/service/service.service';
 import {UserService} from '../shared/user/user.service';
 
-// <div *ngFor="let service of services"
-//   [attr.data-item-id]="service.id"
-// class="grid-item" [ngClass]="{
-// 'is-editable': editModeActive,
-//   'grid-item--width2': service.wide,
-//   'grid-item--height2': service.tall
-// }">FIX HTML</div>
-
 // Packery  -  http://packery.metafizzy.co/
 declare let Packery: any;
 const PACKERY_OPTIONS: any = {
@@ -39,6 +31,7 @@ export class MainViewComponent implements OnInit {
   packery: any;
 
   editModeActive: boolean = false;
+  finishedInitializing: boolean = false;
   grid: HTMLDivElement;
 
   services: Service[];
@@ -55,26 +48,29 @@ export class MainViewComponent implements OnInit {
       .then(services => {
         this.services = services;
         this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
-        this.initPackery();
+        // Add a small delay so the services can populate the DOM with *ngFor before
+        // initializing packery.
+        new Promise(resolve => setTimeout(() => resolve(this.initPackery()), 1));
       });
   }
 
-  initPackery(): void {
-    // init Packery
-    this.packery = new Packery(this.grid, PACKERY_OPTIONS);
-    let pckry = this.packery;
-    let _this = this;
-    // TODO: Use userId
+  initPackery(): any {
+    // TODO: Use userId -- Actually, the getting of services and user prefs could probably
+    // be done together.
     this.userService.getUserPreferences(0)
       .then(initPositions => {
+        this.packery = new Packery(this.grid, PACKERY_OPTIONS);
         // init layout with saved positions
-        pckry.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
-        pckry.getItemElements().forEach(function (itemElem: any) {
-          let draggie = new Draggabilly(itemElem);
-          pckry.bindDraggabillyEvents(draggie);
-          if (!_this.editModeActive) {
+        this.packery.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
+        let thisObj = this;
+        this.packery.getItemElements().forEach(function (itemElem: any) {
+          let draggie = new Draggabilly(itemElem, DRAGGABILLY_OPTIONS);
+          thisObj.packery.bindDraggabillyEvents(draggie);
+          if (!thisObj.editModeActive) {
             draggie.disable();
           }
+          // The elements remain invisible until they're finished initializing.
+          thisObj.finishedInitializing = true;
         });
       });
   }
