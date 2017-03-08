@@ -10,14 +10,11 @@
   <!-- /.row -->
   <div class="row">
     <div class="col-lg-12">
-      <div class="grid">
-        <service-cmp *ngFor="let service of services" [service]="service"
-                      [attr.data-item-id]="service.id"
-                      class="grid-item" [ngClass]="{
-                   'is-editable': editModeActive,
-                   'grid-item--width2': service.wide,
-                   'grid-item--height2': service.tall
-                   }"></service-cmp>
+      <div id="dashboard-grid" class="grid">
+        <div class="grid-item" data-item-id="1">1</div>
+        <div class="grid-item" data-item-id="2">2</div>
+        <div class="grid-item" data-item-id="3">3</div>
+        <div class="grid-item" data-item-id="4">4</div>
       </div>
 
       <button [hidden]="!editModeActive" (click)="onSaveChangesClicked()">Save Changes</button>
