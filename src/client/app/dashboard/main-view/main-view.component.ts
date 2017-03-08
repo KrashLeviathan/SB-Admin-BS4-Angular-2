@@ -13,9 +13,6 @@ const PACKERY_OPTIONS: any = {
 };
 // Draggabilly  -  http://draggabilly.desandro.com/
 declare let Draggabilly: any;
-const DRAGGABILLY_OPTIONS: any = {
-  containment: '.grid'
-};
 
 // Also got help from https://github.com/metafizzy/packery/issues/337 for persistent positioning
 const DATA_ITEM_ATTRIBUTE: string = 'data-item-id';
@@ -64,7 +61,7 @@ export class MainViewComponent implements OnInit {
         this.packery.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
         let thisObj = this;
         this.packery.getItemElements().forEach(function (itemElem: any) {
-          let draggie = new Draggabilly(itemElem, DRAGGABILLY_OPTIONS);
+          let draggie = new Draggabilly(itemElem);
           thisObj.packery.bindDraggabillyEvents(draggie);
           if (!thisObj.editModeActive) {
             draggie.disable();

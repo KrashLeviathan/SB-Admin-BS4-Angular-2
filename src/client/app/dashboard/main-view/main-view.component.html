@@ -4,6 +4,9 @@
     <div class="col-xl-12">
       <h2 class="page-header">
         Dashboard Home
+        <button class="btn btn-primary pull-right" [hidden]="!editModeActive"
+                (click)="onSaveChangesClicked()">Save Changes
+        </button>
       </h2>
     </div>
   </div>
@@ -16,8 +19,6 @@
                      class="grid-item" [ngClass]="{'is-editable': editModeActive, 'invisible': !finishedInitializing,
                      'grid-item--width2': service.wide, 'grid-item--height2': service.tall}"></service-cmp>
       </div>
-
-      <button [hidden]="!editModeActive" (click)="onSaveChangesClicked()">Save Changes</button>
     </div>
   </div>
 </div>
