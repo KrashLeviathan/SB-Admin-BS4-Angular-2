@@ -4,8 +4,8 @@ import {Service} from './service';
 @Component({
   moduleId: module.id,
   selector: 'service-cmp',
-  templateUrl: './service.component.html',
-  styleUrls: ['./service.component.css']
+  templateUrl: 'service.component.html',
+  styleUrls: ['service.component.css']
 })
 
 export class ServiceComponent implements OnInit {

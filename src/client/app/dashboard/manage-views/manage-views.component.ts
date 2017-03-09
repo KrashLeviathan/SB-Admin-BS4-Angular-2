@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {DBView} from '../shared/dbview/dbview';
-import {DBViewService} from '../shared/dbview/dbview.service';
+import {DBView} from '../../shared/dbview/dbview';
+import {DBViewService} from '../../shared/dbview/dbview.service';
 
 @Component({
   moduleId: module.id,
