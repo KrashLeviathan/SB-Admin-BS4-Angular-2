@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {AccountService} from '../../shared/account/account.service';
-import {Account} from '../../shared/account/account';
+import {Household} from '../../shared/account/household';
 import {STATES, State} from '../../states';
 
 @Component({
@@ -11,11 +11,9 @@ import {STATES, State} from '../../states';
 })
 
 export class AccountSettingsComponent implements OnInit {
-  MAX_NAME_LENGTH: number = Account.MAX_NAME_LENGTH;
-  MAX_ADDRESS_LENGTH: number = Account.MAX_ADDRESS_LENGTH;
-  MAX_CITY_LENGTH: number = Account.MAX_CITY_LENGTH;
+  MAX_VARCHAR_LENGTH: number = 255;
 
-  activeAccount: Account;
+  activeHousehold: Household;
 
   states: State[];
   formDisabled: boolean = true;
@@ -28,10 +26,10 @@ export class AccountSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getActiveAccount()
-      .then(account => this.activeAccount = account);
+      .then(account => this.activeHousehold = account);
   }
 
-  getActiveAccount(): Promise<Account> {
+  getActiveAccount(): Promise<Household> {
     return this.accountService.getAccount(0);
   }
 
@@ -47,11 +45,11 @@ export class AccountSettingsComponent implements OnInit {
       .then(success => {
         this.savingState = false;
         if (success) {
-          this.activeAccount.accountName = form.value.accountName;
-          this.activeAccount.streetAddress = form.value.streetAddress;
-          this.activeAccount.city = form.value.city;
-          this.activeAccount.state = form.value.state;
-          this.activeAccount.zip = form.value.zip;
+          this.activeHousehold.accountName = form.value.accountName;
+          this.activeHousehold.streetAddress = form.value.streetAddress;
+          this.activeHousehold.city = form.value.city;
+          this.activeHousehold.state = form.value.state;
+          this.activeHousehold.zip = form.value.zip;
         } else {
           // TODO: Display error message if the form failed to save on the server
           this.errorOnSave = true;
@@ -64,11 +62,11 @@ export class AccountSettingsComponent implements OnInit {
     this.errorOnSave = false;
     this.formDisabled = true;
     form.resetForm({
-      accountName: this.activeAccount.accountName,
-      streetAddress: this.activeAccount.streetAddress,
-      city: this.activeAccount.city,
-      state: this.activeAccount.state,
-      zip: this.activeAccount.zip
+      accountName: this.activeHousehold.accountName,
+      streetAddress: this.activeHousehold.streetAddress,
+      city: this.activeHousehold.city,
+      state: this.activeHousehold.state,
+      zip: this.activeHousehold.zip
     });
   }
 }

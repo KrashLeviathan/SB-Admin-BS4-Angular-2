@@ -3,26 +3,30 @@ import {DBView} from './dbview';
 export const DB_VIEWS: DBView[] = [
   {
     viewId: 1,
-    viewName: 'Weekday A',
+    name: 'Weekday A',
     description: 'Chores around the house, upcoming events, and Mom\'s TODO list',
-    creator: 'Mom'
+    owner: 'Mom',
+    serviceLayout: null
   },
   {
     viewId: 2,
-    viewName: 'Weekday B',
+    name: 'Weekday B',
     description: 'Picture slideshow with Mom\'s TODO list',
-    creator: 'Mom'
+    owner: 'Mom',
+    serviceLayout: null
   },
   {
     viewId: 3,
-    viewName: 'Home IoT',
+    name: 'Home IoT',
     description: 'IoT status and control',
-    creator: 'Dad'
+    owner: 'Dad',
+    serviceLayout: null
   },
   {
     viewId: 4,
-    viewName: 'Oliver',
+    name: 'Oliver',
     description: 'Homework, chores, and games',
-    creator: 'Mom'
+    owner: 'Mom',
+    serviceLayout: null
   }
 ];

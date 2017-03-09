@@ -1,7 +1,7 @@
-import {Account} from './account';
+import {Household} from './household';
 
-export const ACCOUNTS: Account[] = [{
-  accountId: 1,
+export const HOUSEHOLDS: Household[] = [{
+  household_id: 1,
   accountName: 'Team SmartSync',
   streetAddress: '2434 Osborn Drive',
   city: 'Ames',

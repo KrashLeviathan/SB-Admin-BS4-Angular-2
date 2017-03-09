@@ -4,7 +4,7 @@ import {DB_VIEWS} from '../dbview/mock-dbviews';
 
 const MOCK_USER_PREFS: UserPreferences = {
   activeView: DB_VIEWS[1],
-  userViews: DB_VIEWS,
+  userViewCollection: DB_VIEWS,
   colorScheme: {
     primary: '#345cb2',
     secondary: '#3b5156',

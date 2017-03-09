@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Account} from './account';
-import {ACCOUNTS} from './mock-accounts';
+import {Household} from './account';
+import {HOUSEHOLDS} from './mock-accounts';
 
 @Injectable()
 export class AccountService {
-  getAccount(id: number): Promise<Account> {
-    return Promise.resolve(ACCOUNTS[id]);
+  getAccount(id: number): Promise<Household> {
+    return Promise.resolve(HOUSEHOLDS[id]);
   }
 
   saveAccount(formData: Object): Promise<boolean> {
