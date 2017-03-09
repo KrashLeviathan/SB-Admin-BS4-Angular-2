@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Service} from '../shared/service/service';
-import {ServiceService} from '../shared/service/service.service';
-import {UserService} from '../shared/user/user.service';
+import {Service} from '../../shared/service/service';
+import {ServiceService} from '../../shared/service/service.service';
+import {UserService} from '../../shared/user/user.service';
 
 // Packery  -  http://packery.metafizzy.co/
 declare let Packery: any;

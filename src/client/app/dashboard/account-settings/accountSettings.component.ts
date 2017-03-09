@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {AccountService} from '../shared/account/account.service';
-import {Account} from '../shared/account/account';
+import {AccountService} from '../../shared/account/account.service';
+import {Account} from '../../shared/account/account';
 import {STATES, State} from '../../states';
 
 @Component({

@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 
 import {ServicesComponent} from './services.component';
 import {CommonModule} from '@angular/common';
-import {ServiceService} from '../shared/service/service.service';
+import {ServiceService} from '../../shared/service/service.service';
 import {RouterModule} from '@angular/router';
 
 @NgModule({

@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {ServiceType, ALL_SERVICE_TYPES} from '../../shared/service/service';
+import {ServiceType, ALL_SERVICE_TYPES} from '../../../shared/service/service';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
-import {ServiceService} from '../../shared/service/service.service';
+import {ServiceService} from '../../../shared/service/service.service';
 
 @Component({
   moduleId: module.id,
