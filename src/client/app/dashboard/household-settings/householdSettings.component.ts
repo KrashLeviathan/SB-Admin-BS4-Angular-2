@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {AccountService} from '../../shared/account/account.service';
-import {Household} from '../../shared/account/household';
+import {AccountService} from '../../shared/household/account.service';
+import {Household} from '../../shared/household/household';
 import {STATES, State} from '../../states';
 
 @Component({
   moduleId: module.id,
-  selector: 'account-settings',
-  templateUrl: './accountSettings.component.html'
+  selector: 'household-settings',
+  templateUrl: './householdSettings.component.html'
 })
 
-export class AccountSettingsComponent implements OnInit {
+export class HouseholdSettingsComponent implements OnInit {
   MAX_VARCHAR_LENGTH: number = 255;
 
   activeHousehold: Household;
@@ -25,11 +25,11 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getActiveAccount()
-      .then(account => this.activeHousehold = account);
+    this.getActiveHousehold()
+      .then(household => this.activeHousehold = household);
   }
 
-  getActiveAccount(): Promise<Household> {
+  getActiveHousehold(): Promise<Household> {
     return this.accountService.getAccount(0);
   }
 

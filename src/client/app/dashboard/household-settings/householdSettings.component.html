@@ -16,7 +16,7 @@
         <fieldset class="form-group"
                   [class.has-warning]="accountName.errors && (accountName.dirty || accountName.touched)"
                   [attr.disabled]="formDisabled ? true : null">
-          <label class="form-control-label">Account Name</label>
+          <label class="form-control-label">Household Name</label>
           <input name="accountName" [ngModel]="activeHousehold.accountName"
                  required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH" #accountName="ngModel"
                  class="form-control form-control-warning" type="text" value="{{accountName.value}}">

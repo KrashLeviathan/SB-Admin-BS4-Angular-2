@@ -26,10 +26,10 @@
       </li>
     </div>
     <div class="nested-menu">
-      <a class="list-group-item" (click)="addExpandClass('accountpages')">
-        <span><i class="fa fa-fw fa-users"></i> Account</span>
+      <a class="list-group-item" (click)="addExpandClass('householdpages')">
+        <span><i class="fa fa-fw fa-users"></i> Household</span>
       </a>
-      <li class="nested" [ngClass]="{'expand' : showMenu === 'accountpages' }">
+      <li class="nested" [ngClass]="{'expand' : showMenu === 'householdpages' }">
         <ul class="submenu">
           <li>
             <a [routerLink]="['manage-users']" [routerLinkActive]="['router-link-active']">
@@ -37,8 +37,8 @@
             </a>
           </li>
           <li>
-            <a [routerLink]="['account-settings']" [routerLinkActive]="['router-link-active']">
-              <span><i class="fa fa-fw fa-gear"></i> Account Settings</span>
+            <a [routerLink]="['household-settings']" [routerLinkActive]="['router-link-active']">
+              <span><i class="fa fa-fw fa-gear"></i> Household Settings</span>
             </a>
           </li>
         </ul>
