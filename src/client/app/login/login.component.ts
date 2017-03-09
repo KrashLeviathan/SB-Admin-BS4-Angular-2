@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Cookie} from 'ng2-cookies/ng2-cookies';
-import {DAYS_UNTIL_SESSION_EXPIRATION} from "../dashboard/shared/user/user.service";
 import {Router} from "@angular/router";
+import {UserService} from "../shared/user/user.service";
 
 /**
  *  This class represents the lazy loaded LoginComponent.
@@ -15,8 +14,7 @@ declare const gapi: any;
 })
 
 export class LoginComponent {
-  //TODO include UserService and call that function
-  constructor(private router: Router) {
+  constructor(private router: Router, private userService: UserService) {
   }
 
   ngAfterViewInit() {
@@ -41,18 +39,12 @@ export class LoginComponent {
     //YOUR CODE HERE
     //TODO send the info to the server. Have the server add a new user if it doesn't exist yet.
     //TODO figure out why it still tries to render the login button after redirecting.
-    this.setActiveUserSession(googleUser.getAuthResponse().id_token);
+    this.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
+
     this.router.navigate(['dashboard','home']);
 
   }
-  setActiveUserSession(sessionToken: string): void {
-    // let encryptedToken = EncryptionService.encrypt(
-    //   EncryptionService.encode(sessionToken)
-    // );
-    //TODO this is just a dummy function for now, replace with call to user.service.ts version.
-    //TODO also use the encrypted version of the sessionToken.
-    Cookie.set('sessionToken', sessionToken, DAYS_UNTIL_SESSION_EXPIRATION);
-  }
+
 
 }
 
