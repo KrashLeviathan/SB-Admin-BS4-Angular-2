@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from '../../shared/user/user';
 import {UserService} from '../../shared/user/user.service';
 

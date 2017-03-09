@@ -8,6 +8,8 @@ export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 
 @Injectable()
 export class UserService {
+  static activeUser: User;
+
   /**
    * On login, the active user sessionId is encrypted and stored in the cookies.
    * @param sessionToken
@@ -20,12 +22,29 @@ export class UserService {
   }
 
   getActiveUser(): Promise<User> {
-    let encryptedToken = Cookie.get('sessionToken');
-    let sessionToken = EncryptionService.decode(
-      EncryptionService.decrypt(encryptedToken)
-    );
-    // TODO: Replace with HTTP request
-    return this.getUser(1);
+    // TODO: Enable encryption and cookies and such by uncommenting below
+    // let encryptedToken = Cookie.get('sessionToken');
+    // if (!encryptedToken) {
+    //   // Expired token returns null active user
+    //   return Promise.resolve(null);
+    // }
+    // // Decrypt session token
+    // let sessionToken = EncryptionService.decode(
+    //   EncryptionService.decrypt(encryptedToken)
+    // );
+    // Return the current active user if there's already one loaded,
+    // otherwise load the active user, set it, and return it
+    if (UserService.activeUser) {
+      return Promise.resolve(UserService.activeUser);
+    } else {
+      // TODO: Replace with HTTP request
+      return new Promise(resolve => {
+        this.getUser(1).then(user => {
+          UserService.activeUser = user;
+          resolve(UserService.activeUser);
+        });
+      });
+    }
   }
 
   getUser(userId: number): Promise<User> {
