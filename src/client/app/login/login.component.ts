@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {Cookie} from 'ng2-cookies/ng2-cookies';
+import {DAYS_UNTIL_SESSION_EXPIRATION} from "../dashboard/shared/user/user.service";
 
 /**
  *  This class represents the lazy loaded LoginComponent.
@@ -12,7 +14,9 @@ declare const gapi: any;
 })
 
 export class LoginComponent {
-
+  //TODO include UserService and call that function
+  // constructor(private userService: UserService) {
+  // }
   ngAfterViewInit() {
     gapi.signin2.render('googleBtn', {
       'scope': 'profile email',
@@ -33,7 +37,16 @@ export class LoginComponent {
     console.log('Image URL: ' + profile.getImageUrl());
     console.log('Email: ' + profile.getEmail());
     //YOUR CODE HERE
-
+    //TODO send the info to the server. Have the server add a new user if it doesn't exist yet.
+    this.setActiveUserSession(googleUser.getAuthResponse().id_token);
+  }
+  setActiveUserSession(sessionToken: string): void {
+    // let encryptedToken = EncryptionService.encrypt(
+    //   EncryptionService.encode(sessionToken)
+    // );
+    //TODO this is just a dummy function for now, replace with call to user.service.ts version.
+    //TODO also use the encrypted version of the sessionToken.
+    Cookie.set('sessionToken', sessionToken, DAYS_UNTIL_SESSION_EXPIRATION);
   }
 
 }
