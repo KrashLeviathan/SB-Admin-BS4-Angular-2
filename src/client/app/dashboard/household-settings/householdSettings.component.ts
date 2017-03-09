@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {AccountService} from '../../shared/household/account.service';
+import {HouseholdService} from '../../shared/household/household.service';
 import {Household} from '../../shared/household/household';
 import {STATES, State} from '../../states';
 
@@ -20,7 +20,7 @@ export class HouseholdSettingsComponent implements OnInit {
   savingState: boolean = false;
   errorOnSave: boolean = false;
 
-  constructor(private accountService: AccountService) {
+  constructor(private householdService: HouseholdService) {
     this.states = STATES;
   }
 
@@ -30,7 +30,7 @@ export class HouseholdSettingsComponent implements OnInit {
   }
 
   getActiveHousehold(): Promise<Household> {
-    return this.accountService.getAccount(0);
+    return this.householdService.getHousehold(0);
   }
 
   onSubmit(form: NgForm): void {
@@ -41,7 +41,7 @@ export class HouseholdSettingsComponent implements OnInit {
     this.errorOnSave = false;
     this.formDisabled = true;
     this.savingState = true;
-    this.accountService.saveAccount(form.value)
+    this.householdService.saveHousehold(form.value)
       .then(success => {
         this.savingState = false;
         if (success) {

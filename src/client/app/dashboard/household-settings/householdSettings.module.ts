@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 
 import {HouseholdSettingsComponent} from './householdSettings.component';
 import {CommonModule} from '@angular/common';
-import {AccountService} from '../../shared/household/account.service';
+import {HouseholdService} from '../../shared/household/household.service';
 import {FormsModule} from '@angular/forms';
 
 @NgModule({
@@ -12,7 +12,7 @@ import {FormsModule} from '@angular/forms';
   ],
   declarations: [HouseholdSettingsComponent],
   exports: [HouseholdSettingsComponent],
-  providers: [AccountService]
+  providers: [HouseholdService]
 })
 
 export class HouseholdSettingsModule {

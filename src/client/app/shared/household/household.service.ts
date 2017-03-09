@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
-import {Household} from './account';
-import {HOUSEHOLDS} from './mock-accounts';
+import {Household} from './household';
+import {HOUSEHOLDS} from './mock-households';
 
 @Injectable()
-export class AccountService {
-  getAccount(id: number): Promise<Household> {
+export class HouseholdService {
+  getHousehold(id: number): Promise<Household> {
     return Promise.resolve(HOUSEHOLDS[id]);
   }
 
-  saveAccount(formData: Object): Promise<boolean> {
+  saveHousehold(formData: Object): Promise<boolean> {
     // TODO: Save form data to server
     console.log(formData);
     return new Promise(resolve => {
