@@ -45,11 +45,11 @@ export class HouseholdSettingsComponent implements OnInit {
       .then(success => {
         this.savingState = false;
         if (success) {
-          this.activeHousehold.accountName = form.value.accountName;
-          this.activeHousehold.streetAddress = form.value.streetAddress;
+          this.activeHousehold.householdName = form.value.householdName;
+          this.activeHousehold.firstAddressLine = form.value.firstAddressLine;
           this.activeHousehold.city = form.value.city;
           this.activeHousehold.state = form.value.state;
-          this.activeHousehold.zip = form.value.zip;
+          this.activeHousehold.zipCode = form.value.zipCode;
         } else {
           // TODO: Display error message if the form failed to save on the server
           this.errorOnSave = true;
@@ -62,11 +62,11 @@ export class HouseholdSettingsComponent implements OnInit {
     this.errorOnSave = false;
     this.formDisabled = true;
     form.resetForm({
-      accountName: this.activeHousehold.accountName,
-      streetAddress: this.activeHousehold.streetAddress,
+      householdName: this.activeHousehold.householdName,
+      firstAddressLine: this.activeHousehold.firstAddressLine,
       city: this.activeHousehold.city,
       state: this.activeHousehold.state,
-      zip: this.activeHousehold.zip
+      zipCode: this.activeHousehold.zipCode
     });
   }
 }

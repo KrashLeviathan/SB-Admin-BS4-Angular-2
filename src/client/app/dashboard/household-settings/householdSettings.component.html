@@ -14,20 +14,20 @@
 
       <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate class="buffer-bottom">
         <fieldset class="form-group"
-                  [class.has-warning]="accountName.errors && (accountName.dirty || accountName.touched)"
+                  [class.has-warning]="householdName.errors && (householdName.dirty || householdName.touched)"
                   [attr.disabled]="formDisabled ? true : null">
           <label class="form-control-label">Household Name</label>
-          <input name="accountName" [ngModel]="activeHousehold.accountName"
-                 required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH" #accountName="ngModel"
-                 class="form-control form-control-warning" type="text" value="{{accountName.value}}">
+          <input name="householdName" [ngModel]="activeHousehold.householdName"
+                 required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH" #householdName="ngModel"
+                 class="form-control form-control-warning" type="text" value="{{householdName.value}}">
         </fieldset>
 
         <fieldset class="form-group"
                   [attr.disabled]="formDisabled ? true : null">
           <label class="form-control-label">Street Address</label>
-          <input name="streetAddress" [ngModel]="activeHousehold.streetAddress"
-                 [attr.maxlength]="MAX_VARCHAR_LENGTH" #streetAddress="ngModel"
-                 class="form-control" type="text" value="{{streetAddress.value}}">
+          <input name="firstAddressLine" [ngModel]="activeHousehold.firstAddressLine"
+                 [attr.maxlength]="MAX_VARCHAR_LENGTH" #firstAddressLine="ngModel"
+                 class="form-control" type="text" value="{{firstAddressLine.value}}">
         </fieldset>
 
         <fieldset class="form-group"
@@ -49,12 +49,12 @@
         </fieldset>
 
         <fieldset id="zip-field" class="form-group"
-                  [class.has-warning]="zip.errors"
+                  [class.has-warning]="zipCode.errors"
                   [attr.disabled]="formDisabled ? true : null">
           <label class="form-control-label">Zip</label>
-          <input name="zip" [ngModel]="activeHousehold.zip" #zip="ngModel"
+          <input name="zipCode" [ngModel]="activeHousehold.zipCode" #zipCode="ngModel"
                  class="form-control form-control-warning"
-                 type="text" pattern="(\d\d\d\d\d)?" value="{{zip.value}}">
+                 type="text" pattern="(\d\d\d\d\d)?" value="{{zipCode.value}}">
         </fieldset>
 
         <button type="button" class="btn btn-secondary" *ngIf="!formDisabled"
@@ -73,13 +73,13 @@
 
     </div>
     <div class="col-md-9 col-lg-5 col-xl-6">
-      <div [hidden]="!accountName.errors?.minlength" class="alert alert-warning" role="alert">
-        Account name must be greater than 4 characters.
+      <div [hidden]="!householdName.errors?.minlength" class="alert alert-warning" role="alert">
+        Household name must be greater than 4 characters.
       </div>
-      <div [hidden]="!accountName.errors?.required" class="alert alert-warning" role="alert">
-        Account name is required.
+      <div [hidden]="!householdName.errors?.required" class="alert alert-warning" role="alert">
+        Household name is required.
       </div>
-      <div [hidden]="!zip.errors" class="alert alert-warning" role="alert">
+      <div [hidden]="!zipCode.errors" class="alert alert-warning" role="alert">
         Zip codes must be five digits in length.
       </div>
     </div>
