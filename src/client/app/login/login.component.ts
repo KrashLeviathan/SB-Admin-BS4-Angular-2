@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {DAYS_UNTIL_SESSION_EXPIRATION} from "../dashboard/shared/user/user.service";
+import {Router} from "@angular/router";
 
 /**
  *  This class represents the lazy loaded LoginComponent.
@@ -15,8 +16,9 @@ declare const gapi: any;
 
 export class LoginComponent {
   //TODO include UserService and call that function
-  // constructor(private userService: UserService) {
-  // }
+  constructor(private router: Router) {
+  }
+
   ngAfterViewInit() {
     gapi.signin2.render('googleBtn', {
       'scope': 'profile email',
@@ -38,7 +40,10 @@ export class LoginComponent {
     console.log('Email: ' + profile.getEmail());
     //YOUR CODE HERE
     //TODO send the info to the server. Have the server add a new user if it doesn't exist yet.
+    //TODO figure out why it still tries to render the login button after redirecting.
     this.setActiveUserSession(googleUser.getAuthResponse().id_token);
+    this.router.navigate(['dashboard','home']);
+
   }
   setActiveUserSession(sessionToken: string): void {
     // let encryptedToken = EncryptionService.encrypt(
