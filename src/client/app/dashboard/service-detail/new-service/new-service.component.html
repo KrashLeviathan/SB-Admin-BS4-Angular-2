@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="row">
+    <div class="col-xl-12">
+      <h2 class="page-header">New Service</h2>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-block">
+          <p>Select the type of service you would like to create.</p>
+          <div class="btn-group-vertical" role="group" aria-label="Select service type">
+            <button type="button" class="btn btn-secondary text-md-left"
+                    [class.active]="st === serviceType"
+                    *ngFor="let st of allServiceTypes"
+                    (click)="serviceType = st; canContinue = true">{{st.name}}
+            </button>
+          </div>
+          <p class="buffer-top" *ngIf="serviceType">{{serviceType.description}}</p>
+        </div>
+      </div>
+      <div>
+        <button type="button" class="btn btn-secondary pull-right buffer-left" (click)="cancel()">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-secondary pull-right" (click)="continue()">Continue</button>
+      </div>
+      <div class="clearfix"></div>
+      <p class="pull-right text-danger buffer-top" [hidden]="canContinue">
+        Please select a service type before continuing.
+      </p>
+    </div>
+  </div>
+</div>

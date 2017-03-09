@@ -13,7 +13,7 @@
       <li class="nested" [ngClass]="{'expand' : showMenu === 'viewpages' }">
         <ul class="submenu">
           <li>
-            <a routerLink="/dashboard/home" [routerLinkActive]="['router-link-active']">
+            <a [routerLink]="['home','edit']" [routerLinkActive]="['router-link-active']">
               <span><i class="fa fa-fw fa-wrench"></i> Edit Current</span>
             </a>
           </li>
@@ -44,13 +44,13 @@
         </ul>
       </li>
     </div>
-    <a [routerLink]="['services-cmp']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+    <a [routerLink]="['services']" [routerLinkActive]="['router-link-active']" class="list-group-item">
       <i class="fa fa-fw fa-rocket"></i> Services
     </a>
     <a [routerLink]="['user-settings']" [routerLinkActive]="['router-link-active']" class="list-group-item">
       <i class="fa fa-fw fa-user"></i> User Settings
     </a>
-    <a [routerLink]="['logout-cmp']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+    <a [routerLink]="['logout']" [routerLinkActive]="['router-link-active']" class="list-group-item">
       <i class="fa fa-fw fa-power-off"></i> Log Out
     </a>
   </ul>

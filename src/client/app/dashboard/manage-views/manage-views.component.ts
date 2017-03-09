@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {DBView} from '../dbview';
-import {DBViewService} from '../dbview.service';
+import {DBView} from '../shared/dbview/dbview';
+import {DBViewService} from '../shared/dbview/dbview.service';
 
 @Component({
   moduleId: module.id,
@@ -28,7 +28,7 @@ export class ManageViewsComponent implements OnInit {
   getActiveView(): void {
     this.dbViewService.getActiveViewId()
       .then(viewId => this.activeView = this.dbviews
-        .find(view => view.viewId == viewId));
+        .find(view => view.viewId === viewId));
   }
 
   applyView(view: DBView): void {

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Service} from '../service';
-import {ServiceService} from '../service.service';
+import {Service} from '../shared/service/service';
+import {ServiceService} from '../shared/service/service.service';
 
 @Component({
   moduleId: module.id,
@@ -21,11 +21,6 @@ export class ServicesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getServices();
-  }
-
-  configure(service: Service): void {
-    console.log('TODO: configure(service)');
-    console.log(service);
   }
 
   delete(serviceId: number): void {

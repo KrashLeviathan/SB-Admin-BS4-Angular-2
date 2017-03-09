@@ -1,10 +1,21 @@
 import {Component, OnInit} from '@angular/core';
-import $ = require('jquery');
+import {ActivatedRoute, Router} from '@angular/router';
+import {Service} from '../shared/service/service';
+import {ServiceService} from '../shared/service/service.service';
+import {UserService} from '../shared/user/user.service';
 
 // Packery  -  http://packery.metafizzy.co/
 declare let Packery: any;
+const PACKERY_OPTIONS: any = {
+  itemSelector: '.grid-item',
+  columnWidth: 150,
+  initLayout: false // disable initial layout
+};
 // Draggabilly  -  http://draggabilly.desandro.com/
 declare let Draggabilly: any;
+
+// Also got help from https://github.com/metafizzy/packery/issues/337 for persistent positioning
+const DATA_ITEM_ATTRIBUTE: string = 'data-item-id';
 
 @Component({
   moduleId: module.id,
@@ -14,95 +25,63 @@ declare let Draggabilly: any;
 })
 
 export class MainViewComponent implements OnInit {
-  // https://www.thepolyglotdeveloper.com/2016/01/include-external-javascript-libraries-in-an-angular-2-typescript-project/
   packery: any;
 
-  // Also got help from https://github.com/metafizzy/packery/issues/337 for persistent positioning
-
-  dataItemAttribute: string = 'data-item-id';
-
-  draggabillyOptions: any = {
-    containment: '.grid'
-  };
-
-  packeryOptions: any = {
-    itemSelector: '.grid-item',
-    columnWidth: 150,
-    initLayout: false // disable initial layout
-  };
-
-  draggies: any[] = [];
   editModeActive: boolean = false;
-  $grid: any;
+  finishedInitializing: boolean = false;
+  grid: HTMLDivElement;
 
-  static getSavedDraggedPositions(): string {
-    return localStorage.getItem('dragPositions');
+  services: Service[];
+
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private serviceService: ServiceService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
-    this.$grid = $('.grid');
-    // init Packery
-    this.packery = new Packery('.grid', this.packeryOptions);
-    let initPositions = MainViewComponent.getSavedDraggedPositions();
-
-    // init layout with saved positions
-    this.packery.initShiftLayout(initPositions, this.dataItemAttribute);
-
-    // Tiles don't start in edit mode, so we make them static
-    this.initDraggableItems();
-    this.makeItemsStatic();
-
-    // Initialize event listeners (button clicks, etc.)
-    this.initListeners();
+    this.editModeActive = (this.route.data as any).value.editModeActive === true;
+    this.serviceService.getServices()
+      .then(services => {
+        this.services = services;
+        this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
+        // Add a small delay so the services can populate the DOM with *ngFor before
+        // initializing packery.
+        new Promise(resolve => setTimeout(() => resolve(this.initPackery()), 1));
+      });
   }
 
-  initListeners() {
-    let _this = this;
-    this.$grid.on('dragItemPositioned', function () {
-      _this.saveDragPositions();
-    });
-
-    $('#edit-button').click(function (event) {
-      _this.onEditButtonClicked(_this, event);
-    });
+  initPackery(): any {
+    // TODO: Use userId -- Actually, the getting of services and user prefs could probably
+    // be done together.
+    this.userService.getUserPreferences(0)
+      .then(initPositions => {
+        this.packery = new Packery(this.grid, PACKERY_OPTIONS);
+        // init layout with saved positions
+        this.packery.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
+        let thisObj = this;
+        this.packery.getItemElements().forEach(function (itemElem: any) {
+          let draggie = new Draggabilly(itemElem);
+          thisObj.packery.bindDraggabillyEvents(draggie);
+          if (!thisObj.editModeActive) {
+            draggie.disable();
+          }
+          // The elements remain invisible until they're finished initializing.
+          thisObj.finishedInitializing = true;
+        });
+      });
   }
 
-  onEditButtonClicked(_this: any, event: any) {
-    if (_this.editModeActive) {
-      _this.makeItemsStatic();
-      event.target.textContent = 'Edit';
-      _this.editModeActive = false;
-    } else {
-      _this.makeItemsDraggable();
-      event.target.textContent = 'Done';
-      _this.editModeActive = true;
-    }
-    _this.$grid.find('.grid-item').toggleClass('is-editable');
-  }
-
-  initDraggableItems() {
-    let _this = this;
-    this.$grid.find('.grid-item').each(function (i: number, itemElem: any) {
-      let draggie = new Draggabilly(itemElem, _this.draggabillyOptions);
-      _this.packery.bindDraggabillyEvents(draggie);
-      _this.draggies[i] = draggie;
-    });
-  }
-
-  makeItemsDraggable() {
-    for (let i = 0; i < this.draggies.length; i++) {
-      this.draggies[i].enable();
-    }
-  }
-
-  makeItemsStatic() {
-    for (let i = 0; i < this.draggies.length; i++) {
-      this.draggies[i].disable();
-    }
-  }
-
-  saveDragPositions() {
+  onSaveChangesClicked(): void {
     let positions = this.packery.getShiftPositions('data-item-id');
-    localStorage.setItem('dragPositions', JSON.stringify(positions));
+    // TODO: User userId
+    this.userService.setUserPreferences(0, positions)
+      .then(success => {
+        if (success) {
+          this.router.navigate(['dashboard/', 'home']);
+        } else {
+          // TODO
+        }
+      });
   }
 }

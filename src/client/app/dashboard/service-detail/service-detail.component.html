@@ -1,0 +1,42 @@
+<div *ngIf="service" class="container-fluid">
+  <!-- Page Heading -->
+  <div class="row">
+    <div class="col-xl-12">
+      <h2 class="page-header">
+        <span [hidden]="!isEditing">Configure </span>{{service.serviceName}}
+      </h2>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-block">
+          <p><span class="font-weight-bold">Description:&nbsp;&nbsp;</span>{{service.description}}</p>
+          <p><span class="font-weight-bold">Type:&nbsp;&nbsp;</span>{{service.serviceType.name}}</p>
+          <p><span class="font-weight-bold">Status:&nbsp;&nbsp;</span>
+            <i class="fa fa-lg fa-arrow-up text-success" [hidden]="service.status !== 'up'"></i>
+            <i class="fa fa-lg fa-arrow-down text-danger" [hidden]="service.status !=='down'"></i>
+            <i class="fa fa-lg fa-question" [hidden]="service.status !== 'unknown'"></i></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-block">
+          <service-cmp [hidden]="isEditing" [service]="service"></service-cmp>
+          <service-config [hidden]="!isEditing" [service]="service"></service-config>
+        </div>
+      </div>
+      <button type="button" class="btn btn-secondary pull-right buffer-left"
+              (click)="cancel()">{{isEditing ? 'Cancel' : 'Done'}}
+      </button>
+      <button type="button" class="btn btn-secondary pull-right" [hidden]="!isEditing"
+              (click)="save()">Save
+      </button>
+    </div>
+  </div>
+</div>

@@ -9,9 +9,6 @@ body {
 /* ---- grid ---- */
 
 .grid {
-  background: #DDD;
-  /*width: 1200px;*/
-  /*max-width: 1200px;*/
   min-height: 600px;
 }
 
@@ -25,11 +22,10 @@ body {
 /* ---- .grid-item ---- */
 
 .grid-item {
+  padding: 5px;
   width: 150px;
   height: 150px;
   float: left;
-  background: #C09;
-  border: 2px solid hsla(0, 0%, 0%, 0.5);
 }
 
 .grid-item--width2 {
@@ -40,29 +36,24 @@ body {
   height: 300px;
 }
 
-.grid-item--large {
-  width: 300px;
-  height: 300px;
-}
-
 .grid-item.is-dragging,
 .grid-item.is-positioning-post-drag {
-  background: #C90;
+  background: #3db5d8;
   z-index: 2;
 }
 
 .packery-drop-placeholder {
-  /*outline: 3px dashed hsla(0, 0%, 0%, 0.5);*/
-  /*outline-offset: -6px;*/
-  /*-webkit-transition: -webkit-transform 0.2s;*/
-  /*transition: transform 0.2s;*/
+  outline: 3px dashed hsla(0, 0%, 0%, 0.5);
+  outline-offset: -6px;
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: transform 0.2s;
 }
 
 .grid-item.is-editable {
-  border-style: dashed;
+  border: 2px dashed hsla(0, 0%, 0%, 0.3);
 }
 
 .grid-item.is-editable:hover {
-  border-color: hsla(0, 0%, 100%, 0.5);
+  border-color: rgba(0, 0, 200, 0.8);
   cursor: move;
 }

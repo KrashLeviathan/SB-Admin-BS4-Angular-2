@@ -5,11 +5,6 @@ import {DropdownModule} from 'ng2-bootstrap/ng2-bootstrap';
 import {ModalModule} from 'ng2-bootstrap/ng2-bootstrap';
 
 import {HomeModule} from './home/home.module';
-import {ChartModule} from './charts/chart.module';
-import {BlankPageModule} from './blank-page/blankPage.module';
-import {GridModule} from './grid/grid.module';
-import {BSComponentModule} from './bs-component/bsComponent.module';
-import {BSElementModule} from './bs-element/bsElement.module';
 
 import {DashboardComponent} from './dashboard.component';
 
@@ -22,6 +17,7 @@ import {AccountSettingsModule} from './account-settings/accountSettings.module';
 import {ServicesModule} from './services/services.module';
 import {ManageViewsModule} from './manage-views/manage-views.module';
 import {ManageUsersModule} from './manage-users/manage-users.module';
+import {ServiceDetailModule} from './service-detail/service-detail.module';
 
 
 @NgModule({
@@ -31,15 +27,11 @@ import {ManageUsersModule} from './manage-users/manage-users.module';
     DropdownModule,
     ModalModule,
     HomeModule,
-    ChartModule,
-    GridModule,
-    BSComponentModule,
-    BSElementModule,
-    BlankPageModule,
     MainViewModule,
     LogoutModule,
     UserSettingsModule,
     AccountSettingsModule,
+    ServiceDetailModule,
     ServicesModule,
     ManageViewsModule,
     ManageUsersModule

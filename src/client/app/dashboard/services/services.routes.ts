@@ -4,7 +4,7 @@ import { ServicesComponent } from './index';
 
 export const ServicesRoutes: Route[] = [
   {
-    path: 'services-cmp',
+    path: 'services',
     component: ServicesComponent
   }
 ];
