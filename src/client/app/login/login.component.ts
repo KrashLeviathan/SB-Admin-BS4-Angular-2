@@ -24,12 +24,11 @@ export class LoginComponent {
       'height': 50,
       'longtitle': true,
       'theme': 'dark',
-      'onsuccess': param => this.onSignIn(param)
+      'onsuccess': (param: any) => this.onSignIn(param)
     });
   }
 
-  public onSignIn(googleUser) {
-
+  public onSignIn(googleUser: any) {
     let profile = googleUser.getBasicProfile();
     console.log('Token || ' + googleUser.getAuthResponse().id_token);
     console.log('ID: ' + profile.getId());
@@ -41,8 +40,7 @@ export class LoginComponent {
     //TODO figure out why it still tries to render the login button after redirecting.
     this.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
 
-    this.router.navigate(['dashboard','home']);
-
+    this.router.navigate(['/dashboard','home']);
   }
 
 
