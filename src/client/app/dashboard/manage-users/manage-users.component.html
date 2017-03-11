@@ -14,7 +14,7 @@
         <table class="table table-hover">
           <thead>
           <tr>
-            <th>Username</th>
+            <th>Email</th>
             <th>Display Name</th>
             <th class="text-center">Admin</th>
             <th class="text-center">Actions</th>
@@ -22,16 +22,15 @@
           </thead>
           <tbody>
           <tr *ngFor="let user of users">
-            <td>{{user.userName}}</td>
+            <td>{{user.email}}</td>
             <td>{{user.displayName}}</td>
             <td class="text-center">
               <i [ngClass]="{'fa fa-lg fa-key': user.isAdmin}"></i></td>
             <td class="text-center">
               <a href="Javascript:void(0)">
-                <i class="fa fa-lg fa-gear"
-                   (click)="configureUser(user)"></i></a>&nbsp;&nbsp;
-              <a href="Javascript:void(0)"><i class="fa fa-lg fa-trash"
-                                              (click)="delete(user.userId)"></i></a>
+                <i class="fa fa-lg fa-key" (click)="confirmAdminChange(user)"></i></a>&nbsp;&nbsp;
+              <a href="Javascript:void(0)" (click)="confirmDelete(user)">
+                <i class="fa fa-lg fa-trash"></i></a>
             </td>
           </tr>
           </tbody>
@@ -45,8 +44,8 @@
       <div class="card card-block">
         <h4>Key</h4>
         <i class="fa fa-lg fa-fw fa-key"></i>&nbsp;&nbsp;Admin User<br>
-        <i class="fa fa-lg fa-fw fa-gear text-primary"></i>&nbsp;&nbsp;Configure User<br>
-        <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Delete User<br>
+        <i class="fa fa-lg fa-fw fa-key text-primary"></i>&nbsp;&nbsp;Change Privileges<br>
+        <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Remove User<br>
       </div>
     </div>
     <div class="col-md-6 col-lg-8">
@@ -54,3 +53,47 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" [class.in]="isConfirmingDelete" [class.shown]="isConfirmingDelete">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" (click)="cancelDelete()">&times;</button>
+
+        <h4 class="modal-title">Confirm Remove</h4>
+      </div>
+      <div class="modal-body" *ngIf="userToDelete.email !== ''">
+        Are you sure you want to remove <b>{{userToDelete.email}}</b> from the household?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteUser()">DELETE</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->
+
+<div class="modal fade" [class.in]="isConfirmingAdmin" [class.shown]="isConfirmingAdmin">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" (click)="cancelAdminChange()">&times;</button>
+
+        <h4 class="modal-title">Confirm Admin Change</h4>
+      </div>
+      <div class="modal-body" *ngIf="userAdminChanges.email !== ''">
+        Are you sure you want to
+        <i>{{(userAdminChanges.setAsAdmin) ? 'give admin privileges to' : 'withdraw admin privileges from'}}</i>
+        <b>{{userAdminChanges.email}}</b>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelAdminChange()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="adminChange()">CONFIRM</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->

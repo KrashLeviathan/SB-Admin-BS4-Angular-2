@@ -21,3 +21,16 @@
     margin-right: 1em;
   }
 }
+
+.shown {
+  display: block;
+}
+
+.modal-dialog {
+  margin-top: 200px;
+}
+
+.box-shadow {
+  -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+}

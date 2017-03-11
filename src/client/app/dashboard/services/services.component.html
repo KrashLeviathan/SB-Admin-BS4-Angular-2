@@ -24,7 +24,7 @@
           <tbody>
           <tr *ngFor="let service of services">
             <td class="clickable text-primary" [routerLink]="['../','service',service.serviceId]"
-                [routerLinkActive]="['router-link-active']">{{service.serviceName}}
+                [routerLinkActive]="['router-link-active']">{{service.name}}
             </td>
             <td>{{service.description}}</td>
             <td class="text-center">{{service.serviceType.name}}</td>
