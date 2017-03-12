@@ -10,6 +10,11 @@ import {ServiceService} from '../../shared/service/service.service';
 
 export class ServicesComponent implements OnInit {
   services: Service[];
+  isConfirmingDelete: boolean = false;
+  serviceToDelete: any = {
+    serviceId: 0,
+    name: ''
+  };
 
   constructor(private serviceService: ServiceService) {
   }
@@ -23,7 +28,23 @@ export class ServicesComponent implements OnInit {
     this.getServices();
   }
 
-  delete(serviceId: number): void {
-    console.log('TODO: delete(' + serviceId + ')');
+  deleteService(): void {
+    if (!this.isConfirmingDelete) {
+      return;
+    }
+    // TODO: Make call to ServiceService
+    console.log('TODO: delete service ' + this.serviceToDelete.serviceId);
+    // Call cancelDelete to remove modal
+    this.cancelDelete();
+  }
+
+  confirmDelete(service: Service): void {
+    this.serviceToDelete = service;
+    this.isConfirmingDelete = true;
+  }
+
+  cancelDelete(): void {
+    this.serviceToDelete = {serviceId: 0, name: ''};
+    this.isConfirmingDelete = false;
   }
 }

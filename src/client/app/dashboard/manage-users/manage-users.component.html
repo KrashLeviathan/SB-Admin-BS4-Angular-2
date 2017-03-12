@@ -86,7 +86,7 @@
       </div>
       <div class="modal-body" *ngIf="userAdminChanges.email !== ''">
         Are you sure you want to
-        <i>{{(userAdminChanges.setAsAdmin) ? 'give admin privileges to' : 'withdraw admin privileges from'}}</i>
+        {{(userAdminChanges.setAsAdmin) ? 'give admin privileges to' : 'withdraw admin privileges from'}}
         <b>{{userAdminChanges.email}}</b>?
       </div>
       <div class="modal-footer">

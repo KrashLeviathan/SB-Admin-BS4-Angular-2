@@ -42,7 +42,7 @@
               <a [routerLink]="['../','service',service.serviceId,'edit']" [routerLinkActive]="['router-link-active']">
                 <i class="fa fa-lg fa-gear"></i></a>&nbsp;&nbsp;
               <a href="Javascript:void(0)">
-                <i class="fa fa-lg fa-trash" (click)="delete(service.serviceId)"></i></a>
+                <i class="fa fa-lg fa-trash" (click)="confirmDelete(service)"></i></a>
             </td>
           </tr>
           </tbody>
@@ -71,3 +71,24 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" [class.in]="isConfirmingDelete" [class.shown]="isConfirmingDelete">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" (click)="cancelDelete()">&times;</button>
+
+        <h4 class="modal-title">Confirm Delete</h4>
+      </div>
+      <div class="modal-body" *ngIf="serviceToDelete.name !== ''">
+        Are you sure you want to delete <b>{{serviceToDelete.name}}</b>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteService()">DELETE</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->

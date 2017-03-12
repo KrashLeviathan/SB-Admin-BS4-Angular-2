@@ -9,4 +9,5 @@ export class DBView {
   description: string;
   owner: string;
   serviceLayout: ServiceLayout;
+  windowWidth: number;
 }

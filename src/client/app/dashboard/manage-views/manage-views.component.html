@@ -22,9 +22,9 @@
           </thead>
           <tbody>
           <tr *ngFor="let dbview of dbviews" [class.table-active]="dbview === activeView">
-            <td>{{dbview.viewName}}</td>
+            <td>{{dbview.name}}</td>
             <td>{{dbview.description}}</td>
-            <td>{{dbview.creator}}</td>
+            <td>{{dbview.owner}}</td>
             <td class="text-center">
               <a href="Javascript:void(0)">
                 <i class="fa fa-lg fa-square-o"

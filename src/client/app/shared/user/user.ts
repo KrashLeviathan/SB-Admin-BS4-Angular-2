@@ -1,4 +1,4 @@
-import {UserPreferences} from "./user-preferences";
+import {UserPreferences} from './user-preferences';
 
 export class User {
   userId: number;
