@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DBView} from '../../shared/dbview/dbview';
 import {DBViewService} from '../../shared/dbview/dbview.service';
+import {PopoverControllerComponent, AlertType} from "../../shared/popover-controller/popover-controller";
 
 @Component({
   moduleId: module.id,
@@ -46,6 +47,13 @@ export class ManageViewsComponent implements OnInit {
     }
     // TODO: Make call to DBViewService
     console.log('TODO: delete view ' + this.viewToDelete.viewId);
+    let success = true;
+    if (success) {
+      PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.viewToDelete.name + '\' view deleted.');
+    } else {
+      PopoverControllerComponent.createAlert(AlertType.DANGER,
+        '\'' + this.viewToDelete.name + '\' could not be deleted.');
+    }
     // Call cancelDelete to remove modal
     this.cancelDelete();
   }

@@ -31,7 +31,17 @@
   }
 }
 
-.box-shadow {
+.box-shadow,
+.box-shadow-child > div {
   -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
   box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+}
+
+.fade-child > div {
+  opacity: 0;
+  transition: opacity .15s linear;
+}
+
+.fade-child.in > div {
+  opacity: 1;
 }
