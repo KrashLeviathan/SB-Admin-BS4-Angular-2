@@ -11,6 +11,11 @@ import {DBViewService} from '../../shared/dbview/dbview.service';
 export class ManageViewsComponent implements OnInit {
   dbviews: DBView[];
   activeView: DBView;
+  isConfirmingDelete: boolean = false;
+  viewToDelete: any = {
+    viewId: 0,
+    name: ''
+  };
 
   constructor(private dbViewService: DBViewService) {
   }
@@ -35,7 +40,23 @@ export class ManageViewsComponent implements OnInit {
     this.activeView = view;
   }
 
-  delete(viewId: number): void {
-    console.log('TODO: delete(' + viewId + ')');
+  deleteView(): void {
+    if (!this.isConfirmingDelete) {
+      return;
+    }
+    // TODO: Make call to DBViewService
+    console.log('TODO: delete view ' + this.viewToDelete.viewId);
+    // Call cancelDelete to remove modal
+    this.cancelDelete();
+  }
+
+  confirmDelete(view: DBView): void {
+    this.viewToDelete = view;
+    this.isConfirmingDelete = true;
+  }
+
+  cancelDelete(): void {
+    this.viewToDelete = {viewId: 0, name: ''};
+    this.isConfirmingDelete = false;
   }
 }

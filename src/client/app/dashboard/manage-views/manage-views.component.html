@@ -32,7 +32,7 @@
                                'fa-check-square-o': dbview === activeView}"
                    (click)="applyView(dbview)"></i></a>&nbsp;&nbsp;
               <a href="Javascript:void(0)"><i class="fa fa-lg fa-trash"
-                                              (click)="delete(dbview.viewId)"></i></a>
+                                              (click)="confirmDelete(dbview)"></i></a>
             </td>
           </tr>
           </tbody>
@@ -54,3 +54,24 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" [class.in]="isConfirmingDelete" [class.shown]="isConfirmingDelete">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" (click)="cancelDelete()">&times;</button>
+
+        <h4 class="modal-title">Confirm Delete</h4>
+      </div>
+      <div class="modal-body" *ngIf="viewToDelete.name !== ''">
+        Are you sure you want to delete the <b>{{viewToDelete.name}}</b> view?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deleteView()">DELETE</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->
