@@ -11,11 +11,13 @@ import {AlertType, PopoverControllerComponent} from "../../shared/popover-contro
 
 export class ManageUsersComponent implements OnInit {
   users: User[];
+
   userToDelete: any = {
     userId: 0,
     email: ''
   };
   isConfirmingDelete: boolean = false;
+
   userAdminChanges: any = {
     userId: 0,
     email: '',
@@ -33,11 +35,6 @@ export class ManageUsersComponent implements OnInit {
   getUsers(): void {
     this.userService.getUsers()
       .then(users => this.users = users);
-  }
-
-  configureUser(user: User): void {
-    console.log('TODO: configureUser(user)');
-    console.log(user);
   }
 
   deleteUser(): void {
@@ -72,11 +69,23 @@ export class ManageUsersComponent implements OnInit {
     if (!this.isConfirmingAdmin) {
       return;
     }
-    // TODO: Make call to UserService
-    // TODO: Make sure it's not the only admin removing his own privileges
-    console.log('TODO: make admin change');
-    // Call cancelAdminChange to remove modal
-    this.cancelAdminChange();
+    let serverRequest = (this.userAdminChanges.setAsAdmin)
+      ? this.userService.giveAdminPrivileges(this.userAdminChanges.userId)
+      : this.userService.revokeAdminPrivileges(this.userAdminChanges.userId);
+    serverRequest.then(success => {
+      if (success) {
+        let msg = (this.userAdminChanges.setAsAdmin)
+          ? 'given to'
+          : 'revoked from';
+        PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'Admin privileges were ' + msg
+          + ' \'' + this.userAdminChanges.email + '\'.');
+      } else {
+        PopoverControllerComponent.createAlert(AlertType.DANGER,
+          'Could not make admin changes to \'' + this.userAdminChanges.email + '\'.');
+      }
+      // Call cancelAdminChange to remove modal and to reset userAdminChanges
+      this.cancelAdminChange();
+    });
   }
 
   confirmAdminChange(user: User): void {

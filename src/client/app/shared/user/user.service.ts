@@ -78,4 +78,17 @@ export class UserService {
     console.log('deleteUser(' + userId + ') --> success');
     return Promise.resolve(true);
   }
+
+  giveAdminPrivileges(userId: number): Promise<boolean> {
+    // TODO: Replace with HTTP request
+    console.log('giveAdminPrivileges(' + userId + ') --> success');
+    return Promise.resolve(true);
+  }
+
+  revokeAdminPrivileges(userId: number): Promise<boolean> {
+    // TODO: Replace with HTTP request
+    // TODO: Make sure it's not the only admin removing his own privileges
+    console.log('revokeAdminPrivileges(' + userId + ') --> success');
+    return Promise.resolve(true);
+  }
 }
