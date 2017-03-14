@@ -4,8 +4,13 @@ import {HOUSEHOLDS} from './mock-households';
 
 @Injectable()
 export class HouseholdService {
-  getHousehold(id: number): Promise<Household> {
-    return Promise.resolve(HOUSEHOLDS[id]);
+  getHousehold(householdId: number): Promise<Household> {
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(HOUSEHOLDS[householdId]);
+      }, 1000);
+    });
   }
 
   saveHousehold(formData: Object): Promise<boolean> {

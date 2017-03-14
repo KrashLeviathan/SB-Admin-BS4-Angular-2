@@ -68,6 +68,7 @@
               [routerLink]="['../','service','new']" [routerLinkActive]="['router-link-active']">
         Add Service
       </button>
+      <i class="fa fa-lg fa-cog fa-spin pull-right buffer-right" style="margin-top: 0.5em;" *ngIf="savingState"></i>
     </div>
   </div>
 </div>

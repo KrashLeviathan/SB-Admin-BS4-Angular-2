@@ -8,24 +8,42 @@ export class DBViewService {
   getView(viewId: number): Promise<DBView> {
     // TODO: Replace with request to server
     return new Promise(resolve => {
-      let view = DB_VIEWS.find(view => view.viewId === viewId);
-      resolve(view);
+      // Simulate latency
+      setTimeout(() => {
+        let view = DB_VIEWS.find(view => view.viewId === viewId);
+        resolve(view);
+      }, 1000);
     });
   }
 
   getViews(): Promise<DBView[]> {
     // TODO: Replace with request to server
-    return Promise.resolve(DB_VIEWS);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(DB_VIEWS);
+      }, 1000);
+    });
   }
 
   getActiveViewId(): Promise<number> {
     // TODO: Replace with request to server
-    return Promise.resolve(2);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(2);
+      }, 1000);
+    });
   }
 
   deleteView(viewId: number): Promise<boolean> {
     // TODO: Replace with request to server
     console.log('deleteView(' + viewId + ') --> success');
-    return Promise.resolve(true);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
   }
 }

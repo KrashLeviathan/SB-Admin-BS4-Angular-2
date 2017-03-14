@@ -11,11 +11,14 @@ import {PopoverControllerComponent, AlertType} from '../../shared/popover-contro
 
 export class ServicesComponent implements OnInit {
   services: Service[];
+
   isConfirmingDelete: boolean = false;
   serviceToDelete: any = {
     serviceId: 0,
     name: ''
   };
+
+  savingState: boolean = false;
 
   constructor(private serviceService: ServiceService) {
   }
@@ -33,8 +36,11 @@ export class ServicesComponent implements OnInit {
     if (!this.isConfirmingDelete) {
       return;
     }
+    this.savingState = true;
+    this.isConfirmingDelete = false;
     this.serviceService.deleteService(this.serviceToDelete.serviceId)
       .then(success => {
+        this.savingState = false;
         if (success) {
           PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.serviceToDelete.name + '\' service ' +
             'was successfully deleted.');
@@ -42,7 +48,7 @@ export class ServicesComponent implements OnInit {
           PopoverControllerComponent.createAlert(AlertType.DANGER,
             '\'' + this.serviceToDelete.name + '\' could not be deleted.');
         }
-        // Call cancelDelete to remove modal and reset serviceToDelete
+        // Call cancelDelete to reset serviceToDelete
         this.cancelDelete();
       });
   }
