@@ -25,6 +25,8 @@ export class ManageUsersComponent implements OnInit {
   };
   isConfirmingAdmin: boolean = false;
 
+  savingState: boolean = false;
+
   constructor(private userService: UserService) {
   }
 
@@ -41,8 +43,11 @@ export class ManageUsersComponent implements OnInit {
     if (!this.isConfirmingDelete) {
       return;
     }
+    this.savingState = true;
+    this.isConfirmingDelete = false;
     this.userService.deleteUser(this.userToDelete.userId)
       .then(success => {
+        this.savingState = false;
         if (success) {
           PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.userToDelete.email + '\' was ' +
             'successfully removed from the account.');
@@ -50,7 +55,7 @@ export class ManageUsersComponent implements OnInit {
           PopoverControllerComponent.createAlert(AlertType.DANGER,
             '\'' + this.userToDelete.email + '\' could not be removed from the account.');
         }
-        // Call cancelDelete to remove modal and to reset userToDelete
+        // Call cancelDelete to reset userToDelete
         this.cancelDelete();
       });
   }
@@ -69,10 +74,13 @@ export class ManageUsersComponent implements OnInit {
     if (!this.isConfirmingAdmin) {
       return;
     }
+    this.savingState = true;
+    this.isConfirmingAdmin = false;
     let serverRequest = (this.userAdminChanges.setAsAdmin)
       ? this.userService.giveAdminPrivileges(this.userAdminChanges.userId)
       : this.userService.revokeAdminPrivileges(this.userAdminChanges.userId);
     serverRequest.then(success => {
+      this.savingState = false;
       if (success) {
         let msg = (this.userAdminChanges.setAsAdmin)
           ? 'given to'
@@ -83,7 +91,7 @@ export class ManageUsersComponent implements OnInit {
         PopoverControllerComponent.createAlert(AlertType.DANGER,
           'Could not make admin changes to \'' + this.userAdminChanges.email + '\'.');
       }
-      // Call cancelAdminChange to remove modal and to reset userAdminChanges
+      // Call cancelAdminChange reset userAdminChanges
       this.cancelAdminChange();
     });
   }

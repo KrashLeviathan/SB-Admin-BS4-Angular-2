@@ -34,61 +34,91 @@ export class UserService {
     // );
     // Return the current active user if there's already one loaded,
     // otherwise load the active user, set it, and return it
-    if (UserService.activeUser) {
-      return Promise.resolve(UserService.activeUser);
-    } else {
-      // TODO: Replace with HTTP request
-      return new Promise(resolve => {
+    return new Promise(resolve => {
+      if (UserService.activeUser) {
+        resolve(UserService.activeUser);
+      } else {
+        // TODO: Replace with HTTP request here (if there's not already an activeUser)
         this.getUser(1).then(user => {
           UserService.activeUser = user;
           resolve(UserService.activeUser);
         });
-      });
-    }
+      }
+    });
   }
 
   getUser(userId: number): Promise<User> {
     // TODO: Replace with HTTP request
     return new Promise(resolve => {
-      this.getUsers()
-        .then(users => {
-          resolve(users.find(user => user.userId === userId));
-        });
+      // Simulate latency
+      setTimeout(() => {
+        resolve(USERS.find(user => user.userId === userId));
+      }, 1000);
     });
   }
 
   getUsers(): Promise<User[]> {
     // TODO: Replace with HTTP request
-    return Promise.resolve(USERS);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(USERS);
+      }, 1000);
+    });
   }
 
   getUserPreferences(userId: number): Promise<any> {
     // TODO: Currently just getting drag positions
-    return Promise.resolve(localStorage.getItem('dragPositions'));
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(localStorage.getItem('dragPositions'));
+      }, 1000);
+    });
   }
 
   setUserPreferences(userId: number, prefs: any): Promise<boolean> {
     // TODO: Replace with HTTP request
     localStorage.setItem('dragPositions', JSON.stringify(prefs));
-    return Promise.resolve(true);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
   }
 
   deleteUser(userId: number): Promise<boolean> {
     // TODO: Replace with HTTP request
     console.log('deleteUser(' + userId + ') --> success');
-    return Promise.resolve(true);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
   }
 
   giveAdminPrivileges(userId: number): Promise<boolean> {
     // TODO: Replace with HTTP request
     console.log('giveAdminPrivileges(' + userId + ') --> success');
-    return Promise.resolve(true);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
   }
 
   revokeAdminPrivileges(userId: number): Promise<boolean> {
     // TODO: Replace with HTTP request
     // TODO: Make sure it's not the only admin removing his own privileges
     console.log('revokeAdminPrivileges(' + userId + ') --> success');
-    return Promise.resolve(true);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
   }
 }
