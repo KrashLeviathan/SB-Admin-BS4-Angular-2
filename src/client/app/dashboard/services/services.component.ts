@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Service} from '../../shared/service/service';
 import {ServiceService} from '../../shared/service/service.service';
+import {PopoverControllerComponent, AlertType} from '../../shared/popover-controller/popover-controller';
 
 @Component({
   moduleId: module.id,
@@ -32,10 +33,18 @@ export class ServicesComponent implements OnInit {
     if (!this.isConfirmingDelete) {
       return;
     }
-    // TODO: Make call to ServiceService
-    console.log('TODO: delete service ' + this.serviceToDelete.serviceId);
-    // Call cancelDelete to remove modal
-    this.cancelDelete();
+    this.serviceService.deleteService(this.serviceToDelete.serviceId)
+      .then(success => {
+        if (success) {
+          PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.serviceToDelete.name + '\' service ' +
+            'was successfully deleted.');
+        } else {
+          PopoverControllerComponent.createAlert(AlertType.DANGER,
+            '\'' + this.serviceToDelete.name + '\' could not be deleted.');
+        }
+        // Call cancelDelete to remove modal and reset serviceToDelete
+        this.cancelDelete();
+      });
   }
 
   confirmDelete(service: Service): void {

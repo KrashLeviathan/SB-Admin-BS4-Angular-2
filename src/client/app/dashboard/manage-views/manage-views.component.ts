@@ -45,17 +45,18 @@ export class ManageViewsComponent implements OnInit {
     if (!this.isConfirmingDelete) {
       return;
     }
-    // TODO: Make call to DBViewService
-    console.log('TODO: delete view ' + this.viewToDelete.viewId);
-    let success = true;
-    if (success) {
-      PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.viewToDelete.name + '\' view deleted.');
-    } else {
-      PopoverControllerComponent.createAlert(AlertType.DANGER,
-        '\'' + this.viewToDelete.name + '\' could not be deleted.');
-    }
-    // Call cancelDelete to remove modal
-    this.cancelDelete();
+    this.dbViewService.deleteView(this.viewToDelete.viewId)
+      .then(success => {
+        if (success) {
+          PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.viewToDelete.name + '\' view ' +
+            'was successfully deleted.');
+        } else {
+          PopoverControllerComponent.createAlert(AlertType.DANGER,
+            '\'' + this.viewToDelete.name + '\' could not be deleted.');
+        }
+        // Call cancelDelete to remove modal and reset viewToDelete
+        this.cancelDelete();
+      });
   }
 
   confirmDelete(view: DBView): void {

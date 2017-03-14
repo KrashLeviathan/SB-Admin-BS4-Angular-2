@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from '../../shared/user/user';
 import {UserService} from '../../shared/user/user.service';
+import {AlertType, PopoverControllerComponent} from "../../shared/popover-controller/popover-controller";
 
 @Component({
   moduleId: module.id,
@@ -43,10 +44,18 @@ export class ManageUsersComponent implements OnInit {
     if (!this.isConfirmingDelete) {
       return;
     }
-    // TODO: Make call to UserService
-    console.log('TODO: delete user ' + this.userToDelete.userId);
-    // Call cancelDelete to remove modal
-    this.cancelDelete();
+    this.userService.deleteUser(this.userToDelete.userId)
+      .then(success => {
+        if (success) {
+          PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.userToDelete.email + '\' was ' +
+            'successfully removed from the account.');
+        } else {
+          PopoverControllerComponent.createAlert(AlertType.DANGER,
+            '\'' + this.userToDelete.email + '\' could not be removed from the account.');
+        }
+        // Call cancelDelete to remove modal and to reset userToDelete
+        this.cancelDelete();
+      });
   }
 
   confirmDelete(user: User): void {

@@ -41,6 +41,13 @@ export class ServiceService {
    */
   createNewService(serviceType: ServiceType): Promise<number> {
     // TODO: Replace with HTTP request
+    console.log('ServiceService.createNewService(' + serviceType.name + ') --> ' + ServiceService.idCounter);
     return Promise.resolve(ServiceService.idCounter++);
+  }
+
+  deleteService(serviceId: number): Promise<boolean> {
+    // TODO: Replace with HTTP request
+    console.log('ServiceService.deleteService(' + serviceId + ') --> success');
+    return Promise.resolve(true);
   }
 }

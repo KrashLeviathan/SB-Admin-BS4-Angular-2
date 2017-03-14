@@ -72,4 +72,10 @@ export class UserService {
     localStorage.setItem('dragPositions', JSON.stringify(prefs));
     return Promise.resolve(true);
   }
+
+  deleteUser(userId: number): Promise<boolean> {
+    // TODO: Replace with HTTP request
+    console.log('deleteUser(' + userId + ') --> success');
+    return Promise.resolve(true);
+  }
 }

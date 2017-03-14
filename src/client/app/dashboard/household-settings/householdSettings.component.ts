@@ -3,6 +3,7 @@ import {NgForm} from '@angular/forms';
 import {HouseholdService} from '../../shared/household/household.service';
 import {Household} from '../../shared/household/household';
 import {STATES, State} from '../../states';
+import {AlertType, PopoverControllerComponent} from "../../shared/popover-controller/popover-controller";
 
 @Component({
   moduleId: module.id,
@@ -50,10 +51,11 @@ export class HouseholdSettingsComponent implements OnInit {
           this.activeHousehold.city = form.value.city;
           this.activeHousehold.state = form.value.state;
           this.activeHousehold.zipCode = form.value.zipCode;
+          PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'Household Settings were saved successfully.');
         } else {
-          // TODO: Display error message if the form failed to save on the server
           this.errorOnSave = true;
           this.formDisabled = false;
+          PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'Household Settings could not be saved.');
         }
       });
   }
