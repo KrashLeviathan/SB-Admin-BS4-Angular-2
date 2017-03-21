@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {UserService} from "../shared/user/user.service";
+import {GoogleService} from "../shared/google/google.service";
 
 /**
  *  This class represents the lazy loaded LoginComponent.
@@ -14,7 +15,7 @@ declare const gapi: any;
 })
 
 export class LoginComponent {
-  constructor(private router: Router, private userService: UserService) {
+  constructor(private router: Router, private userService: UserService, private google: GoogleService) {
   }
 
   ngAfterViewInit() {
@@ -38,6 +39,7 @@ export class LoginComponent {
     //YOUR CODE HERE
     //TODO send the info to the server. Have the server add a new user if it doesn't exist yet.
     //TODO figure out why it still tries to render the login button after redirecting.
+    this.google.loginUser(googleUser);
     this.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
 
     this.router.navigate(['/dashboard','home']);
