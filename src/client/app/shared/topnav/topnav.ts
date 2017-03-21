@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../user/user.service';
 
 @Component({
   moduleId: module.id,
@@ -6,7 +7,17 @@ import {Component} from '@angular/core';
   templateUrl: 'topnav.html',
 })
 
-export class TopNavComponent {
+export class TopNavComponent implements OnInit {
+  activeUserName: string;
+
+  constructor(private userService: UserService) {
+  }
+
+  ngOnInit(): void {
+    this.userService.getActiveUser()
+      .then(user => this.activeUserName = (user !== null) ? user.displayName : null);
+  }
+
   changeTheme(color: string): void {
     var link: any = $('<link>');
     link

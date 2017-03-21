@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DBView} from '../../shared/dbview/dbview';
 import {DBViewService} from '../../shared/dbview/dbview.service';
+import {PopoverControllerComponent, AlertType} from "../../shared/popover-controller/popover-controller";
 
 @Component({
   moduleId: module.id,
@@ -11,6 +12,14 @@ import {DBViewService} from '../../shared/dbview/dbview.service';
 export class ManageViewsComponent implements OnInit {
   dbviews: DBView[];
   activeView: DBView;
+
+  isConfirmingDelete: boolean = false;
+  viewToDelete: any = {
+    viewId: 0,
+    name: ''
+  };
+
+  savingState: boolean = false;
 
   constructor(private dbViewService: DBViewService) {
   }
@@ -35,7 +44,34 @@ export class ManageViewsComponent implements OnInit {
     this.activeView = view;
   }
 
-  delete(viewId: number): void {
-    console.log('TODO: delete(' + viewId + ')');
+  deleteView(): void {
+    if (!this.isConfirmingDelete) {
+      return;
+    }
+    this.savingState = true;
+    this.isConfirmingDelete = false;
+    this.dbViewService.deleteView(this.viewToDelete.viewId)
+      .then(success => {
+        this.savingState = false;
+        if (success) {
+          PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.viewToDelete.name + '\' view ' +
+            'was successfully deleted.');
+        } else {
+          PopoverControllerComponent.createAlert(AlertType.DANGER,
+            '\'' + this.viewToDelete.name + '\' could not be deleted.');
+        }
+        // Call cancelDelete to reset viewToDelete
+        this.cancelDelete();
+      });
+  }
+
+  confirmDelete(view: DBView): void {
+    this.viewToDelete = view;
+    this.isConfirmingDelete = true;
+  }
+
+  cancelDelete(): void {
+    this.viewToDelete = {viewId: 0, name: ''};
+    this.isConfirmingDelete = false;
   }
 }

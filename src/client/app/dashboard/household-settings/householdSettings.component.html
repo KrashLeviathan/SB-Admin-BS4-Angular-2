@@ -3,44 +3,44 @@
   <div class="row">
     <div class="col-lg-12">
       <h2 class="page-header">
-        Account Settings
+        Household Settings
       </h2>
     </div>
   </div>
   <!-- /.row -->
 
-  <div *ngIf="activeAccount" class="row">
+  <div *ngIf="activeHousehold" class="row">
     <div class="col-md-9 col-lg-7 col-xl-6">
 
       <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate class="buffer-bottom">
         <fieldset class="form-group"
-                  [class.has-warning]="accountName.errors && (accountName.dirty || accountName.touched)"
+                  [class.has-warning]="householdName.errors && (householdName.dirty || householdName.touched)"
                   [attr.disabled]="formDisabled ? true : null">
-          <label class="form-control-label">Account Name</label>
-          <input name="accountName" [ngModel]="activeAccount.accountName"
-                 required minlength=4 [attr.maxlength]="MAX_NAME_LENGTH" #accountName="ngModel"
-                 class="form-control form-control-warning" type="text" value="{{accountName.value}}">
+          <label class="form-control-label">Household Name</label>
+          <input name="householdName" [ngModel]="activeHousehold.householdName"
+                 required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH" #householdName="ngModel"
+                 class="form-control form-control-warning" type="text" value="{{householdName.value}}">
         </fieldset>
 
         <fieldset class="form-group"
                   [attr.disabled]="formDisabled ? true : null">
           <label class="form-control-label">Street Address</label>
-          <input name="streetAddress" [ngModel]="activeAccount.streetAddress"
-                 [attr.maxlength]="MAX_ADDRESS_LENGTH" #streetAddress="ngModel"
-                 class="form-control" type="text" value="{{streetAddress.value}}">
+          <input name="firstAddressLine" [ngModel]="activeHousehold.firstAddressLine"
+                 [attr.maxlength]="MAX_VARCHAR_LENGTH" #firstAddressLine="ngModel"
+                 class="form-control" type="text" value="{{firstAddressLine.value}}">
         </fieldset>
 
         <fieldset class="form-group"
                   [attr.disabled]="formDisabled ? true : null">
           <label class="form-control-label">City</label>
-          <input name="city" [ngModel]="activeAccount.city"
-                 [attr.maxlength]="MAX_CITY_LENGTH" #city="ngModel"
+          <input name="city" [ngModel]="activeHousehold.city"
+                 [attr.maxlength]="MAX_VARCHAR_LENGTH" #city="ngModel"
                  class="form-control" type="text" value="{{city.value}}">
         </fieldset>
 
         <fieldset class="form-group" [attr.disabled]="formDisabled ? true : null">
           <label class="form-control-label">State</label>
-          <select name="state" [ngModel]="activeAccount.state" required id="stateOption" class="form-control">
+          <select name="state" [ngModel]="activeHousehold.state" required id="stateOption" class="form-control">
             <option value="" disabled>Choose a state</option>
             <option *ngFor="let state of states" [ngValue]="state.abbreviation">
               {{state.fullName}} - {{state.abbreviation}}
@@ -49,12 +49,12 @@
         </fieldset>
 
         <fieldset id="zip-field" class="form-group"
-                  [class.has-warning]="zip.errors"
+                  [class.has-warning]="zipCode.errors"
                   [attr.disabled]="formDisabled ? true : null">
           <label class="form-control-label">Zip</label>
-          <input name="zip" [ngModel]="activeAccount.zip" #zip="ngModel"
+          <input name="zipCode" [ngModel]="activeHousehold.zipCode" #zipCode="ngModel"
                  class="form-control form-control-warning"
-                 type="text" pattern="(\d\d\d\d\d)?" value="{{zip.value}}">
+                 type="text" pattern="(\d\d\d\d\d)?" value="{{zipCode.value}}">
         </fieldset>
 
         <button type="button" class="btn btn-secondary" *ngIf="!formDisabled"
@@ -73,13 +73,13 @@
 
     </div>
     <div class="col-md-9 col-lg-5 col-xl-6">
-      <div [hidden]="!accountName.errors?.minlength" class="alert alert-warning" role="alert">
-        Account name must be greater than 4 characters.
+      <div [hidden]="!householdName.errors?.minlength" class="alert alert-warning" role="alert">
+        Household name must be greater than 4 characters.
       </div>
-      <div [hidden]="!accountName.errors?.required" class="alert alert-warning" role="alert">
-        Account name is required.
+      <div [hidden]="!householdName.errors?.required" class="alert alert-warning" role="alert">
+        Household name is required.
       </div>
-      <div [hidden]="!zip.errors" class="alert alert-warning" role="alert">
+      <div [hidden]="!zipCode.errors" class="alert alert-warning" role="alert">
         Zip codes must be five digits in length.
       </div>
     </div>

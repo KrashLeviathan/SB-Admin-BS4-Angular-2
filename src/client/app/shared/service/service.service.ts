@@ -14,12 +14,17 @@ export class ServiceService {
    * @returns {Promise<Service>}
    */
   getService(serviceId: number): Promise<Service> {
-    // TODO: Replace with HTTP request
-    if (!Number.isNaN(serviceId) && serviceId >= 1 && serviceId <= 4) {
-      return Promise.resolve(SERVICES[serviceId - 1]);
-    } else {
-      return Promise.resolve(null);
-    }
+    return new Promise(resolve => {
+      if (!Number.isNaN(serviceId) && serviceId >= 1 && serviceId <= 4) {
+        // TODO: Replace with HTTP request
+        // Simulate latency
+        setTimeout(() => {
+          resolve(SERVICES[serviceId - 1]);
+        }, 1000);
+      } else {
+        resolve(null);
+      }
+    });
   }
 
   /**
@@ -29,7 +34,12 @@ export class ServiceService {
    */
   getServices(): Promise<Service[]> {
     // TODO: Replace with HTTP request
-    return Promise.resolve(SERVICES);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(SERVICES);
+      }, 1000);
+    });
   }
 
   /**
@@ -41,6 +51,23 @@ export class ServiceService {
    */
   createNewService(serviceType: ServiceType): Promise<number> {
     // TODO: Replace with HTTP request
-    return Promise.resolve(ServiceService.idCounter++);
+    console.log('ServiceService.createNewService(' + serviceType.name + ') --> ' + ServiceService.idCounter);
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(ServiceService.idCounter++);
+      }, 1000);
+    });
+  }
+
+  deleteService(serviceId: number): Promise<boolean> {
+    // TODO: Replace with HTTP request
+    console.log('ServiceService.deleteService(' + serviceId + ') --> success');
+    return new Promise(resolve => {
+      // Simulate latency
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
   }
 }

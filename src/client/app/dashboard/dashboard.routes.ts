@@ -4,7 +4,7 @@ import {HomeRoutes} from './home/index';
 import {MainViewRoutes} from './main-view/main-view.routes';
 import {LogoutRoutes} from './logout/logout.routes';
 import {UserSettingsRoutes} from './user-settings/userSettings.routes';
-import {AccountSettingsRoutes} from './account-settings/accountSettings.routes';
+import {HouseholdSettingsRoutes} from './household-settings/householdSettings.routes';
 import {ServicesRoutes} from './services/services.routes';
 import {ManageViewsRoutes} from './manage-views/manage-views.routes';
 import {ManageUsersRoutes} from './manage-users/manage-users.routes';
@@ -21,7 +21,7 @@ export const DashboardRoutes: Route[] = [
       ...HomeRoutes,
       ...LogoutRoutes,
       ...UserSettingsRoutes,
-      ...AccountSettingsRoutes,
+      ...HouseholdSettingsRoutes,
       ...ServiceDetailRoutes,
       ...ServicesRoutes,
       ...ManageViewsRoutes,

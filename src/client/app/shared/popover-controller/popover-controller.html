@@ -1,0 +1,5 @@
+<alert *ngFor="let alert of staticAlertsArray; let i = index" class="box-shadow-child text-xs-center fade-child"
+       [class.in]="alert.fadedIn" [dismissOnTimeout]="alert.timeout"
+       [type]="alert.type" dismissible="true" (close)="closeStaticAlert(i)">
+  {{ alert?.msg }}
+</alert>
