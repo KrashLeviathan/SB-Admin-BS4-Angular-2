@@ -38,7 +38,7 @@ export class LoginComponent {
     console.log('Email: ' + profile.getEmail());
     //YOUR CODE HERE
     //TODO send the info to the server. Have the server add a new user if it doesn't exist yet.
-    //TODO figure out why it still tries to render the login button after redirecting.
+    //TODO check the result of this function. Make sure that the response is ok.
     this.google.loginUser(googleUser);
     this.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
 
