@@ -7,7 +7,7 @@ export class User {
   fullName: string;
   givenName: string;
   familyName: string;
-  imageUrl: string;
+  imageURL: string;
   email: string;
   role: string;
   created: string;
