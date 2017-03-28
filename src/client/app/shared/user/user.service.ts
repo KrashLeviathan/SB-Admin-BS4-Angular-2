@@ -77,6 +77,15 @@ export class UserService {
     });
   }
 
+  saveUser(formData: Object): Promise<boolean> {
+    // TODO: Save form data to server
+    console.log(formData);
+    return new Promise(resolve => {
+      // Simulate server latency with 1 second delay
+      setTimeout(() => resolve(true), 1000);
+    });
+  }
+
   setUserPreferences(userId: number, prefs: any): Promise<boolean> {
     // TODO: Replace with HTTP request
     localStorage.setItem('dragPositions', JSON.stringify(prefs));
