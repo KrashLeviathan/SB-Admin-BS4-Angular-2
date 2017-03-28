@@ -3,6 +3,8 @@ import {User} from './user';
 import {USERS} from './mock-users';
 import {EncryptionService} from '../encryption/encryption.service';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
+import {Response} from '@angular/http';
+import {Observable} from "rxjs";
 
 export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 
@@ -22,23 +24,21 @@ export class UserService {
   }
 
   getActiveUser(): Promise<User> {
-    // TODO: Enable encryption and cookies and such by uncommenting below
-    // let encryptedToken = Cookie.get('sessionToken');
-    // if (!encryptedToken) {
-    //   // Expired token returns null active user
-    //   return Promise.resolve(null);
-    // }
-    // // Decrypt session token
-    // let sessionToken = EncryptionService.decode(
-    //   EncryptionService.decrypt(encryptedToken)
-    // );
+    let encryptedToken = Cookie.get('sessionToken');
+    if (!encryptedToken) {
+      // Expired token returns null active user
+      return Promise.resolve(null);
+    }
+    // Decrypt session token
+    let sessionToken = EncryptionService.decode(
+      EncryptionService.decrypt(encryptedToken)
+    );
     // Return the current active user if there's already one loaded,
     // otherwise load the active user, set it, and return it
     return new Promise(resolve => {
       if (UserService.activeUser) {
         resolve(UserService.activeUser);
       } else {
-        // TODO: Replace with HTTP request here (if there's not already an activeUser)
         this.getUser(1).then(user => {
           UserService.activeUser = user;
           resolve(UserService.activeUser);
@@ -55,6 +55,11 @@ export class UserService {
         resolve(USERS.find(user => user.userId === userId));
       }, 1000);
     });
+  }
+
+  getUserByEmail(email: string): Promise<User> {
+    return http.;
+
   }
 
   getUsers(): Promise<User[]> {
@@ -120,5 +125,24 @@ export class UserService {
         resolve(true);
       }, 1000);
     });
+  }
+
+  private extractData(res: Response) {
+    let body = res.json();
+    console.log(body.data);
+    return body.data || { };
+  }
+
+  private handleError (error: Response | any) {
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.json() || '';
+      const err = body.error || JSON.stringify(body);
+      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+
+    return Observable.throw(errMsg);
   }
 }
