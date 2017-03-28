@@ -3,15 +3,18 @@ import {User} from './user';
 import {USERS} from './mock-users';
 import {EncryptionService} from '../encryption/encryption.service';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
-import {Response} from '@angular/http';
 import {Observable} from "rxjs";
+import {Headers, Http, RequestOptions} from '@angular/http';
+
 
 export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 
 @Injectable()
 export class UserService {
   static activeUser: User;
-
+  constructor (
+    private http: Http,
+  ) {}
   /**
    * On login, the active user sessionId is encrypted and stored in the cookies.
    * @param sessionToken
@@ -57,8 +60,8 @@ export class UserService {
     });
   }
 
-  getUserByEmail(email: string): Promise<User> {
-    return http.;
+  getUserByEmail(email: string, headers: Headers, options: RequestOptions): Promise<Response> {
+    return this.http.post(`http://localhost:8000/users/`+ email, '', options).toPromise();
 
   }
 

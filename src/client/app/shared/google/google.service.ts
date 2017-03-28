@@ -11,7 +11,6 @@ import {UserService} from "../user/user.service";
 export class GoogleService {
   private myUser: User;
   constructor (
-    private http: Http,
     private userService: UserService
   ) {}
 
@@ -34,7 +33,7 @@ export class GoogleService {
      *
      */
     //TODO try to get the user's info with the new endpoint jack will add first,
-    this.userService.getUserByEmail(this.myUser.email).then(
+    this.userService.getUserByEmail(this.myUser.email, headers, options).then(
       currUser => this.extractData
     );
     //Then add a new user if unsuccessful.
