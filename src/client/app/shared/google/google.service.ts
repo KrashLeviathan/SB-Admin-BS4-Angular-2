@@ -34,21 +34,31 @@ export class GoogleService {
     /**
      *
      */
-    //TODO replace with actual email
     let that = this;
-    this.userService.getUserByEmail('11').then(
+    //TODO replace with actual email returned from google. Jack hasn't implemented that method yet.
+    this.userService.getUserByGoogle(this.myUser.googleId).then(
       response => {
         that.acceptUser(response, googleUser);
       }
     ).catch(
       response => {
-        that.addNewUser(response, options, googleUser).catch(that.handleError);
+        that.addNewUser(response, options, googleUser);
       }
     );
   }
 
   private acceptUser(response: Response, googleUser: any){
     this.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
+
+    let user = new User();
+    let body = response.json();
+    user.userId = body.userId;
+    user.email = body.email;
+    user.givenName = body.givenName;
+    user.familyName = body.familyName;
+    user.imageURL = body.imageURL;
+    user.role = body.role;
+    this.userService.setActiveUser(user);
 
     this.router.navigate(['/dashboard','home']);
   }
@@ -60,6 +70,16 @@ export class GoogleService {
         response => {
           that.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
 
+          let user = new User();
+          let body = response.json();
+          user.userId = body.userId;
+          user.email = body.email;
+          user.givenName = body.givenName;
+          user.familyName = body.familyName;
+          user.imageURL = body.imageURL;
+          user.role = body.role;
+          this.userService.setActiveUser(user);
+
           that.router.navigate(['/dashboard', 'home']);
         }
       )
@@ -67,7 +87,6 @@ export class GoogleService {
   }
 
   private handleError (error: Response | any) {
-    console.log(error);
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';

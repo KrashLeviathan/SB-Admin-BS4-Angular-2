@@ -5,6 +5,7 @@ import {EncryptionService} from '../encryption/encryption.service';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {Observable} from "rxjs";
 import {Http, RequestOptions, Response} from '@angular/http';
+import {Router} from "@angular/router";
 
 
 export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
@@ -14,6 +15,7 @@ export class UserService {
   static activeUser: User;
   constructor (
     private http: Http,
+    private router: Router
   ) {}
   /**
    * On login, the active user sessionId is encrypted and stored in the cookies.
@@ -24,6 +26,11 @@ export class UserService {
       EncryptionService.encode(sessionToken)
     );
     Cookie.set('sessionToken', encryptedToken, DAYS_UNTIL_SESSION_EXPIRATION);
+  }
+
+  setActiveUser(user: User){
+    Cookie.set('userId', user.userId.toString());
+    UserService.activeUser = user;
   }
 
   getActiveUser(): Promise<User> {
@@ -42,26 +49,35 @@ export class UserService {
       if (UserService.activeUser) {
         resolve(UserService.activeUser);
       } else {
-        this.getUser(1).then(user => {
-          UserService.activeUser = user;
-          resolve(UserService.activeUser);
-        });
+        resolve(this.getUser(parseInt(Cookie.get('userId'))));
       }
     });
   }
 
   getUser(userId: number): Promise<User> {
-    // TODO: Replace with HTTP request
     return new Promise(resolve => {
-      // Simulate latency
-      setTimeout(() => {
-        resolve(USERS.find(user => user.userId === userId));
-      }, 1000);
+      this.http.get(`http://localhost:8000/users/` + userId).toPromise()
+        .then(
+          response => {
+            let body = response.json();
+            let user = new User();
+            user.userId = body.userId;
+            user.email = body.email;
+            user.givenName = body.givenName;
+            user.familyName = body.familyName;
+            user.imageURL = body.imageURL;
+            user.role = body.role;
+            this.setActiveUser(user);
+            resolve(user);
+          }
+        )
+        .catch(this.handleError);
     });
+
   }
 
-  getUserByEmail(email: string): Promise<Response> {
-    return this.http.get(`http://localhost:8000/users/`+ email).toPromise();
+  getUserByGoogle(googleId: string): Promise<Response> {
+    return this.http.get(`http://localhost:8000/users/google/`+ googleId).toPromise();
   }
 
   addNewUser(myUser: User, options: RequestOptions): Promise<Response> {
@@ -69,15 +85,32 @@ export class UserService {
   }
 
   getUsers(): Promise<User[]> {
-    // TODO: Replace with HTTP request
     return new Promise(resolve => {
-      // Simulate latency
-      setTimeout(() => {
-        resolve(USERS);
-      }, 1000);
+      this.http.get(`http://localhost:8000/users/`).toPromise()
+        .then(
+          response => {
+            let users = new Array<User>();
+            let body = response.json();
+            let count = 0;
+            body.forEach((currIndex:any) => {
+              let user = new User();
+              user.userId = currIndex.userId;
+              user.email = currIndex.email;
+              user.givenName = currIndex.givenName;
+              user.familyName = currIndex.familyName;
+              user.imageURL = currIndex.imageURL;
+              user.role = currIndex.role;
+              users[count] = user;
+              count++;
+            });
+            resolve(users);
+          }
+        )
+        .catch(this.handleError);
     });
   }
 
+  //TODO still.
   getUserPreferences(userId: number): Promise<any> {
     // TODO: Currently just getting drag positions
     return new Promise(resolve => {
