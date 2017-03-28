@@ -6,12 +6,14 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import {Response} from '@angular/http';
 import {UserService} from "../user/user.service";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class GoogleService {
   private myUser: User;
   constructor (
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
 
@@ -32,19 +34,40 @@ export class GoogleService {
     /**
      *
      */
-    //TODO try to get the user's info with the new endpoint jack will add first,
-    this.userService.getUserByEmail(this.myUser.email, headers, options).then(
-      currUser => this.extractData
+    //TODO replace with actual email
+    let that = this;
+    this.userService.getUserByEmail('11').then(
+      response => {
+        that.acceptUser(response, googleUser);
+      }
+    ).catch(
+      response => {
+        that.addNewUser(response, options, googleUser).catch(that.handleError);
+      }
     );
-    //Then add a new user if unsuccessful.
-    return ;
   }
-  private extractData(res: Response) {
-    let body = res.json();
-    return body || { };
+
+  private acceptUser(response: Response, googleUser: any){
+    this.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
+
+    this.router.navigate(['/dashboard','home']);
+  }
+
+  private addNewUser(response: Response, options: RequestOptions, googleUser: any){
+    let that = this;
+    return this.userService.addNewUser(this.myUser, options)
+      .then(
+        response => {
+          that.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
+
+          that.router.navigate(['/dashboard', 'home']);
+        }
+      )
+      .catch(this.handleError)
   }
 
   private handleError (error: Response | any) {
+    console.log(error);
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';

@@ -4,7 +4,7 @@ import {USERS} from './mock-users';
 import {EncryptionService} from '../encryption/encryption.service';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {Observable} from "rxjs";
-import {Headers, Http, RequestOptions} from '@angular/http';
+import {Http, RequestOptions, Response} from '@angular/http';
 
 
 export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
@@ -60,9 +60,12 @@ export class UserService {
     });
   }
 
-  getUserByEmail(email: string, headers: Headers, options: RequestOptions): Promise<Response> {
-    return this.http.post(`http://localhost:8000/users/`+ email, '', options).toPromise();
+  getUserByEmail(email: string): Promise<Response> {
+    return this.http.get(`http://localhost:8000/users/`+ email).toPromise();
+  }
 
+  addNewUser(myUser: User, options: RequestOptions): Promise<Response> {
+    return this.http.post('http://localhost:8000/users/', JSON.stringify(myUser), options).toPromise();
   }
 
   getUsers(): Promise<User[]> {

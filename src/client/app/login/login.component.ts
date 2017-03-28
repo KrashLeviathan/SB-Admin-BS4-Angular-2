@@ -34,11 +34,8 @@ export class LoginComponent {
   public onSignIn(googleUser: any){
     //This function sends the http request to the database.
 
-   this.google.loginUser(googleUser);
-    //stores the token
-    this.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
+    this.google.loginUser(googleUser);
 
-    // this.router.navigate(['/dashboard','home']);
   }
 
 
