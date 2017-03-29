@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {User} from './user';
-import {USERS} from './mock-users';
 import {EncryptionService} from '../encryption/encryption.service';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {Observable} from "rxjs";
-import {Http, RequestOptions, Response} from '@angular/http';
+import {Headers, Http, RequestOptions, Response} from '@angular/http';
 import {Router} from "@angular/router";
 
 
@@ -110,7 +109,6 @@ export class UserService {
     });
   }
 
-  //TODO still.
   getUserPreferences(userId: number): Promise<any> {
     // TODO: Currently just getting drag positions
     return new Promise(resolve => {
@@ -133,36 +131,73 @@ export class UserService {
   }
 
   deleteUser(userId: number): Promise<boolean> {
-    // TODO: Replace with HTTP request
     console.log('deleteUser(' + userId + ') --> success');
     return new Promise(resolve => {
-      // Simulate latency
-      setTimeout(() => {
-        resolve(true);
-      }, 1000);
+      this.http.delete(`http://localhost:8000/users/` + userId).toPromise()
+        .then(
+          response => {
+            let body = response.json();
+            let user = new User();
+            user.userId = body.userId;
+            user.email = body.email;
+            user.givenName = body.givenName;
+            user.familyName = body.familyName;
+            user.imageURL = body.imageURL;
+            user.role = body.role;
+
+            resolve(user);
+          }
+        )
+        .catch(this.handleError);
     });
   }
 
   giveAdminPrivileges(userId: number): Promise<boolean> {
-    // TODO: Replace with HTTP request
-    console.log('giveAdminPrivileges(' + userId + ') --> success');
     return new Promise(resolve => {
-      // Simulate latency
-      setTimeout(() => {
-        resolve(true);
-      }, 1000);
+      let json = new User();
+      json.userId = userId;
+      json.role = '1';
+      let headers = new Headers({ 'Content-Type': 'application/json'});
+      let options = new RequestOptions({ headers: headers });
+
+      this.http.post(`http://localhost:8000/users/createAdmin`, JSON.stringify(json), options).toPromise()
+        .then(
+          response => {
+            let body = response.json();
+            if(body.role == 1){
+              resolve(true);
+            }
+            resolve(false);
+          }
+        )
+        .catch(this.handleError);
     });
   }
 
   revokeAdminPrivileges(userId: number): Promise<boolean> {
-    // TODO: Replace with HTTP request
-    // TODO: Make sure it's not the only admin removing his own privileges
-    console.log('revokeAdminPrivileges(' + userId + ') --> success');
     return new Promise(resolve => {
-      // Simulate latency
-      setTimeout(() => {
-        resolve(true);
-      }, 1000);
+      let json = new User();
+      json.userId = userId;
+      json.role = '1';
+      let headers = new Headers({ 'Content-Type': 'application/json'});
+      let options = new RequestOptions({ headers: headers });
+
+      this.http.post(`http://localhost:8000/users/removeAdmin`, JSON.stringify(json), options).toPromise()
+        .then(
+          response => {
+            let body = response.json();
+            let user = new User();
+            user.userId = body.userId;
+            user.email = body.email;
+            user.givenName = body.givenName;
+            user.familyName = body.familyName;
+            user.imageURL = body.imageURL;
+            user.role = body.role;
+
+            resolve(user);
+          }
+        )
+        .catch(this.handleError);
     });
   }
 
