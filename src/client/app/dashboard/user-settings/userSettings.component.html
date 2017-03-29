@@ -28,12 +28,12 @@
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Primary</label>
               <input name="primary" (focus)="setSelectedColor('primary')"
-                     [ngModel]="activeUser.preferences.colorScheme.primary" #primary="ngModel"
+                     [ngModel]="formColors.primary" #primary="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="activeUser.preferences.colorScheme['primary']"
+                     [style.background]="formColors.primary"
                      style="width: 100%; height: 11em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="activeUser.preferences.colorScheme['primary']"/>
+                     [value]="formColors.primary" (keyup)="updateColor('primary',primary.value)"/>
             </fieldset>
           </div>
           <div class="col-xs-4">
@@ -41,22 +41,22 @@
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Secondary</label>
               <input name="secondary" (focus)="setSelectedColor('secondary')"
-                     [ngModel]="activeUser.preferences.colorScheme.secondary" #secondary="ngModel"
+                     [ngModel]="formColors.secondary" #secondary="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="activeUser.preferences.colorScheme['secondary']"
+                     [style.background]="formColors.secondary"
                      style="width: 100%; height: 4em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="activeUser.preferences.colorScheme['secondary']"/>
+                     [value]="formColors.secondary" (keyup)="updateColor('secondary',secondary.value)"/>
             </fieldset>
             <fieldset class="form-group"
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Accent</label>
               <input name="accent" (focus)="setSelectedColor('accent')"
-                     [ngModel]="activeUser.preferences.colorScheme.accent" #accent="ngModel"
+                     [ngModel]="formColors.accent" #accent="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="activeUser.preferences.colorScheme['accent']" style="width: 100%; height: 4em;"
+                     [style.background]="formColors.accent" style="width: 100%; height: 4em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="activeUser.preferences.colorScheme['accent']"/>
+                     [value]="formColors.accent" (keyup)="updateColor('accent',accent.value)"/>
             </fieldset>
           </div>
           <div class="col-xs-4">
@@ -64,23 +64,23 @@
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Light</label>
               <input name="neutralLight" (focus)="setSelectedColor('neutralLight')"
-                     [ngModel]="activeUser.preferences.colorScheme.neutralLight" #neutralLight="ngModel"
+                     [ngModel]="formColors.neutralLight" #neutralLight="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="activeUser.preferences.colorScheme['neutralLight']"
+                     [style.background]="formColors.neutralLight"
                      style="width: 100%; height: 4em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="activeUser.preferences.colorScheme['neutralLight']"/>
+                     [value]="formColors.neutralLight" (keyup)="updateColor('neutralLight',neutralLight.value)"/>
             </fieldset>
             <fieldset class="form-group"
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Dark</label>
               <input name="neutralDark" (focus)="setSelectedColor('neutralDark')"
-                     [ngModel]="activeUser.preferences.colorScheme.neutralDark" #neutralDark="ngModel"
+                     [ngModel]="formColors.neutralDark" #neutralDark="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="activeUser.preferences.colorScheme['neutralDark']"
+                     [style.background]="formColors.neutralDark"
                      style="width: 100%; height: 4em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="activeUser.preferences.colorScheme['neutralDark']"/>
+                     [value]="formColors.neutralDark" (keyup)="updateColor('neutralDark',neutralDark.value)"/>
             </fieldset>
           </div>
         </div>
@@ -97,11 +97,13 @@
         </button>
         &nbsp;&nbsp;&nbsp;<i class="fa fa-lg fa-cog fa-spin" *ngIf="savingState"></i>
         &nbsp;&nbsp;&nbsp;<span class="text-danger" [hidden]="!errorOnSave">Invalid form!</span>
+        <p class="font-italic buffer-top buffer-bottom"><b>NOTE:</b> To make account changes related to the Google
+          account used for login, please visit the Google account settings page.</p>
       </form>
 
     </div>
     <div class="col-md-9 col-lg-5 col-xl-6">
-      <span [(colorPicker)]="activeUser.preferences.colorScheme[selectedColor]"
+      <span [(colorPicker)]="formColors[selectedColor]"
             [cpDialogDisplay]="'inline'" [cpCancelButton]="true" [cpCancelButtonClass]="'btn btn-primary'"
             [cpAlphaChannel]="'disabled'" [cpToggle]="!formDisabled"
             style="width: 0; height: 330px; display: inline-block"></span>
@@ -111,6 +113,11 @@
       </div>
       <div [hidden]="!displayName.errors?.required" class="alert alert-warning" role="alert">
         Display Name is required.
+      </div>
+      <div
+        [hidden]="!primary.errors && !secondary.errors && !accent.errors && !neutralLight.errors && !neutralDark.errors"
+        class="alert alert-warning" role="alert">
+        Color fields are required. Enter a color in HEX format for each color field, or use the Color Picker.
       </div>
     </div>
   </div>

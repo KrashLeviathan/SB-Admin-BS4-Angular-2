@@ -50,6 +50,10 @@ export class UserSettingsComponent implements OnInit {
     this.selectedColor = colorName;
   }
 
+  updateColor(colorName: string, value: string) {
+    (<any>this.formColors)[colorName] = value;
+  }
+
   onSubmit(form: NgForm): void {
     if (!form.valid) {
       this.errorOnSave = true;
@@ -80,6 +84,13 @@ export class UserSettingsComponent implements OnInit {
   cancelChanges(form: NgForm): void {
     this.errorOnSave = false;
     this.formDisabled = true;
+    this.formColors = {
+      primary: this.activeUser.preferences.colorScheme.primary,
+      secondary: this.activeUser.preferences.colorScheme.secondary,
+      accent: this.activeUser.preferences.colorScheme.accent,
+      neutralLight: this.activeUser.preferences.colorScheme.neutralLight,
+      neutralDark: this.activeUser.preferences.colorScheme.neutralDark
+    };
     form.resetForm({
       displayName: this.activeUser.displayName,
       primary: this.activeUser.preferences.colorScheme.primary,
