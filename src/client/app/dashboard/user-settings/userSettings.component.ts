@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForm} from "@angular/forms";
-import {AlertType, PopoverControllerComponent} from "../../shared/popover-controller/popover-controller";
-import {UserService} from "../../shared/user/user.service";
-import {User} from "../../shared/user/user";
-import {ColorScheme} from "../../shared/user/color-scheme";
+import {NgForm} from '@angular/forms';
+import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
+import {UserService} from '../../shared/user/user.service';
+import {User} from '../../shared/user/user';
+import {ColorScheme} from '../../shared/user/color-scheme';
 
 @Component({
   moduleId: module.id,
@@ -43,7 +43,7 @@ export class UserSettingsComponent implements OnInit {
 
   getTextColor(color: string): string {
     // TODO
-    return "";
+    return '';
   }
 
   setSelectedColor(colorName: string) {

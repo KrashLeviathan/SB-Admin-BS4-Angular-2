@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {UserService} from "../shared/user/user.service";
-import {GoogleService} from "../shared/google/google.service";
-import {Observable} from "rxjs";
+import {Component, AfterViewInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {UserService} from '../shared/user/user.service';
+import {GoogleService} from '../shared/google/google.service';
+import {Observable} from 'rxjs';
 import {Response} from '@angular/http';
 
 
@@ -17,7 +17,7 @@ declare const gapi: any;
   templateUrl: 'login.component.html'
 })
 
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   constructor(private router: Router, private userService: UserService, private google: GoogleService) {
   }
 
@@ -41,16 +41,16 @@ export class LoginComponent {
     //stores the token
     this.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
 
-    this.router.navigate(['/dashboard','home']);
+    this.router.navigate(['/dashboard', 'home']);
   }
 
   private extractData(res: Response) {
     let body = res.json();
     console.log(body.data);
-    return body.data || { };
+    return body.data || {};
   }
 
-  private handleError (error: Response | any) {
+  private handleError(error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';

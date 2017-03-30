@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DBView} from '../../shared/dbview/dbview';
 import {DBViewService} from '../../shared/dbview/dbview.service';
-import {PopoverControllerComponent, AlertType} from "../../shared/popover-controller/popover-controller";
+import {PopoverControllerComponent, AlertType} from '../../shared/popover-controller/popover-controller';
 
 @Component({
   moduleId: module.id,

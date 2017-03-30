@@ -3,7 +3,7 @@ import {NgForm} from '@angular/forms';
 import {HouseholdService} from '../../shared/household/household.service';
 import {Household} from '../../shared/household/household';
 import {STATES, State} from '../../states';
-import {AlertType, PopoverControllerComponent} from "../../shared/popover-controller/popover-controller";
+import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
 
 @Component({
   moduleId: module.id,

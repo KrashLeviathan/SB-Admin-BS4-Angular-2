@@ -21,18 +21,6 @@ export enum AlertType {
 export class PopoverControllerComponent implements OnInit {
   static alerts: any[] = [];
 
-  ngOnInit(): void {
-    // TODO: Get any messages from server?
-  }
-
-  get staticAlertsArray() {
-    return PopoverControllerComponent.alerts;
-  }
-
-  closeStaticAlert(i: number): void {
-    PopoverControllerComponent.closeAlert(i);
-  }
-
   /**
    * Use this static method to display an alert at the top of the app.
    * @param alertType - Determines the color of the alert
@@ -69,7 +57,24 @@ export class PopoverControllerComponent implements OnInit {
     }, 5);
   }
 
+  /**
+   * Allow the user to programmatically close an alert.
+   * @param i
+   */
   static closeAlert(i: number): void {
     this.alerts.splice(i, 1);
   }
+
+  ngOnInit(): void {
+    // TODO: Get any messages from server?
+  }
+
+  get staticAlertsArray() {
+    return PopoverControllerComponent.alerts;
+  }
+
+  closeStaticAlert(i: number): void {
+    PopoverControllerComponent.closeAlert(i);
+  }
+
 }

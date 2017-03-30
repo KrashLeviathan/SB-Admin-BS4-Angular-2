@@ -1,19 +1,19 @@
 import {Injectable} from '@angular/core';
-import {Json} from "@angular/common/src/facade/lang";
-import {User} from "../user/user";
-import {Headers, Http, RequestOptions, Response} from '@angular/http';
-import {Observable} from "rxjs";
+// import {Json} from '@angular/common/src/facade/lang';
+import {User} from '../user/user';
+import {Headers, Http, RequestOptions} from '@angular/http';
+// import {Response} from '@angular/http';
+// import {Observable} from 'rxjs';
 
 @Injectable()
 export class GoogleService {
   private myUser: User;
-  constructor (
-    private http: Http
-  ) {}
+
+  constructor(private http: Http) {
+  }
 
 
-
-  loginUser(googleUser: any){
+  loginUser(googleUser: any) {
     let profile = googleUser.getBasicProfile();
     this.myUser = new User();
     this.myUser.googleId = profile.getId();
@@ -24,8 +24,8 @@ export class GoogleService {
     this.myUser.email = profile.getEmail();
     this.myUser.role = '0';
 
-    let headers = new Headers({ 'Content-Type': 'application/json'});
-    let options = new RequestOptions({ headers: headers });
+    let headers = new Headers({'Content-Type': 'application/json'});
+    let options = new RequestOptions({headers: headers});
     /**
      *
      */
