@@ -25,6 +25,7 @@ export class UserService {
       EncryptionService.encode(sessionToken)
     );
     Cookie.set('sessionToken', encryptedToken, DAYS_UNTIL_SESSION_EXPIRATION);
+    //TODO send sessionToken to the server to save.
   }
 
   setActiveUser(user: User){

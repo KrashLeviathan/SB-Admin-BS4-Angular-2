@@ -61,6 +61,7 @@ export class GoogleService {
     this.userService.setActiveUser(user);
 
     this.router.navigate(['/dashboard','home']);
+
   }
 
   private addNewUser(response: Response, options: RequestOptions, googleUser: any){
