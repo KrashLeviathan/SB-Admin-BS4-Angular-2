@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from '../../shared/user/user';
 import {UserService} from '../../shared/user/user.service';
-import {AlertType, PopoverControllerComponent} from "../../shared/popover-controller/popover-controller";
+import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
 
 @Component({
   moduleId: module.id,

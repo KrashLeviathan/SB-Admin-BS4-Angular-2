@@ -1,8 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {UserService} from "../shared/user/user.service";
-import {GoogleService} from "../shared/google/google.service";
-
+import {Component, AfterViewInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {UserService} from '../shared/user/user.service';
+import {GoogleService} from '../shared/google/google.service';
 
 
 /**
@@ -16,7 +15,7 @@ declare const gapi: any;
   templateUrl: 'login.component.html'
 })
 
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   constructor(private router: Router, private userService: UserService, private google: GoogleService) {
   }
 
@@ -37,6 +36,7 @@ export class LoginComponent {
     this.google.loginUser(googleUser);
 
   }
+
 
 
 }
