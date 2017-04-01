@@ -36,7 +36,7 @@ export const SERVICES: Service[] = [
     wide: false,
     tall: false,
     data: {
-      location: 'Ames',
+      location: 'Ames, IA',
       temp: 42,
       celsius: false
     }

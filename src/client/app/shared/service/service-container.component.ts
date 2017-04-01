@@ -6,13 +6,21 @@ import {ServiceDirective} from './service.directive';
   moduleId: module.id,
   selector: 'service-component',
   template: `
-    <div class="tile-container" *ngIf="service">
-      <template serviceHost></template>
+    <div class="card fill-space">
+      <div class="card-block tile-container" *ngIf="service">
+        <template serviceHost></template>
+      </div>
     </div>`,
   styles: [
       `
-      .tile-container {
-        background-color: #b0e1ef;
+      .fill-space {
+        height: 100%;
+        width: 100%;
+      }
+
+      .card-block.tile-container {
+        background-color: #F0F8FF;
+        /*background-color: #E0FFFF;*/
         padding: 5px;
         height: 100%;
         width: 100%;
