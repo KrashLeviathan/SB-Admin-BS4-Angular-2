@@ -1,15 +1,22 @@
 import {Injectable} from '@angular/core';
 import {Household} from './household';
 import {HOUSEHOLDS} from './mock-households';
+import {Http} from "@angular/http";
+import {UserService} from "../user/user.service";
 
 @Injectable()
 export class HouseholdService {
+  constructor (
+    private http: Http,
+  ) {}
   getHousehold(householdId: number): Promise<Household> {
-    return new Promise(resolve => {
-      // Simulate latency
-      setTimeout(() => {
-        resolve(HOUSEHOLDS[householdId]);
-      }, 1000);
+    return new Promise(resolve =>{
+      this.http.get(`http://localhost:8000/households/` + UserService.activeUser.householdId).toPromise().then(
+        response => {
+          let house = response.json();
+          resolve(house);
+        }
+      )
     });
   }
 

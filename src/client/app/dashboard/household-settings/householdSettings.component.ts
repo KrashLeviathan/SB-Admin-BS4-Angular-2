@@ -4,6 +4,7 @@ import {HouseholdService} from '../../shared/household/household.service';
 import {Household} from '../../shared/household/household';
 import {STATES, State} from '../../states';
 import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
+import {UserService} from "../../shared/user/user.service";
 
 @Component({
   moduleId: module.id,
@@ -21,13 +22,15 @@ export class HouseholdSettingsComponent implements OnInit {
   savingState: boolean = false;
   errorOnSave: boolean = false;
 
-  constructor(private householdService: HouseholdService) {
+  constructor(private householdService: HouseholdService, private userService: UserService) {
     this.states = STATES;
   }
 
   ngOnInit(): void {
-    this.getActiveHousehold()
-      .then(household => this.activeHousehold = household);
+    this.userService.getActiveUser().then(resolve => {
+      this.getActiveHousehold()
+        .then(household => this.activeHousehold = household);
+    })
   }
 
   getActiveHousehold(): Promise<Household> {
