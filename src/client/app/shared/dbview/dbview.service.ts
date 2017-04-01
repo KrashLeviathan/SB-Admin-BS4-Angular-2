@@ -12,7 +12,7 @@ export class DBViewService {
       setTimeout(() => {
         let view = DB_VIEWS.find(view => view.viewId === viewId);
         resolve(view);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -22,7 +22,7 @@ export class DBViewService {
       // Simulate latency
       setTimeout(() => {
         resolve(DB_VIEWS);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -32,7 +32,7 @@ export class DBViewService {
       // Simulate latency
       setTimeout(() => {
         resolve(2);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -43,7 +43,7 @@ export class DBViewService {
       // Simulate latency
       setTimeout(() => {
         resolve(true);
-      }, 1000);
+      }, 250);
     });
   }
 }

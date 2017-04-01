@@ -39,7 +39,7 @@ export class UserService {
         resolve(UserService.activeUser);
       } else {
         // TODO: Replace with HTTP request here (if there's not already an activeUser)
-        this.getUser(1).then(user => {
+        this.getUser(2).then(user => {
           UserService.activeUser = user;
           resolve(UserService.activeUser);
         });
@@ -53,7 +53,7 @@ export class UserService {
       // Simulate latency
       setTimeout(() => {
         resolve(USERS.find(user => user.userId === userId));
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -63,7 +63,7 @@ export class UserService {
       // Simulate latency
       setTimeout(() => {
         resolve(USERS);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -73,7 +73,7 @@ export class UserService {
       // Simulate latency
       setTimeout(() => {
         resolve(localStorage.getItem('dragPositions'));
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -82,7 +82,7 @@ export class UserService {
     console.log(formData);
     return new Promise(resolve => {
       // Simulate server latency with 1 second delay
-      setTimeout(() => resolve(true), 1000);
+      setTimeout(() => resolve(true), 250);
     });
   }
 
@@ -93,7 +93,7 @@ export class UserService {
       // Simulate latency
       setTimeout(() => {
         resolve(true);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -104,7 +104,7 @@ export class UserService {
       // Simulate latency
       setTimeout(() => {
         resolve(true);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -115,7 +115,7 @@ export class UserService {
       // Simulate latency
       setTimeout(() => {
         resolve(true);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -127,7 +127,7 @@ export class UserService {
       // Simulate latency
       setTimeout(() => {
         resolve(true);
-      }, 1000);
+      }, 250);
     });
   }
 }

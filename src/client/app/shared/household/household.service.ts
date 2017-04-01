@@ -9,7 +9,7 @@ export class HouseholdService {
       // Simulate latency
       setTimeout(() => {
         resolve(HOUSEHOLDS[householdId]);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -18,7 +18,7 @@ export class HouseholdService {
     console.log(formData);
     return new Promise(resolve => {
       // Simulate server latency with 1 second delay
-      setTimeout(() => resolve(true), 1000);
+      setTimeout(() => resolve(true), 250);
     });
   }
 }

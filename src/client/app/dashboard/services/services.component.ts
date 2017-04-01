@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Service} from '../../shared/service/service';
 import {ServiceService} from '../../shared/service/service.service';
 import {PopoverControllerComponent, AlertType} from '../../shared/popover-controller/popover-controller';
+import {UserService} from '../../shared/user/user.service';
 
 @Component({
   moduleId: module.id,
@@ -11,6 +12,7 @@ import {PopoverControllerComponent, AlertType} from '../../shared/popover-contro
 
 export class ServicesComponent implements OnInit {
   services: Service[];
+  userIsAdmin: boolean = false;
 
   isConfirmingDelete: boolean = false;
   serviceToDelete: any = {
@@ -20,7 +22,7 @@ export class ServicesComponent implements OnInit {
 
   savingState: boolean = false;
 
-  constructor(private serviceService: ServiceService) {
+  constructor(private serviceService: ServiceService, private userService: UserService) {
   }
 
   getServices(): void {
@@ -29,11 +31,12 @@ export class ServicesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userService.getActiveUser().then(user => this.userIsAdmin = user.isAdmin);
     this.getServices();
   }
 
   deleteService(): void {
-    if (!this.isConfirmingDelete) {
+    if (!this.isConfirmingDelete || !this.userIsAdmin) {
       return;
     }
     this.savingState = true;
@@ -54,11 +57,17 @@ export class ServicesComponent implements OnInit {
   }
 
   confirmDelete(service: Service): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     this.serviceToDelete = service;
     this.isConfirmingDelete = true;
   }
 
   cancelDelete(): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     this.serviceToDelete = {serviceId: 0, name: ''};
     this.isConfirmingDelete = false;
   }

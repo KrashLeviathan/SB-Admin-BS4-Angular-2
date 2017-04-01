@@ -10,6 +10,8 @@ import {Service} from '../../../shared/service/service';
 export class ServiceConfigComponent implements OnInit {
   @Input() service: Service;
 
+  // TODO: Confirm user is admin before allowing access to this page
+
   ngOnInit(): void {
     // TODO
   }

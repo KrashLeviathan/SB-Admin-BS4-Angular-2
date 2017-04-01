@@ -20,7 +20,7 @@ export class ServiceService {
         // Simulate latency
         setTimeout(() => {
           resolve(SERVICES[serviceId - 1]);
-        }, 1000);
+        }, 250);
       } else {
         resolve(null);
       }
@@ -38,7 +38,7 @@ export class ServiceService {
       // Simulate latency
       setTimeout(() => {
         resolve(SERVICES);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -56,7 +56,7 @@ export class ServiceService {
       // Simulate latency
       setTimeout(() => {
         resolve(ServiceService.idCounter++);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -67,7 +67,7 @@ export class ServiceService {
       // Simulate latency
       setTimeout(() => {
         resolve(true);
-      }, 1000);
+      }, 250);
     });
   }
 }
