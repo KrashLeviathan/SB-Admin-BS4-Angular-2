@@ -31,12 +31,17 @@ export class ManageUsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUsers();
+    this.userService.getActiveUser().then(result => {
+      this.getUsers();
+    });
+
   }
 
   getUsers(): void {
-    this.userService.getUsers()
-      .then(users => this.users = users);
+    this.userService.getUsers(UserService.activeUser.householdId)
+      .then(users => {
+        this.users = users
+      });
   }
 
   deleteUser(): void {

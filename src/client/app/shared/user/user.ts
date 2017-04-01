@@ -9,6 +9,7 @@ export class User {
   familyName: string;
   imageURL: string;
   email: string;
+  householdId: number;
   role: string;
   created: string;
   lastUpdated: string;

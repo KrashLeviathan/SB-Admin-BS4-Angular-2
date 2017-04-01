@@ -19,7 +19,8 @@ export class GoogleService {
   ) {}
 
 
-  loginUser(googleUser: any) {
+  loginUser(googleUser: any) : Promise<User>{
+    console.log("Logging in user");
     let profile = googleUser.getBasicProfile();
     this.myUser = new User();
     this.myUser.googleId = profile.getId();
@@ -35,22 +36,27 @@ export class GoogleService {
     /**
      *
      */
-    let that = this;
-    //TODO replace with actual email returned from google. Jack hasn't implemented that method yet.
-    this.userService.getUserByGoogle(this.myUser.googleId).then(
-      response => {
-        that.acceptUser(response, googleUser);
-      }
-    ).catch(
-      response => {
-        that.addNewUser(response, options, googleUser);
-      }
-    );
+    return new Promise(resolve => {
+      //TODO replace with actual email returned from google. Jack hasn't implemented that method yet.
+      Promise.all([
+        this.userService.getUserByGoogle(this.myUser.googleId),
+        this.userService.getUserHouseholdByGoogle(this.myUser.googleId)
+      ]).then(
+        response => {
+          this.acceptUser(response[0], response[1], googleUser);
+          resolve();
+        }
+      ).catch(
+        response => {
+          this.addNewUser(response[0], options, googleUser);
+          resolve();
+        }
+      );
+    })
   }
 
-  private acceptUser(response: Response, googleUser: any){
+  private acceptUser(response: Response, householdId: number, googleUser: any){
     this.userService.setActiveUserSession(googleUser.getAuthResponse().id_token);
-
     let user = new User();
     let body = response.json();
     user.userId = body.userId;
@@ -59,9 +65,8 @@ export class GoogleService {
     user.familyName = body.familyName;
     user.imageURL = body.imageURL;
     user.role = body.role;
+    user.householdId = householdId;
     this.userService.setActiveUser(user);
-
-    this.router.navigate(['/dashboard','home']);
 
   }
 
@@ -80,9 +85,10 @@ export class GoogleService {
           user.familyName = body.familyName;
           user.imageURL = body.imageURL;
           user.role = body.role;
+          this.userService.getUserHousehold(user.userId).then(householdId => {
+            UserService.activeUser.householdId = householdId;
+          });
           this.userService.setActiveUser(user);
-
-          that.router.navigate(['/dashboard', 'home']);
         }
       )
       .catch(this.handleError)

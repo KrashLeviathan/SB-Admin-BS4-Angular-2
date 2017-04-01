@@ -51,17 +51,24 @@ export class UserService {
       if (UserService.activeUser) {
         resolve(UserService.activeUser);
       } else {
-        resolve(this.getUser(parseInt(Cookie.get('userId'))));
+        this.getUser(parseInt(Cookie.get('userId'))).then(result => {
+          resolve(result);
+        })
       }
     });
   }
 
   getUser(userId: number): Promise<User> {
     return new Promise(resolve => {
-      this.http.get(`http://localhost:8000/users/` + userId).toPromise()
-        .then(
+
+      Promise.all([
+        this.http.get(`http://localhost:8000/users/` + userId).toPromise(),
+        this.getUserHousehold(userId),
+        this.getUserPreferences(userId)
+      ]).then(
           response => {
-            let body = response.json();
+
+            let body = response[0].json();
             let user = new User();
             user.userId = body.userId;
             user.email = body.email;
@@ -69,10 +76,15 @@ export class UserService {
             user.familyName = body.familyName;
             user.imageURL = body.imageURL;
             user.role = body.role;
-            this.getUserPreferences(user.userId).then(preferences => {
-              user.preferences = preferences;
-            });
+            user.householdId = response[1];
+            user.preferences = response[2];
+
             this.setActiveUser(user);
+            if(user.role == "1"){
+              user.isAdmin = true;
+            }else{
+              user.isAdmin = false;
+            }
             resolve(user);
           }
         )
@@ -89,9 +101,9 @@ export class UserService {
     return this.http.post('http://localhost:8000/users/', JSON.stringify(myUser), options).toPromise();
   }
 
-  getUsers(): Promise<User[]> {
+  getUsers(householdId: number): Promise<User[]> {
     return new Promise(resolve => {
-      this.http.get(`http://localhost:8000/users/`).toPromise()
+      this.http.get(`http://localhost:8000/households/` + householdId + `/users`).toPromise()
         .then(
           response => {
             let users = new Array<User>();
@@ -105,6 +117,12 @@ export class UserService {
               user.familyName = currIndex.familyName;
               user.imageURL = currIndex.imageURL;
               user.role = currIndex.role;
+              user.displayName = currIndex.displayName;
+              if(user.role == "1"){
+                user.isAdmin = true;
+              }else{
+                user.isAdmin = false;
+              }
               users[count] = user;
               count++;
             });
@@ -115,17 +133,39 @@ export class UserService {
     });
   }
 
+  getUserHousehold(userId: number): Promise<number> {
+    return new Promise(resolve => {
+      this.http.get(`http://localhost:8000/users/` + userId + `/household`).toPromise()
+        .then(household => {
+          let body = household.json();
+          resolve(body.householdId);
+      });
+    });
+  }
+
+  getUserHouseholdByGoogle(googleId: string): Promise<number> {
+    return new Promise(resolve => {
+      this.http.get(`http://localhost:8000/users/google/` + googleId + `/household`).toPromise()
+        .then(household => {
+          let body = household.json();
+          resolve(body.householdId);
+        });
+    });
+  }
+
   getUserPreferences(userId: number): Promise<UserPreferences> {
     //TODO: Currently just getting drag positions
     //TODO set the user colorScheme
     return new Promise(resolve => {
-      // Simulate latency
-      let preferences = new UserPreferences();
-      preferences.colorScheme = new ColorScheme();
-
-      setTimeout(() => {
-        resolve(preferences);
-      }, 1000);
+      resolve(localStorage.getItem('dragPositions'));
+      //
+      // // Simulate latency
+      // let preferences = new UserPreferences();
+      // preferences.colorScheme = new ColorScheme();
+      //
+      // setTimeout(() => {
+      //   resolve(preferences);
+      // }, 1000);
     });
   }
 

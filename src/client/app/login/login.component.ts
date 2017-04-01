@@ -33,7 +33,11 @@ export class LoginComponent implements AfterViewInit {
   public onSignIn(googleUser: any){
     //This function sends the http request to the database.
 
-    this.google.loginUser(googleUser);
+    this.google.loginUser(googleUser).then(
+      response => {
+        this.router.navigate(['/dashboard', 'home'])
+      }
+    );
 
   }
 
