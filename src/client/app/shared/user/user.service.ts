@@ -5,6 +5,8 @@ import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {Observable} from "rxjs";
 import {Headers, Http, RequestOptions, Response} from '@angular/http';
 import {Router} from "@angular/router";
+import {UserPreferences} from "./user-preferences";
+import {ColorScheme} from "./color-scheme";
 
 
 export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
@@ -67,6 +69,9 @@ export class UserService {
             user.familyName = body.familyName;
             user.imageURL = body.imageURL;
             user.role = body.role;
+            this.getUserPreferences(user.userId).then(preferences => {
+              user.preferences = preferences;
+            });
             this.setActiveUser(user);
             resolve(user);
           }
@@ -110,22 +115,17 @@ export class UserService {
     });
   }
 
-  getUserPreferences(userId: number): Promise<any> {
-    // TODO: Currently just getting drag positions
+  getUserPreferences(userId: number): Promise<UserPreferences> {
+    //TODO: Currently just getting drag positions
+    //TODO set the user colorScheme
     return new Promise(resolve => {
       // Simulate latency
-      setTimeout(() => {
-        resolve(localStorage.getItem('dragPositions'));
-      }, 1000);
-    });
-  }
+      let preferences = new UserPreferences();
+      preferences.colorScheme = new ColorScheme();
 
-  saveUser(formData: Object): Promise<boolean> {
-    // TODO: Save form data to server
-    console.log(formData);
-    return new Promise(resolve => {
-      // Simulate server latency with 1 second delay
-      setTimeout(() => resolve(true), 1000);
+      setTimeout(() => {
+        resolve(preferences);
+      }, 1000);
     });
   }
 
@@ -137,6 +137,15 @@ export class UserService {
       setTimeout(() => {
         resolve(true);
       }, 1000);
+    });
+  }
+
+  saveUser(formData: Object): Promise<boolean> {
+    // TODO: Save form data to server
+    console.log(formData);
+    return new Promise(resolve => {
+      // Simulate server latency with 1 second delay
+      setTimeout(() => resolve(true), 1000);
     });
   }
 
