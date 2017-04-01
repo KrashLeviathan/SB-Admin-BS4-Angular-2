@@ -14,10 +14,10 @@
   <div class="row">
     <div class="col-lg-12">
       <div id="dashboard-grid" class="grid">
-        <service-cmp *ngFor="let service of services"
-                     [attr.data-item-id]="service.serviceId" [service]="service"
-                     class="grid-item" [ngClass]="{'is-editable': editModeActive, 'invisible': !finishedInitializing,
-                     'grid-item--width2': service.wide, 'grid-item--height2': service.tall}"></service-cmp>
+        <service-component *ngFor="let service of services"
+                           [attr.data-item-id]="service.serviceId" [service]="service"
+                           class="grid-item" [ngClass]="{'is-editable': editModeActive, 'invisible': !finishedInitializing,
+                     'grid-item--width2': service.wide, 'grid-item--height2': service.tall}"></service-component>
       </div>
     </div>
   </div>
