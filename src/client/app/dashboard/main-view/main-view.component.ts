@@ -3,6 +3,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Service} from '../../shared/service/service';
 import {ServiceService} from '../../shared/service/service.service';
 import {UserService} from '../../shared/user/user.service';
+import {GlobalVariables} from '../../shared/global-variables';
+import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
 
 // Packery  -  http://packery.metafizzy.co/
 declare let Packery: any;
@@ -41,13 +43,16 @@ export class MainViewComponent implements OnInit {
 
   ngOnInit() {
     this.editModeActive = (this.route.data as any).value.editModeActive === true;
-    this.serviceService.getServices()
-      .then(services => {
-        this.services = services;
-        this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
-        // Add a small delay so the services can populate the DOM with *ngFor before
-        // initializing packery.
-        new Promise(resolve => setTimeout(() => resolve(this.initPackery()), 1));
+    this.userService.getActiveUser()
+      .then(user => {
+        this.serviceService.getServices(user.userId)
+          .then(services => {
+            this.services = services;
+            this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
+            // Add a small delay so the services can populate the DOM with *ngFor before
+            // initializing packery.
+            new Promise(resolve => setTimeout(() => resolve(this.initPackery()), 1));
+          });
       });
   }
 
@@ -69,6 +74,7 @@ export class MainViewComponent implements OnInit {
           // The elements remain invisible until they're finished initializing.
           thisObj.finishedInitializing = true;
         });
+        this.navigationComplete();
       });
   }
 
@@ -78,10 +84,15 @@ export class MainViewComponent implements OnInit {
     this.userService.setUserPreferences(0, positions)
       .then(success => {
         if (success) {
+          PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'Saved dashboard changes.');
           this.router.navigate(['dashboard/', 'home']);
         } else {
-          // TODO
+          PopoverControllerComponent.createAlert(AlertType.DANGER, 'Unable to save changes to the dashboard.');
         }
       });
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

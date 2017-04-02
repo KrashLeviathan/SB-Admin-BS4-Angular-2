@@ -25,7 +25,7 @@
         </ul>
       </li>
     </div>
-    <div class="nested-menu">
+    <div class="nested-menu" *ngIf="userIsAdmin">
       <a class="list-group-item" (click)="addExpandClass('householdpages')">
         <span><i class="fa fa-fw fa-users"></i> Household</span>
       </a>

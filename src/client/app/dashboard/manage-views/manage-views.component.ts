@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {DBView} from '../../shared/dbview/dbview';
 import {DBViewService} from '../../shared/dbview/dbview.service';
 import {PopoverControllerComponent, AlertType} from '../../shared/popover-controller/popover-controller';
+import {UserService} from '../../shared/user/user.service';
+import {GlobalVariables} from '../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -12,6 +14,7 @@ import {PopoverControllerComponent, AlertType} from '../../shared/popover-contro
 export class ManageViewsComponent implements OnInit {
   dbviews: DBView[];
   activeView: DBView;
+  activeUserId: number;
 
   isConfirmingDelete: boolean = false;
   viewToDelete: any = {
@@ -21,23 +24,31 @@ export class ManageViewsComponent implements OnInit {
 
   savingState: boolean = false;
 
-  constructor(private dbViewService: DBViewService) {
+  constructor(private dbViewService: DBViewService, private userService: UserService) {
   }
 
+  // Gets activeUserId, then all views for the user, then the active view within that set of views
   ngOnInit(): void {
-    this.getViews();
-    this.getActiveView();
+    this.userService.getActiveUser().then(user => {
+      this.activeUserId = user.userId;
+      this.getViews();
+    });
   }
 
   getViews(): void {
-    this.dbViewService.getViews()
-      .then(views => this.dbviews = views);
+    this.dbViewService.getViews(this.activeUserId)
+      .then(views => {
+        this.dbviews = views;
+        this.getActiveView();
+      });
   }
 
   getActiveView(): void {
-    this.dbViewService.getActiveViewId()
-      .then(viewId => this.activeView = this.dbviews
-        .find(view => view.viewId === viewId));
+    this.dbViewService.getActiveViewId(this.activeUserId)
+      .then(viewId => {
+        this.activeView = this.dbviews.find(view => view.viewId === viewId);
+        this.navigationComplete();
+      });
   }
 
   applyView(view: DBView): void {
@@ -73,5 +84,9 @@ export class ManageViewsComponent implements OnInit {
   cancelDelete(): void {
     this.viewToDelete = {viewId: 0, name: ''};
     this.isConfirmingDelete = false;
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

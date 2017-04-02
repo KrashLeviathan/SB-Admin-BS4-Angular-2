@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Service} from '../../shared/service/service';
 import {ServiceService} from '../../shared/service/service.service';
 import {PopoverControllerComponent, AlertType} from '../../shared/popover-controller/popover-controller';
+import {UserService} from '../../shared/user/user.service';
+import {GlobalVariables} from '../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -11,6 +13,8 @@ import {PopoverControllerComponent, AlertType} from '../../shared/popover-contro
 
 export class ServicesComponent implements OnInit {
   services: Service[];
+  userIsAdmin: boolean = false;
+  activeUserId: number;
 
   isConfirmingDelete: boolean = false;
   serviceToDelete: any = {
@@ -20,25 +24,32 @@ export class ServicesComponent implements OnInit {
 
   savingState: boolean = false;
 
-  constructor(private serviceService: ServiceService) {
+  constructor(private serviceService: ServiceService, private userService: UserService) {
   }
 
-  getServices(): void {
-    this.serviceService.getServices()
-      .then(services => this.services = services);
+  getServices(userId: number): void {
+    this.serviceService.getServices(userId)
+      .then(services => {
+        this.services = services;
+        this.navigationComplete();
+      });
   }
 
   ngOnInit(): void {
-    this.getServices();
+    this.userService.getActiveUser().then(user => {
+      this.userIsAdmin = user.isAdmin;
+      this.activeUserId = user.userId;
+      this.getServices(user.userId);
+    });
   }
 
   deleteService(): void {
-    if (!this.isConfirmingDelete) {
+    if (!this.isConfirmingDelete || !this.userIsAdmin) {
       return;
     }
     this.savingState = true;
     this.isConfirmingDelete = false;
-    this.serviceService.deleteService(this.serviceToDelete.serviceId)
+    this.serviceService.deleteService(this.activeUserId, this.serviceToDelete.serviceId)
       .then(success => {
         this.savingState = false;
         if (success) {
@@ -54,12 +65,22 @@ export class ServicesComponent implements OnInit {
   }
 
   confirmDelete(service: Service): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     this.serviceToDelete = service;
     this.isConfirmingDelete = true;
   }
 
   cancelDelete(): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     this.serviceToDelete = {serviceId: 0, name: ''};
     this.isConfirmingDelete = false;
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

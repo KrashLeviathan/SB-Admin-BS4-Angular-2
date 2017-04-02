@@ -60,7 +60,6 @@ export class UserService {
 
   getUser(userId: number): Promise<User> {
     return new Promise(resolve => {
-
       Promise.all([
         this.http.get(`http://localhost:8000/users/` + userId).toPromise(),
         this.getUserHousehold(userId),
@@ -166,6 +165,7 @@ export class UserService {
       // setTimeout(() => {
       //   resolve(preferences);
       // }, 1000);
+
     });
   }
 
@@ -176,7 +176,7 @@ export class UserService {
       // Simulate latency
       setTimeout(() => {
         resolve(true);
-      }, 1000);
+      }, 250);
     });
   }
 

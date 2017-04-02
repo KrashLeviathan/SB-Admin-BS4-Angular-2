@@ -9,7 +9,7 @@
   </div>
   <!-- /.row -->
 
-  <div *ngIf="activeHousehold" class="row">
+  <div *ngIf="activeHousehold && userIsAdmin" class="row">
     <div class="col-md-9 col-lg-7 col-xl-6">
 
       <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate class="buffer-bottom">
@@ -86,4 +86,11 @@
   </div>
   <!-- /.row -->
 
+  <div *ngIf="confirmedNotAdmin" class="row">
+    <div class="col-lg-12">
+      <p>Whoops! You are not authorized to view this page. Please contact your
+        household administrator if you believe you are receiving this in error.</p>
+    </div>
+  </div>
+  <!-- /.row -->
 </div>

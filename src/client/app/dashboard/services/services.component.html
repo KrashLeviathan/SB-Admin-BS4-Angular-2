@@ -38,11 +38,12 @@
                    }"></i></td>
             <td class="text-center">
               <a [routerLink]="['../','service',service.serviceId]" [routerLinkActive]="['router-link-active']">
-                <i class="fa fa-lg fa-eye"></i></a>&nbsp;&nbsp;
-              <a [routerLink]="['../','service',service.serviceId,'edit']" [routerLinkActive]="['router-link-active']">
-                <i class="fa fa-lg fa-gear"></i></a>&nbsp;&nbsp;
-              <a href="Javascript:void(0)">
-                <i class="fa fa-lg fa-trash" (click)="confirmDelete(service)"></i></a>
+                <i class="fa fa-lg fa-eye"></i></a>
+              <a *ngIf="userIsAdmin" [routerLink]="['../','service',service.serviceId,'edit']"
+                 [routerLinkActive]="['router-link-active']">
+                &nbsp;&nbsp;<i class="fa fa-lg fa-gear"></i></a>
+              <a *ngIf="userIsAdmin" href="Javascript:void(0)">
+                &nbsp;&nbsp;<i class="fa fa-lg fa-trash" (click)="confirmDelete(service)"></i></a>
             </td>
           </tr>
           </tbody>
@@ -59,12 +60,14 @@
         <i class="fa fa-lg fa-fw fa-arrow-down text-danger"></i>&nbsp;&nbsp;Service is Down<br>
         <i class="fa fa-lg fa-fw fa-question"></i>&nbsp;&nbsp;Unknown Service State<br>
         <i class="fa fa-lg fa-fw fa-eye text-primary"></i>&nbsp;&nbsp;View Service<br>
-        <i class="fa fa-lg fa-fw fa-gear text-primary"></i>&nbsp;&nbsp;Configure Service<br>
-        <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Delete Service<br>
+        <div *ngIf="userIsAdmin">
+          <i class="fa fa-lg fa-fw fa-gear text-primary"></i>&nbsp;&nbsp;Configure Service<br>
+          <i class="fa fa-lg fa-fw fa-trash text-primary"></i>&nbsp;&nbsp;Delete Service<br>
+        </div>
       </div>
     </div>
     <div class="col-md-6 col-lg-8">
-      <button type="button" class="btn btn-secondary pull-right"
+      <button *ngIf="userIsAdmin" type="button" class="btn btn-secondary pull-right"
               [routerLink]="['../','service','new']" [routerLinkActive]="['router-link-active']">
         Add Service
       </button>
@@ -73,12 +76,13 @@
   </div>
 </div>
 
-<div class="modal fade" [class.in]="isConfirmingDelete" [class.shown]="isConfirmingDelete">
+<div *ngIf="userIsAdmin" class="modal fade" [class.in]="isConfirmingDelete" [class.shown]="isConfirmingDelete">
   <div class="modal-dialog">
     <div class="modal-content box-shadow">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"
-                aria-hidden="true" (click)="cancelDelete()">&times;</button>
+                aria-hidden="true" (click)="cancelDelete()">&times;
+        </button>
 
         <h4 class="modal-title">Confirm Delete</h4>
       </div>
