@@ -32,6 +32,8 @@ export class MainViewComponent implements OnInit {
   editModeActive: boolean = false;
   finishedInitializing: boolean = false;
   grid: HTMLDivElement;
+  userOwnsView: boolean = false;
+  isAddingService: boolean = false;
 
   services: Service[];
 
@@ -45,6 +47,9 @@ export class MainViewComponent implements OnInit {
     this.editModeActive = (this.route.data as any).value.editModeActive === true;
     this.userService.getActiveUser()
       .then(user => {
+        // TODO: Run check to see if user owns this DashboardView (user.userId == dbview.owner)
+        this.userOwnsView = true; // FIXME
+
         this.serviceService.getServices(user.userId)
           .then(services => {
             this.services = services;
@@ -97,8 +102,37 @@ export class MainViewComponent implements OnInit {
   }
 
   onAddServiceClicked(): void {
-    // TODO
-    console.log("Add Service clicked");
+    if (!this.userOwnsView) {
+      return;
+    }
+    this.isAddingService = true;
+  }
+
+  completeAddService(service: Service) {
+    if (!this.isAddingService || !this.userOwnsView) {
+      return;
+    }
+    this.isAddingService = false;
+    // TODO: Add service to this dashboard view at any position
+    console.log("Adding service to dashboard...");
+    // if (success) {
+    //   PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.serviceToDelete.name + '\' service ' +
+    //     'was successfully deleted.');
+    // } else {
+    //   PopoverControllerComponent.createAlert(AlertType.DANGER,
+    //     '\'' + this.serviceToDelete.name + '\' could not be deleted.');
+    // }
+
+    // We navigate to another component that navigates us back. That way
+    // packery re-inits with the new service. A simple redirect doesn't work.
+    this.router.navigate(['dashboard/', 'home', 'addservice']);
+  }
+
+  cancelAddService(): void {
+    if (!this.userOwnsView) {
+      return;
+    }
+    this.isAddingService = false;
   }
 
   private navigationComplete(): void {
