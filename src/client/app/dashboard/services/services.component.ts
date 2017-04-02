@@ -3,6 +3,7 @@ import {Service} from '../../shared/service/service';
 import {ServiceService} from '../../shared/service/service.service';
 import {PopoverControllerComponent, AlertType} from '../../shared/popover-controller/popover-controller';
 import {UserService} from '../../shared/user/user.service';
+import {GlobalVariables} from '../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -27,7 +28,10 @@ export class ServicesComponent implements OnInit {
 
   getServices(): void {
     this.serviceService.getServices()
-      .then(services => this.services = services);
+      .then(services => {
+        this.services = services;
+        this.navigationComplete();
+      });
   }
 
   ngOnInit(): void {
@@ -70,5 +74,9 @@ export class ServicesComponent implements OnInit {
     }
     this.serviceToDelete = {serviceId: 0, name: ''};
     this.isConfirmingDelete = false;
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

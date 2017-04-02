@@ -4,6 +4,7 @@ import {AlertType, PopoverControllerComponent} from '../../shared/popover-contro
 import {UserService} from '../../shared/user/user.service';
 import {User} from '../../shared/user/user';
 import {ColorScheme} from '../../shared/user/color-scheme';
+import {GlobalVariables} from '../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -38,6 +39,7 @@ export class UserSettingsComponent implements OnInit {
         for (let colorType in user.preferences.colorScheme) {
           (<any>this.formColors)[colorType] = (<any>user.preferences.colorScheme)[colorType];
         }
+        this.navigationComplete();
       });
   }
 
@@ -101,4 +103,7 @@ export class UserSettingsComponent implements OnInit {
     });
   }
 
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
+  }
 }

@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {ServiceService} from '../../../shared/service/service.service';
 import {UserService} from '../../../shared/user/user.service';
+import {GlobalVariables} from '../../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -29,6 +30,7 @@ export class NewServiceComponent implements OnInit {
       this.userIsAdmin = user.isAdmin;
       // Confirm they're not an admin before showing them the "not authorized" message
       this.confirmedNotAdmin = !user.isAdmin;
+      this.navigationComplete();
     });
   }
 
@@ -50,5 +52,9 @@ export class NewServiceComponent implements OnInit {
           this.router.navigate(['dashboard/', 'service', serviceId, 'edit']);
         }
       });
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

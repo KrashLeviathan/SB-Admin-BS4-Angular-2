@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {User} from '../../shared/user/user';
 import {UserService} from '../../shared/user/user.service';
 import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
+import {GlobalVariables} from '../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -36,7 +37,10 @@ export class ManageUsersComponent implements OnInit {
 
   getUsers(): void {
     this.userService.getUsers()
-      .then(users => this.users = users);
+      .then(users => {
+        this.users = users;
+        this.navigationComplete();
+      });
   }
 
   deleteUser(): void {
@@ -108,5 +112,9 @@ export class ManageUsersComponent implements OnInit {
   cancelAdminChange(): void {
     this.userAdminChanges = {userId: 0, email: '', setAsAdmin: false};
     this.isConfirmingAdmin = false;
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

@@ -5,6 +5,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Location} from '@angular/common';
 
 import 'rxjs/add/operator/switchMap';
+import {GlobalVariables} from '../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -30,6 +31,7 @@ export class ServiceDetailComponent implements OnInit {
       .subscribe(service => {
         if (service) {
           this.service = service;
+          this.navigationComplete();
         } else {
           console.log('Bad route: ' + this.router.url);
           this.router.navigate(['dashboard/', 'services']);
@@ -45,5 +47,9 @@ export class ServiceDetailComponent implements OnInit {
     // TODO: Save service configuration
     console.log('Service configuration saved!');
     this.location.back();
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

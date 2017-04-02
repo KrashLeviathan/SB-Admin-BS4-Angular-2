@@ -3,6 +3,7 @@ import {DBView} from '../../shared/dbview/dbview';
 import {DBViewService} from '../../shared/dbview/dbview.service';
 import {PopoverControllerComponent, AlertType} from '../../shared/popover-controller/popover-controller';
 import {UserService} from '../../shared/user/user.service';
+import {GlobalVariables} from '../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -44,8 +45,10 @@ export class ManageViewsComponent implements OnInit {
 
   getActiveView(): void {
     this.dbViewService.getActiveViewId(this.activeUserId)
-      .then(viewId => this.activeView = this.dbviews
-        .find(view => view.viewId === viewId));
+      .then(viewId => {
+        this.activeView = this.dbviews.find(view => view.viewId === viewId);
+        this.navigationComplete();
+      });
   }
 
   applyView(view: DBView): void {
@@ -81,5 +84,9 @@ export class ManageViewsComponent implements OnInit {
   cancelDelete(): void {
     this.viewToDelete = {viewId: 0, name: ''};
     this.isConfirmingDelete = false;
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

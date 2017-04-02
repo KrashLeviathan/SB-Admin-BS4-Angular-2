@@ -5,6 +5,7 @@ import {Household} from '../../shared/household/household';
 import {STATES, State} from '../../states';
 import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
 import {UserService} from '../../shared/user/user.service';
+import {GlobalVariables} from '../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -29,13 +30,26 @@ export class HouseholdSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let halfComplete = false;
     this.userService.getActiveUser().then(user => {
       this.userIsAdmin = user.isAdmin;
       // Confirm the user isn't an admin before showing the "You can't be here" text in the template.
       this.confirmedNotAdmin = !user.isAdmin;
+      if (halfComplete) {
+        this.navigationComplete();
+      } else {
+        halfComplete = true;
+      }
     });
     this.getActiveHousehold()
-      .then(household => this.activeHousehold = household);
+      .then(household => {
+        this.activeHousehold = household;
+        if (halfComplete) {
+          this.navigationComplete();
+        } else {
+          halfComplete = true;
+        }
+      });
   }
 
   getActiveHousehold(): Promise<Household> {
@@ -84,5 +98,9 @@ export class HouseholdSettingsComponent implements OnInit {
       state: this.activeHousehold.state,
       zipCode: this.activeHousehold.zipCode
     });
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

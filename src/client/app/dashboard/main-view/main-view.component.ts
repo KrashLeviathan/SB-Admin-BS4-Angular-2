@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Service} from '../../shared/service/service';
 import {ServiceService} from '../../shared/service/service.service';
 import {UserService} from '../../shared/user/user.service';
+import {GlobalVariables} from '../../shared/global-variables';
 
 // Packery  -  http://packery.metafizzy.co/
 declare let Packery: any;
@@ -69,6 +70,7 @@ export class MainViewComponent implements OnInit {
           // The elements remain invisible until they're finished initializing.
           thisObj.finishedInitializing = true;
         });
+        this.navigationComplete();
       });
   }
 
@@ -83,5 +85,9 @@ export class MainViewComponent implements OnInit {
           // TODO
         }
       });
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }
