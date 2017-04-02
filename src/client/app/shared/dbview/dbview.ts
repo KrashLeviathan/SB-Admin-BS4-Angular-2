@@ -7,7 +7,8 @@ export class DBView {
   viewId: number;
   name: string;
   description: string;
-  owner: string;
+  ownerId: number;
+  ownerName: string;
   serviceLayout: ServiceLayout;
   windowWidth: number;
 }

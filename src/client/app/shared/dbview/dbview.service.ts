@@ -16,7 +16,7 @@ export class DBViewService {
     });
   }
 
-  getViews(): Promise<DBView[]> {
+  getViews(userId: number): Promise<DBView[]> {
     // TODO: Replace with request to server
     return new Promise(resolve => {
       // Simulate latency
@@ -26,7 +26,7 @@ export class DBViewService {
     });
   }
 
-  getActiveViewId(): Promise<number> {
+  getActiveViewId(userId: number): Promise<number> {
     // TODO: Replace with request to server
     return new Promise(resolve => {
       // Simulate latency
