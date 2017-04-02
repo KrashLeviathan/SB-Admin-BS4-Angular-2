@@ -7,6 +7,7 @@ import {Headers, Http, RequestOptions, Response} from '@angular/http';
 import {Router} from "@angular/router";
 import {UserPreferences} from "./user-preferences";
 import {ColorScheme} from "./color-scheme";
+import {HouseholdService} from "../household/household.service";
 
 
 export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
@@ -15,6 +16,7 @@ export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 export class UserService {
   static activeUser: User;
   static activeUserPrefs: UserPreferences;
+
   constructor (
     private http: Http,
     private router: Router
@@ -233,7 +235,6 @@ export class UserService {
   }
 
   deleteUser(userId: number): Promise<boolean> {
-    console.log('deleteUser(' + userId + ') --> success');
     return new Promise(resolve => {
       this.http.delete(`http://localhost:8000/users/` + userId).toPromise()
         .then(
@@ -254,37 +255,12 @@ export class UserService {
     });
   }
 
-  giveAdminPrivileges(userId: number): Promise<boolean> {
+  removeUserFromHousehold(userId: number): Promise<boolean> {
+
     return new Promise(resolve => {
-      let json = new User();
-      json.userId = userId;
-      json.role = '1';
-      let headers = new Headers({ 'Content-Type': 'application/json'});
-      let options = new RequestOptions({ headers: headers });
 
-      this.http.post(`http://localhost:8000/users/createAdmin`, JSON.stringify(json), options).toPromise()
-        .then(
-          response => {
-            let body = response.json();
-            if(body.role == 1){
-              resolve(true);
-            }
-            resolve(false);
-          }
-        )
-        .catch(this.handleError);
-    });
-  }
-
-  revokeAdminPrivileges(userId: number): Promise<boolean> {
-    return new Promise(resolve => {
-      let json = new User();
-      json.userId = userId;
-      json.role = '1';
-      let headers = new Headers({ 'Content-Type': 'application/json'});
-      let options = new RequestOptions({ headers: headers });
-
-      this.http.post(`http://localhost:8000/users/removeAdmin`, JSON.stringify(json), options).toPromise()
+      let body = {'userId': userId, 'householdId': HouseholdService.activeHousehold.householdId};
+      this.http.delete(`http://localhost:8000/households/` + body.householdId + `/users/` +body.userId).toPromise()
         .then(
           response => {
             let body = response.json();
@@ -300,6 +276,77 @@ export class UserService {
           }
         )
         .catch(this.handleError);
+    });
+  }
+  giveAdminPrivileges(userId: number): Promise<boolean> {
+    return new Promise(resolve => {
+      this.http.get(`http://localhost:8000/users/`+userId).toPromise().then(response => {
+        let json = new User();
+        let body = response.json();
+        json.userId = userId;
+        json.familyName = body.familyName;
+        json.googleId = body.googleId;
+        json.fullName = body.fullName;
+        json.displayName = body.displayName;
+        json.email = body.email;
+        json.givenName = body.givenName;
+        json.role = '1';
+        let headers = new Headers({ 'Content-Type': 'application/json'});
+        let options = new RequestOptions({ headers: headers });
+
+        this.http.post(`http://localhost:8000/users/`, JSON.stringify(json), options).toPromise()
+          .then(
+            response => {
+              let body = response.json();
+              let user = new User();
+              user.userId = body.userId;
+              user.email = body.email;
+              user.givenName = body.givenName;
+              user.familyName = body.familyName;
+              user.imageURL = body.imageURL;
+              user.role = body.role;
+
+              resolve(true);
+            }
+          )
+          .catch(this.handleError);
+      })
+    });
+  }
+
+  revokeAdminPrivileges(userId: number): Promise<boolean> {
+    return new Promise(resolve => {
+      this.http.get(`http://localhost:8000/users/`+userId).toPromise().then(response => {
+        let json = new User();
+        let body = response.json();
+        json.userId = userId;
+        json.familyName = body.familyName;
+        json.googleId = body.googleId;
+        json.fullName = body.fullName;
+        json.displayName = body.displayName;
+        json.email = body.email;
+        json.givenName = body.givenName;
+        json.role = '0';
+        let headers = new Headers({ 'Content-Type': 'application/json'});
+        let options = new RequestOptions({ headers: headers });
+
+        this.http.post(`http://localhost:8000/users/`, JSON.stringify(json), options).toPromise()
+          .then(
+            response => {
+              let body = response.json();
+              let user = new User();
+              user.userId = body.userId;
+              user.email = body.email;
+              user.givenName = body.givenName;
+              user.familyName = body.familyName;
+              user.imageURL = body.imageURL;
+              user.role = body.role;
+
+              resolve(true);
+            }
+          )
+          .catch(this.handleError);
+      })
     });
   }
 

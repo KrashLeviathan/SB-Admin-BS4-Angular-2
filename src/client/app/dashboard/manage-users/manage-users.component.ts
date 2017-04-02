@@ -3,6 +3,7 @@ import {User} from '../../shared/user/user';
 import {UserService} from '../../shared/user/user.service';
 import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
 import {GlobalVariables} from '../../shared/global-variables';
+import {HouseholdService} from "../../shared/household/household.service";
 
 @Component({
   moduleId: module.id,
@@ -28,14 +29,15 @@ export class ManageUsersComponent implements OnInit {
 
   savingState: boolean = false;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private householdService: HouseholdService) {
   }
 
   ngOnInit(): void {
-    this.userService.getActiveUser().then(result => {
-      this.getUsers();
+    this.userService.getActiveUser().then(response => {
+      this.householdService.getActiveHousehold().then(result => {
+        this.getUsers();
+      });
     });
-
   }
 
   getUsers(): void {
@@ -52,12 +54,16 @@ export class ManageUsersComponent implements OnInit {
     }
     this.savingState = true;
     this.isConfirmingDelete = false;
-    this.userService.deleteUser(this.userToDelete.userId)
+    this.userService.removeUserFromHousehold(this.userToDelete.userId)
       .then(success => {
         this.savingState = false;
         if (success) {
           PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.userToDelete.email + '\' was ' +
             'successfully removed from the account.');
+          this.userService.getUsers(UserService.activeUser.householdId).then(response =>{
+            this.users = response;
+            this.navigationComplete();
+          });
         } else {
           PopoverControllerComponent.createAlert(AlertType.DANGER,
             '\'' + this.userToDelete.email + '\' could not be removed from the account.');

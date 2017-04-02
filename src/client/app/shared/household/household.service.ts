@@ -3,6 +3,7 @@ import {Household} from './household';
 import {HOUSEHOLDS} from './mock-households';
 import {Http, RequestOptions, Headers} from "@angular/http";
 import {UserService} from "../user/user.service";
+import {User} from "../user/user";
 
 @Injectable()
 export class HouseholdService {
@@ -10,6 +11,18 @@ export class HouseholdService {
   constructor (
     private http: Http
   ) {}
+
+  getActiveHousehold(): Promise<Household>{
+    return new Promise(resolve => {
+      if(HouseholdService.activeHousehold){
+        resolve(HouseholdService.activeHousehold);
+      }else{
+        this.getHousehold(UserService.activeUser.householdId).then(response => {
+          resolve(response);
+        })
+      }
+    });
+  }
 
   getHousehold(householdId: number): Promise<Household> {
     return new Promise(resolve => {
@@ -34,7 +47,6 @@ export class HouseholdService {
   }
 
   saveHousehold(formData: Object): Promise<boolean> {
-
     return new Promise(resolve => {
       let house = new Household();
       house.householdId = UserService.activeUser.householdId;
@@ -53,7 +65,15 @@ export class HouseholdService {
           resolve(true);
         }
       );
+    });
+  }
 
+  addUser(userId: number): Promise<User>{
+    return new Promise(resolve =>{
+      let headers = new Headers({'Content-Type': 'application/json'});
+      let options = new RequestOptions({headers: headers});
+      let body = {'userId': userId, 'householdId': HouseholdService.activeHousehold.householdId};
+      this.http.post(`http://localhost:8000/households`, JSON.stringify(body), options)
     });
   }
 }
