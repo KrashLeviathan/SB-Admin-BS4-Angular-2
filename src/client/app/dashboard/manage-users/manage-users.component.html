@@ -8,7 +8,7 @@
     </div>
   </div>
   <!-- /.row -->
-  <div class="row">
+  <div class="row" *ngIf="userIsAdmin">
     <div class="col-lg-12">
       <div class="card card-block table-responsive">
         <table class="table table-hover">
@@ -39,7 +39,7 @@
     </div>
   </div>
   <!-- /.row -->
-  <div class="row">
+  <div class="row" *ngIf="userIsAdmin">
     <div class="col-md-6 col-lg-4">
       <div class="card card-block">
         <h4>Key</h4>
@@ -51,6 +51,13 @@
     <div class="col-md-6 col-lg-8">
       <button type="button" class="btn btn-secondary pull-right" (click)="confirmInviteUser()">Invite User</button>
       <i class="fa fa-lg fa-cog fa-spin pull-right buffer-right" style="margin-top: 0.5em;" *ngIf="savingState"></i>
+    </div>
+  </div>
+  <!-- /.row -->
+  <div *ngIf="!userIsAdmin" class="row">
+    <div class="col-lg-12">
+      <p>Whoops! You are not authorized to view this page. Please contact your
+        household administrator if you believe you are receiving this in error.</p>
     </div>
   </div>
 </div>

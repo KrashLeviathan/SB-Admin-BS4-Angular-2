@@ -13,7 +13,7 @@ import {NgForm} from '@angular/forms';
 
 export class ManageUsersComponent implements OnInit {
   users: User[];
-  userIsAdmin: boolean = false;
+  userIsAdmin: boolean = true;
 
   userToDelete: any = {
     userId: 0,
