@@ -17,6 +17,7 @@ export class NewServiceComponent implements OnInit {
   allServiceTypes: ServiceType[] = ALL_SERVICE_TYPES;
   canContinue: boolean = true;
   userIsAdmin: boolean = false;
+  activeUserId: number;
   confirmedNotAdmin: boolean = false;
 
   constructor(private serviceService: ServiceService,
@@ -28,6 +29,7 @@ export class NewServiceComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getActiveUser().then(user => {
       this.userIsAdmin = user.isAdmin;
+      this.activeUserId = user.userId;
       // Confirm they're not an admin before showing them the "not authorized" message
       this.confirmedNotAdmin = !user.isAdmin;
       this.navigationComplete();
@@ -44,7 +46,7 @@ export class NewServiceComponent implements OnInit {
       return;
     }
     this.canContinue = true;
-    this.serviceService.createNewService(this.serviceType)
+    this.serviceService.createNewService(this.activeUserId, this.serviceType)
       .then(serviceId => {
         if (serviceId === -1) {
           // TODO: On Error

@@ -14,6 +14,7 @@ import {GlobalVariables} from '../../shared/global-variables';
 export class ServicesComponent implements OnInit {
   services: Service[];
   userIsAdmin: boolean = false;
+  activeUserId: number;
 
   isConfirmingDelete: boolean = false;
   serviceToDelete: any = {
@@ -26,8 +27,8 @@ export class ServicesComponent implements OnInit {
   constructor(private serviceService: ServiceService, private userService: UserService) {
   }
 
-  getServices(): void {
-    this.serviceService.getServices()
+  getServices(userId: number): void {
+    this.serviceService.getServices(userId)
       .then(services => {
         this.services = services;
         this.navigationComplete();
@@ -35,8 +36,11 @@ export class ServicesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getActiveUser().then(user => this.userIsAdmin = user.isAdmin);
-    this.getServices();
+    this.userService.getActiveUser().then(user => {
+      this.userIsAdmin = user.isAdmin;
+      this.activeUserId = user.userId;
+      this.getServices(user.userId);
+    });
   }
 
   deleteService(): void {
@@ -45,7 +49,7 @@ export class ServicesComponent implements OnInit {
     }
     this.savingState = true;
     this.isConfirmingDelete = false;
-    this.serviceService.deleteService(this.serviceToDelete.serviceId)
+    this.serviceService.deleteService(this.activeUserId, this.serviceToDelete.serviceId)
       .then(success => {
         this.savingState = false;
         if (success) {
