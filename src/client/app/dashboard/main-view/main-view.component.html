@@ -2,9 +2,15 @@
   <!-- Page Heading -->
   <div class="row">
     <div class="col-xl-12">
-      <h2 class="page-header">
-        <button class="btn btn-primary pull-right buffer-bottom" [hidden]="!editModeActive"
+      <h2 class="page-header" *ngIf="editModeActive">
+        <button class="btn btn-secondary pull-left buffer-bottom"
+                (click)="onAddServiceClicked()">Add Service
+        </button>
+        <button class="btn btn-primary pull-right buffer-bottom"
                 (click)="onSaveChangesClicked()">Save Changes
+        </button>
+        <button class="btn btn-secondary pull-right buffer-bottom buffer-right"
+                (click)="onCancelChangesClicked()">Cancel
         </button>
       </h2>
     </div>
@@ -21,3 +27,42 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="userOwnsView" class="modal fade" [class.in]="isAddingService" [class.shown]="isAddingService">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true" (click)="cancelAddService()">&times;
+        </button>
+
+        <h4 class="modal-title">Add Service to Dashboard</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="table-responsive" style="max-height: 300px;">
+          <table class="table table-hover table-sm">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th class="text-center">Type</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="clickable" *ngFor="let service of services" (click)="completeAddService(service)">
+              <td>{{service.name}}</td>
+              <td class="text-center">{{service.serviceType.name}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        For more information on each Service, see Services page.
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelAddService()">Cancel</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->

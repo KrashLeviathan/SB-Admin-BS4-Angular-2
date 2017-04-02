@@ -3,4 +3,9 @@
 <sidebar-cmp></sidebar-cmp>
 <section class="main-container" [ngClass]="{sidebarPushRight: isActive}">
 	<router-outlet></router-outlet>
+  <div class="spinner" #spinnerElement style="opacity: 0;">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
 </section>

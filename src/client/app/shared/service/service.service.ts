@@ -13,14 +13,15 @@ export class ServiceService {
    * @param serviceId
    * @returns {Promise<Service>}
    */
-  getService(serviceId: number): Promise<Service> {
+  getService(userId: number, serviceId: number): Promise<Service> {
     return new Promise(resolve => {
+      // TODO: Replace with HTTP request
+
       if (!Number.isNaN(serviceId) && serviceId >= 1 && serviceId <= 4) {
-        // TODO: Replace with HTTP request
         // Simulate latency
         setTimeout(() => {
           resolve(SERVICES[serviceId - 1]);
-        }, 1000);
+        }, 250);
       } else {
         resolve(null);
       }
@@ -32,13 +33,13 @@ export class ServiceService {
    * Returns an array of Service objects.
    * @returns {Promise<Service[]>}
    */
-  getServices(): Promise<Service[]> {
+  getServices(userId: number): Promise<Service[]> {
     // TODO: Replace with HTTP request
     return new Promise(resolve => {
       // Simulate latency
       setTimeout(() => {
         resolve(SERVICES);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -49,25 +50,25 @@ export class ServiceService {
    * @param serviceType
    * @returns {Promise<number>}
    */
-  createNewService(serviceType: ServiceType): Promise<number> {
+  createNewService(userId: number, serviceType: ServiceType): Promise<number> {
     // TODO: Replace with HTTP request
     console.log('ServiceService.createNewService(' + serviceType.name + ') --> ' + ServiceService.idCounter);
     return new Promise(resolve => {
       // Simulate latency
       setTimeout(() => {
         resolve(ServiceService.idCounter++);
-      }, 1000);
+      }, 250);
     });
   }
 
-  deleteService(serviceId: number): Promise<boolean> {
+  deleteService(userId: number, serviceId: number): Promise<boolean> {
     // TODO: Replace with HTTP request
     console.log('ServiceService.deleteService(' + serviceId + ') --> success');
     return new Promise(resolve => {
       // Simulate latency
       setTimeout(() => {
         resolve(true);
-      }, 1000);
+      }, 250);
     });
   }
 }

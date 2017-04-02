@@ -24,15 +24,16 @@
           <tr *ngFor="let dbview of dbviews" [class.table-active]="dbview === activeView">
             <td>{{dbview.name}}</td>
             <td>{{dbview.description}}</td>
-            <td>{{dbview.owner}}</td>
+            <td>{{dbview.ownerName}}</td>
             <td class="text-center">
               <a href="Javascript:void(0)">
-                <i class="fa fa-lg fa-square-o"
+                <i class="fa fa-lg fa-fw fa-square-o"
                    [ngClass]="{'fa-square-o': dbview !== activeView,
                                'fa-check-square-o': dbview === activeView}"
                    (click)="applyView(dbview)"></i></a>&nbsp;&nbsp;
-              <a href="Javascript:void(0)"><i class="fa fa-lg fa-trash"
-                                              (click)="confirmDelete(dbview)"></i></a>
+              <a *ngIf="activeUserId == dbview.ownerId" href="Javascript:void(0)">
+                <i class="fa fa-lg fa-fw fa-trash" (click)="confirmDelete(dbview)"></i></a>
+              <i *ngIf="activeUserId != dbview.ownerId" class="fa fa-lg fa-fw">&nbsp;</i>
             </td>
           </tr>
           </tbody>
@@ -61,7 +62,8 @@
     <div class="modal-content box-shadow">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"
-                aria-hidden="true" (click)="cancelDelete()">&times;</button>
+                aria-hidden="true" (click)="cancelDelete()">&times;
+        </button>
 
         <h4 class="modal-title">Confirm Delete</h4>
       </div>

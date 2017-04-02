@@ -29,6 +29,7 @@ export class HouseholdService {
         HouseholdService.activeHousehold = house;
         resolve(house);
       })
+
     });
   }
 
@@ -52,6 +53,7 @@ export class HouseholdService {
           resolve(true);
         }
       );
+
     });
   }
 }

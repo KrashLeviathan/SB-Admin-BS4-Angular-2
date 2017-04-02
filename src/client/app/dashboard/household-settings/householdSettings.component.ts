@@ -4,7 +4,9 @@ import {HouseholdService} from '../../shared/household/household.service';
 import {Household} from '../../shared/household/household';
 import {STATES, State} from '../../states';
 import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
-import {UserService} from "../../shared/user/user.service";
+
+import {UserService} from '../../shared/user/user.service';
+import {GlobalVariables} from '../../shared/global-variables';
 
 @Component({
   moduleId: module.id,
@@ -16,6 +18,8 @@ export class HouseholdSettingsComponent implements OnInit {
   MAX_VARCHAR_LENGTH: number = 255;
 
   activeHousehold: Household;
+  userIsAdmin: boolean = false;
+  confirmedNotAdmin: boolean = false;
 
   states: State[];
   formDisabled: boolean = true;
@@ -27,10 +31,27 @@ export class HouseholdSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getActiveUser().then(resolve => {
-      this.getActiveHousehold()
-        .then(household => this.activeHousehold = household);
+
+    let halfComplete = false;
+    this.userService.getActiveUser().then(user => {
+      this.userIsAdmin = user.isAdmin;
+      // Confirm the user isn't an admin before showing the "You can't be here" text in the template.
+      this.confirmedNotAdmin = !user.isAdmin;
+      if (halfComplete) {
+        this.navigationComplete();
+      } else {
+        halfComplete = true;
+      }
     });
+    this.getActiveHousehold()
+      .then(household => {
+        this.activeHousehold = household;
+        if (halfComplete) {
+          this.navigationComplete();
+        } else {
+          halfComplete = true;
+        }
+      });
   }
 
   getActiveHousehold(): Promise<Household> {
@@ -38,6 +59,9 @@ export class HouseholdSettingsComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     if (!form.valid) {
       this.errorOnSave = true;
       return;
@@ -64,6 +88,9 @@ export class HouseholdSettingsComponent implements OnInit {
   }
 
   cancelChanges(form: NgForm): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     this.errorOnSave = false;
     this.formDisabled = true;
     form.resetForm({
@@ -73,5 +100,9 @@ export class HouseholdSettingsComponent implements OnInit {
       state: this.activeHousehold.state,
       zipCode: this.activeHousehold.zipCode
     });
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }

@@ -12,27 +12,27 @@ export class DBViewService {
       setTimeout(() => {
         let view = DB_VIEWS.find(view => view.viewId === viewId);
         resolve(view);
-      }, 1000);
+      }, 250);
     });
   }
 
-  getViews(): Promise<DBView[]> {
+  getViews(userId: number): Promise<DBView[]> {
     // TODO: Replace with request to server
     return new Promise(resolve => {
       // Simulate latency
       setTimeout(() => {
         resolve(DB_VIEWS);
-      }, 1000);
+      }, 250);
     });
   }
 
-  getActiveViewId(): Promise<number> {
+  getActiveViewId(userId: number): Promise<number> {
     // TODO: Replace with request to server
     return new Promise(resolve => {
       // Simulate latency
       setTimeout(() => {
         resolve(2);
-      }, 1000);
+      }, 250);
     });
   }
 
@@ -43,7 +43,7 @@ export class DBViewService {
       // Simulate latency
       setTimeout(() => {
         resolve(true);
-      }, 1000);
+      }, 250);
     });
   }
 }

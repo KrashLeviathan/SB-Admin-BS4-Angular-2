@@ -3,6 +3,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Service} from '../../shared/service/service';
 import {ServiceService} from '../../shared/service/service.service';
 import {UserService} from '../../shared/user/user.service';
+import {GlobalVariables} from '../../shared/global-variables';
+import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
 
 // Packery  -  http://packery.metafizzy.co/
 declare let Packery: any;
@@ -30,6 +32,8 @@ export class MainViewComponent implements OnInit {
   editModeActive: boolean = false;
   finishedInitializing: boolean = false;
   grid: HTMLDivElement;
+  userOwnsView: boolean = false;
+  isAddingService: boolean = false;
 
   services: Service[];
 
@@ -41,13 +45,19 @@ export class MainViewComponent implements OnInit {
 
   ngOnInit() {
     this.editModeActive = (this.route.data as any).value.editModeActive === true;
-    this.serviceService.getServices()
-      .then(services => {
-        this.services = services;
-        this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
-        // Add a small delay so the services can populate the DOM with *ngFor before
-        // initializing packery.
-        new Promise(resolve => setTimeout(() => resolve(this.initPackery()), 1));
+    this.userService.getActiveUser()
+      .then(user => {
+        // TODO: Run check to see if user owns this DashboardView (user.userId == dbview.owner)
+        this.userOwnsView = true; // FIXME
+
+        this.serviceService.getServices(user.userId)
+          .then(services => {
+            this.services = services;
+            this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
+            // Add a small delay so the services can populate the DOM with *ngFor before
+            // initializing packery.
+            new Promise(resolve => setTimeout(() => resolve(this.initPackery()), 1));
+          });
       });
   }
 
@@ -70,6 +80,7 @@ export class MainViewComponent implements OnInit {
           // The elements remain invisible until they're finished initializing.
           thisObj.finishedInitializing = true;
         });
+        this.navigationComplete();
       });
   }
 
@@ -79,10 +90,53 @@ export class MainViewComponent implements OnInit {
     this.userService.setUserPreferences(0, positions)
       .then(success => {
         if (success) {
+          PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'Saved dashboard changes.');
           this.router.navigate(['dashboard/', 'home']);
         } else {
-          // TODO
+          PopoverControllerComponent.createAlert(AlertType.DANGER, 'Unable to save changes to the dashboard.');
         }
       });
+  }
+
+  onCancelChangesClicked(): void {
+    this.router.navigate(['dashboard/', 'home']);
+  }
+
+  onAddServiceClicked(): void {
+    if (!this.userOwnsView) {
+      return;
+    }
+    this.isAddingService = true;
+  }
+
+  completeAddService(service: Service) {
+    if (!this.isAddingService || !this.userOwnsView) {
+      return;
+    }
+    this.isAddingService = false;
+    // TODO: Add service to this dashboard view at any position
+    console.log("Adding service to dashboard...");
+    // if (success) {
+    //   PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.serviceToDelete.name + '\' service ' +
+    //     'was successfully deleted.');
+    // } else {
+    //   PopoverControllerComponent.createAlert(AlertType.DANGER,
+    //     '\'' + this.serviceToDelete.name + '\' could not be deleted.');
+    // }
+
+    // We navigate to another component that navigates us back. That way
+    // packery re-inits with the new service. A simple redirect doesn't work.
+    this.router.navigate(['dashboard/', 'home', 'addservice']);
+  }
+
+  cancelAddService(): void {
+    if (!this.userOwnsView) {
+      return;
+    }
+    this.isAddingService = false;
+  }
+
+  private navigationComplete(): void {
+    GlobalVariables.navigationState.next(false);
   }
 }
