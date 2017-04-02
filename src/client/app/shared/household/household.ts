@@ -1,5 +1,6 @@
 export class Household {
   householdId: number;
+  ownerId: number;
   householdName: string;
   firstAddressLine: string;
   secondAddressLine: string;

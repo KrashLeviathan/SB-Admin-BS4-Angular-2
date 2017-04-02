@@ -56,6 +56,7 @@ export class MainViewComponent implements OnInit {
     // be done together.
     this.userService.getUserPreferences(0)
       .then(initPositions => {
+        //TODO getUserPreferences will need to return colors and dragPositions.
         this.packery = new Packery(this.grid, PACKERY_OPTIONS);
         // init layout with saved positions
         this.packery.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
