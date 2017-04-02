@@ -92,6 +92,15 @@ export class MainViewComponent implements OnInit {
       });
   }
 
+  onCancelChangesClicked(): void {
+    this.router.navigate(['dashboard/', 'home']);
+  }
+
+  onAddServiceClicked(): void {
+    // TODO
+    console.log("Add Service clicked");
+  }
+
   private navigationComplete(): void {
     GlobalVariables.navigationState.next(false);
   }

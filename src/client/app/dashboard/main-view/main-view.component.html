@@ -2,9 +2,15 @@
   <!-- Page Heading -->
   <div class="row">
     <div class="col-xl-12">
-      <h2 class="page-header">
-        <button class="btn btn-primary pull-right buffer-bottom" [hidden]="!editModeActive"
+      <h2 class="page-header" *ngIf="editModeActive">
+        <button class="btn btn-secondary pull-left buffer-bottom"
+                (click)="onAddServiceClicked()">Add Service
+        </button>
+        <button class="btn btn-primary pull-right buffer-bottom"
                 (click)="onSaveChangesClicked()">Save Changes
+        </button>
+        <button class="btn btn-secondary pull-right buffer-bottom buffer-right"
+                (click)="onCancelChangesClicked()">Cancel
         </button>
       </h2>
     </div>
