@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Household} from './household';
 import {HOUSEHOLDS} from './mock-households';
-import {Http} from "@angular/http";
+import {Http, RequestOptions, Headers} from "@angular/http";
+import {UserService} from "../user/user.service";
 
 @Injectable()
 export class HouseholdService {
+  static activeHousehold: Household;
   constructor (
     private http: Http
   ) {}
@@ -24,20 +26,30 @@ export class HouseholdService {
         house.zipCode = body.zipCode;
         house.lastUpdated = body.lastUpdated;
         house.created = body.created;
+        HouseholdService.activeHousehold = house;
         resolve(house);
       })
     });
   }
 
   saveHousehold(formData: Object): Promise<boolean> {
-    // TODO: Save form data to server
-    console.log(formData);
+
     return new Promise(resolve => {
       let house = new Household();
+      house.householdId = UserService.activeUser.householdId;
+      house.householdName = formData['householdName'];
+      house.ownerId = HouseholdService.activeHousehold.ownerId;
+      house.city = formData['city'];
+      house.zipCode = formData['zipCode'];
+      house.state = formData['state'];
+      house.firstAddressLine = formData['firstAddressLine'];
 
-      this.http.put(`http://localhost:8000/households`, JSON.stringify(house)).toPromise().then(
+      let headers = new Headers({'Content-Type': 'application/json'});
+      let options = new RequestOptions({headers: headers});
+
+      this.http.put(`http://localhost:8000/households`, JSON.stringify(house), options).toPromise().then(
         response => {
-
+          resolve(true);
         }
       );
     });
