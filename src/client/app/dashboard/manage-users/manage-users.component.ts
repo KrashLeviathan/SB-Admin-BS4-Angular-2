@@ -3,6 +3,7 @@ import {User} from '../../shared/user/user';
 import {UserService} from '../../shared/user/user.service';
 import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
 import {GlobalVariables} from '../../shared/global-variables';
+import {NgForm} from '@angular/forms';
 
 @Component({
   moduleId: module.id,
@@ -12,6 +13,7 @@ import {GlobalVariables} from '../../shared/global-variables';
 
 export class ManageUsersComponent implements OnInit {
   users: User[];
+  userIsAdmin: boolean = false;
 
   userToDelete: any = {
     userId: 0,
@@ -26,20 +28,25 @@ export class ManageUsersComponent implements OnInit {
   };
   isConfirmingAdmin: boolean = false;
 
+  MAX_VARCHAR_LENGTH: number = 255;
+  inviteEmail: string = '';
+  isInvitingUser: boolean = false;
+
   savingState: boolean = false;
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit(): void {
-    this.userService.getActiveUser().then(result => {
-      this.getUsers();
+    this.userService.getActiveUser().then(user => {
+      this.userIsAdmin = user.isAdmin;
+      this.getUsers(user);
     });
 
   }
 
-  getUsers(): void {
-    this.userService.getUsers(UserService.activeUser.householdId)
+  getUsers(activeUser: User): void {
+    this.userService.getUsers(activeUser.householdId)
       .then(users => {
         this.users = users;
         this.navigationComplete();
@@ -47,7 +54,7 @@ export class ManageUsersComponent implements OnInit {
   }
 
   deleteUser(): void {
-    if (!this.isConfirmingDelete) {
+    if (!this.isConfirmingDelete || !this.userIsAdmin) {
       return;
     }
     this.savingState = true;
@@ -68,17 +75,23 @@ export class ManageUsersComponent implements OnInit {
   }
 
   confirmDelete(user: User): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     this.userToDelete = user;
     this.isConfirmingDelete = true;
   }
 
   cancelDelete(): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     this.userToDelete = {userId: 0, email: ''};
     this.isConfirmingDelete = false;
   }
 
   adminChange(): void {
-    if (!this.isConfirmingAdmin) {
+    if (!this.isConfirmingAdmin || !this.userIsAdmin) {
       return;
     }
     this.savingState = true;
@@ -104,6 +117,9 @@ export class ManageUsersComponent implements OnInit {
   }
 
   confirmAdminChange(user: User): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     this.userAdminChanges = {
       userId: user.userId,
       email: user.email,
@@ -113,8 +129,48 @@ export class ManageUsersComponent implements OnInit {
   }
 
   cancelAdminChange(): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
     this.userAdminChanges = {userId: 0, email: '', setAsAdmin: false};
     this.isConfirmingAdmin = false;
+  }
+
+  inviteUser(form: NgForm): void {
+    if (!this.userIsAdmin || form.invalid) {
+      return;
+    }
+    this.userService.inviteUserEmail(form.value.inviteEmail)
+      .then(success => {
+        if (success) {
+          PopoverControllerComponent.createAlert(AlertType.SUCCESS, form.value.inviteEmail + ' invited successfully.');
+        } else {
+          PopoverControllerComponent.createAlert(AlertType.DANGER, 'Could not invite \''
+            + form.value.inviteEmail + '\'. Make sure he or she is a registered SmartSync user before sending ' +
+            'the invite.', 10000);
+        }
+      });
+
+    this.isInvitingUser = false;
+  }
+
+  confirmInviteUser(): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
+    this.inviteEmail = '';
+    this.isInvitingUser = true;
+    let inputField = document.querySelector('#inviteEmailField');
+    setTimeout(() => {
+      (<HTMLInputElement>inputField).focus();
+    }, 100);
+  }
+
+  cancelInviteUser(): void {
+    if (!this.userIsAdmin) {
+      return;
+    }
+    this.isInvitingUser = false;
   }
 
   private navigationComplete(): void {

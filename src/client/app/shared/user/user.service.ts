@@ -260,6 +260,15 @@ export class UserService {
     });
   }
 
+  inviteUserEmail(email: string): Promise<boolean> {
+    return new Promise(resolve => {
+      // TODO: Ask server for the userId for that email (return false if not a user)
+      // TODO: Ask server to invite that user (return true on success, otherwise false)
+      console.log("TODO: inviteUserImail(" + email + ")");
+      resolve(true);
+    });
+  }
+
   private extractData(res: Response) {
     let body = res.json();
     console.log(body.data);

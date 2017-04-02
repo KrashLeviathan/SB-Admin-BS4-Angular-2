@@ -80,7 +80,7 @@ export class HouseholdSettingsComponent implements OnInit {
         } else {
           this.errorOnSave = true;
           this.formDisabled = false;
-          PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'Household Settings could not be saved.');
+          PopoverControllerComponent.createAlert(AlertType.DANGER, 'Household Settings could not be saved.');
         }
       });
   }

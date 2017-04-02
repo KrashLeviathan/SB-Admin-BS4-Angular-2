@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="col-md-6 col-lg-8">
-      <button type="button" class="btn btn-secondary pull-right" href="Javascript:void(0)">Add User</button>
+      <button type="button" class="btn btn-secondary pull-right" (click)="confirmInviteUser()">Invite User</button>
       <i class="fa fa-lg fa-cog fa-spin pull-right buffer-right" style="margin-top: 0.5em;" *ngIf="savingState"></i>
     </div>
   </div>
@@ -60,7 +60,8 @@
     <div class="modal-content box-shadow">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"
-                aria-hidden="true" (click)="cancelDelete()">&times;</button>
+                aria-hidden="true" (click)="cancelDelete()">&times;
+        </button>
 
         <h4 class="modal-title">Confirm Remove</h4>
       </div>
@@ -81,7 +82,8 @@
     <div class="modal-content box-shadow">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"
-                aria-hidden="true" (click)="cancelAdminChange()">&times;</button>
+                aria-hidden="true" (click)="cancelAdminChange()">&times;
+        </button>
 
         <h4 class="modal-title">Confirm Admin Change</h4>
       </div>
@@ -93,6 +95,36 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelAdminChange()">Cancel</button>
         <button type="button" class="btn btn-primary" (click)="adminChange()">CONFIRM</button>
+      </div>
+      <div class="clearfix"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal show -->
+
+<div class="modal fade" [class.in]="isInvitingUser" [class.shown]="isInvitingUser">
+  <div class="modal-dialog">
+    <div class="modal-content box-shadow">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancelInviteUser()">
+          &times;
+        </button>
+
+        <h4 class="modal-title">Invite User to Household</h4>
+      </div>
+
+      <div class="modal-body">
+        <form #f="ngForm" id="inviteForm" (ngSubmit)="inviteUser(f)" role="form">
+          <fieldset class="form-group">
+            <label class="form-control-label">User Email</label>
+            <input name="inviteEmail" id="inviteEmailField" [attr.maxlength]="MAX_VARCHAR_LENGTH" required
+                   class="form-control" type="email" [(ngModel)]="inviteEmail">
+          </fieldset>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelInviteUser()">Cancel</button>
+        <button type="submit" form="inviteForm" class="btn btn-primary">INVITE</button>
       </div>
       <div class="clearfix"></div>
     </div><!-- /.modal-content -->

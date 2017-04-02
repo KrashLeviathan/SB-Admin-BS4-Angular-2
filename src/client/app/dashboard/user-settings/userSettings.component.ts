@@ -78,7 +78,7 @@ export class UserSettingsComponent implements OnInit {
         } else {
           this.errorOnSave = true;
           this.formDisabled = false;
-          PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'User Settings could not be saved.');
+          PopoverControllerComponent.createAlert(AlertType.DANGER, 'User Settings could not be saved.');
         }
       });
   }
