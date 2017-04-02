@@ -54,7 +54,7 @@ export class MainViewComponent implements OnInit {
   initPackery(): any {
     // TODO: Use userId -- Actually, the getting of services and user prefs could probably
     // be done together.
-    this.userService.getUserPreferences(0)
+    this.userService.getUserPreferences(UserService.activeUser.userId)
       .then(initPositions => {
         //TODO getUserPreferences will need to return colors and dragPositions.
         this.packery = new Packery(this.grid, PACKERY_OPTIONS);

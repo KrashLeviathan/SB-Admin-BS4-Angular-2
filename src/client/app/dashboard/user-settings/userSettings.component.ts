@@ -17,11 +17,11 @@ export class UserSettingsComponent implements OnInit {
   activeUser: User;
   selectedColor: string = 'primary';
   formColors: ColorScheme = {
-    primary: '',
-    secondary: '',
-    accent: '',
-    neutralLight: '',
-    neutralDark: ''
+    primaryColor: '',
+    secondaryColor: '',
+    accentColor: '',
+    neutralLightColor: '',
+    neutralDarkColor: ''
   };
 
   formDisabled: boolean = true;
@@ -67,11 +67,11 @@ export class UserSettingsComponent implements OnInit {
         this.savingState = false;
         if (success) {
           this.activeUser.displayName = form.value.displayName;
-          this.activeUser.preferences.colorScheme.primary = form.value.primary;
-          this.activeUser.preferences.colorScheme.secondary = form.value.secondary;
-          this.activeUser.preferences.colorScheme.accent = form.value.accent;
-          this.activeUser.preferences.colorScheme.neutralLight = form.value.neutralLight;
-          this.activeUser.preferences.colorScheme.neutralDark = form.value.neutralDark;
+          this.activeUser.preferences.colorScheme.primaryColor = form.value.primary;
+          this.activeUser.preferences.colorScheme.secondaryColor = form.value.secondary;
+          this.activeUser.preferences.colorScheme.accentColor = form.value.accent;
+          this.activeUser.preferences.colorScheme.neutralLightColor = form.value.neutralLight;
+          this.activeUser.preferences.colorScheme.neutralDarkColor = form.value.neutralDark;
           PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'User Settings were saved successfully.');
         } else {
           this.errorOnSave = true;
@@ -85,19 +85,19 @@ export class UserSettingsComponent implements OnInit {
     this.errorOnSave = false;
     this.formDisabled = true;
     this.formColors = {
-      primary: this.activeUser.preferences.colorScheme.primary,
-      secondary: this.activeUser.preferences.colorScheme.secondary,
-      accent: this.activeUser.preferences.colorScheme.accent,
-      neutralLight: this.activeUser.preferences.colorScheme.neutralLight,
-      neutralDark: this.activeUser.preferences.colorScheme.neutralDark
+      primaryColor: this.activeUser.preferences.colorScheme.primaryColor,
+      secondaryColor: this.activeUser.preferences.colorScheme.secondaryColor,
+      accentColor: this.activeUser.preferences.colorScheme.accentColor,
+      neutralLightColor: this.activeUser.preferences.colorScheme.neutralLightColor,
+      neutralDarkColor: this.activeUser.preferences.colorScheme.neutralDarkColor
     };
     form.resetForm({
       displayName: this.activeUser.displayName,
-      primary: this.activeUser.preferences.colorScheme.primary,
-      secondary: this.activeUser.preferences.colorScheme.secondary,
-      accent: this.activeUser.preferences.colorScheme.accent,
-      neutralLight: this.activeUser.preferences.colorScheme.neutralLight,
-      neutralDark: this.activeUser.preferences.colorScheme.neutralDark
+      primaryColor: this.activeUser.preferences.colorScheme.primaryColor,
+      secondaryColor: this.activeUser.preferences.colorScheme.secondaryColor,
+      accentColor: this.activeUser.preferences.colorScheme.accentColor,
+      neutralLightColor: this.activeUser.preferences.colorScheme.neutralLightColor,
+      neutralDarkColor: this.activeUser.preferences.colorScheme.neutralDarkColor
     });
   }
 

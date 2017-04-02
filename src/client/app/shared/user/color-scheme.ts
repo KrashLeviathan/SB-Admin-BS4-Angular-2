@@ -4,9 +4,9 @@
  * E.g. primary: '#00FFAB'
  */
 export class ColorScheme {
-  primary: string;
-  secondary: string;
-  accent: string;
-  neutralLight: string;
-  neutralDark: string;
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
+  neutralLightColor: string;
+  neutralDarkColor: string;
 }

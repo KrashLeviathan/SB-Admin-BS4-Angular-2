@@ -15,4 +15,27 @@ export class UserPreferences {
    * The user's dashboard color scheme.
    */
   colorScheme: ColorScheme;
+
+  /**
+   * The preference's id number
+   */
+  id: number;
+
+  /**
+   * The user's id
+   */
+  userId: number;
+
+  /**
+   * The name of the preferences, for the user's sake
+   */
+  name: string;
+
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
+  neutralLightColor: string;
+  neutralDarkColor: string;
+
+
 }

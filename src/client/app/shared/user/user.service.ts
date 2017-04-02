@@ -14,6 +14,7 @@ export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 @Injectable()
 export class UserService {
   static activeUser: User;
+  static activeUserPrefs: UserPreferences;
   constructor (
     private http: Http,
     private router: Router
@@ -71,7 +72,9 @@ export class UserService {
             let body = response[0].json();
             let user = new User();
             user.userId = body.userId;
+            user.googleId = body.googleId;
             user.email = body.email;
+            user.fullName = body.fullName;
             user.givenName = body.givenName;
             user.familyName = body.familyName;
             user.imageURL = body.imageURL;
@@ -153,19 +156,36 @@ export class UserService {
     });
   }
 
-  getUserPreferences(userId: number): Promise<UserPreferences> {
+  getUserDragPositions(userId: number): Promise<UserPreferences>{
     //TODO: Currently just getting drag positions
-    //TODO set the user colorScheme
     return new Promise(resolve => {
       resolve(localStorage.getItem('dragPositions'));
-      //
-      // // Simulate latency
-      // let preferences = new UserPreferences();
-      // preferences.colorScheme = new ColorScheme();
-      //
-      // setTimeout(() => {
-      //   resolve(preferences);
-      // }, 1000);
+    })
+  }
+
+  getUserPreferences(userId: number): Promise<UserPreferences> {
+    return new Promise(resolve => {
+      Promise.all([
+        this.getUserDragPositions(userId),
+        this.http.get(`http://localhost:8000/users/` + userId + `/preferences`).toPromise()
+      ]).then( response => {
+        //TODO fix the way colorScheme is used.
+        //Might need to create a new object to send as json as a hybrid of pref and color
+          let pref = new UserPreferences();
+          let color = new ColorScheme();
+          let resp = response[1].json();
+          pref.primaryColor = resp.primaryColor;
+          pref.secondaryColor = resp.secondaryColor;
+          pref.neutralDarkColor = resp.neutralDark;
+          pref.neutralLightColor = resp.neutralLight;
+          pref.accentColor = resp.accent;
+          pref.id = resp.id;
+          pref.name = resp.name;
+          pref.userId = resp.userId;
+          pref.colorScheme = color;
+          UserService.activeUserPrefs = pref;
+          resolve(response[0]);
+        })
     });
   }
 
@@ -181,12 +201,35 @@ export class UserService {
   }
 
   saveUser(formData: Object): Promise<boolean> {
-    // TODO: Save form data to server
-    console.log(formData);
+
+    //TODO some of the colors not sending correctly either.
+    //TODO need to fix the way colorScheme is used.
+    //Might need to create a new object to send as json as a hybrid of pref and color
+    let user = UserService.activeUser;
+    let pref = UserService.activeUserPrefs;
+    let color = new ColorScheme();
+    pref.accentColor = formData['accent'];
+    pref.neutralLightColor = formData['neutralLight'];
+    pref.neutralDarkColor = formData['neutralDark'];
+    pref.primaryColor = formData['primary'];
+    pref.secondaryColor = formData['secondary'];
+    pref.colorScheme = color;
+    user.preferences = pref;
+    user.displayName = formData['displayName'];
+
+    let headers = new Headers({'Content-Type': 'application/json'});
+    let options = new RequestOptions({headers: headers});
+
     return new Promise(resolve => {
-      // Simulate server latency with 1 second delay
-      setTimeout(() => resolve(true), 1000);
+      Promise.all([
+        this.http.put(`http://localhost:8000/users`, JSON.stringify(user), options).toPromise(),
+        this.http.put(`http://localhost:8000/users/preferences`, JSON.stringify(pref), options).toPromise()
+      ]).then(response =>{
+            resolve(true);
+          }
+      );
     });
+
   }
 
   deleteUser(userId: number): Promise<boolean> {

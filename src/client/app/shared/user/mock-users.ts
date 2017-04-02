@@ -6,11 +6,11 @@ const MOCK_USER_PREFS: UserPreferences = {
   activeView: DB_VIEWS[1],
   userViewCollection: DB_VIEWS,
   colorScheme: {
-    primary: '#345cb2',
-    secondary: '#3b5156',
-    accent: '#00ffab',
-    neutralLight: '#969696',
-    neutralDark: '#313131'
+    primaryColor: '#345cb2',
+    secondaryColor: '#3b5156',
+    accentColor: '#00ffab',
+    neutralLightColor: '#969696',
+    neutralDarkColor: '#313131'
   }
 };
 
