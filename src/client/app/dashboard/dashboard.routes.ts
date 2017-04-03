@@ -2,7 +2,6 @@ import {Route} from '@angular/router';
 
 import {HomeRoutes} from './home/index';
 import {MainViewRoutes} from './main-view/main-view.routes';
-import {LogoutRoutes} from './logout/logout.routes';
 import {UserSettingsRoutes} from './user-settings/userSettings.routes';
 import {HouseholdSettingsRoutes} from './household-settings/householdSettings.routes';
 import {ServicesRoutes} from './services/services.routes';
@@ -19,7 +18,6 @@ export const DashboardRoutes: Route[] = [
     children: [
       ...MainViewRoutes,
       ...HomeRoutes,
-      ...LogoutRoutes,
       ...UserSettingsRoutes,
       ...HouseholdSettingsRoutes,
       ...ServiceDetailRoutes,

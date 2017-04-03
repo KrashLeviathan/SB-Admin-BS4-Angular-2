@@ -1,28 +1,58 @@
 <div class="login-page">
-	<div class="row">
-		<div class="col-lg-4 col-lg-offset-4">
-        	<img src="assets/img/SB-admin.png" width="150px;" class="user-avatar" />
-			<h1>Register a SmartSync Household</h1>
-			<form role="form">
-				<div class="form-content">
-					<div class="form-group">
-						<input type="text" class="form-control input-underline input-lg" id="" placeholder="Full Name">
-					</div>
+  <div class="row">
+    <div class="col-lg-4 col-lg-offset-4">
+      <img src="assets/img/SB-admin.png" width="150px;" class="user-avatar"/>
+      <h1>Create a SmartSync User Account</h1>
+      <form #f="ngForm" role="form" (ngSubmit)="onSubmit(f)">
+        <div class="form-content">
+          <div class="form-group" style="margin-bottom: 3em;">
+            <label>User Display Name<br>
+              <input type="text" class="form-control input-underline input-lg"
+                     autofocus required maxlength="{{MAX_VARCHAR_LENGTH}}"
+                     name="displayName" placeholder="E.g. 'Mom' or 'Swarley'" [(ngModel)]="displayName">
+            </label>
+            <p class="form-note">
+              <b>NOTE:</b> Most of your User Settings are tied to your Google Account, and should be
+              changed at the Google Account Settings page.
+            </p>
+          </div>
 
-					<div class="form-group">
-						<input type="text" class="form-control input-underline input-lg" id="" placeholder="Email">
-					</div>
+          <div class="form-group">
+            <label>Accept an Invite to a Household<br>
+              <div class="btn-group-vertical buffer-top invite-list" role="group" aria-label="Select Invite">
+                <button type="button" class="btn rounded-btn"
+                        *ngFor="let invite of invites" [class.active]="invite === selectedInvite"
+                        (click)="onClickInvite(invite)">{{invite}}
+                </button>
+              </div>
+              <input type="hidden" name="invite" [(ngModel)]="selectedInvite">
+              <input type="hidden" name="acceptedInvite" [(ngModel)]="acceptingInvite">
+            </label>
+          </div>
 
-					<div class="form-group">
-						<input type="password" class="form-control input-underline input-lg" id="" placeholder="Password">
-					</div>
-					<div class="form-group">
-						<input type="password" class="form-control input-underline input-lg" id="" placeholder="Repeat Password">
-					</div>
-				</div>
-				<a type="submit" class="btn rounded-btn" routerLink="/dashboard/home"> Register </a>&nbsp;
-				<a type="submit" class="btn rounded-btn" routerLink="/"> Log in </a>
-			</form>
-		</div>
-	</div>
+          <p>OR</p>
+
+          <div class="form-group">
+            <label class="buffer-top">Create a new Household with name...<br>
+              <input type="text" class="form-control input-underline input-lg" maxlength="{{MAX_VARCHAR_LENGTH}}"
+                     name="householdName" placeholder="E.g. 'The Smiths'" [(ngModel)]="householdName"
+                     (focus)="onFocusHousehold()">
+            </label>
+          </div>
+
+          <p>OR</p>
+
+          <div class="form-group">
+            <button type="button" class="btn rounded-btn" [class.active]="joinHouseholdLater"
+                    (click)="onClickJoinLater()"> Join a Household Later
+            </button>
+            <input type="hidden" name="joinHouseholdLater" [(ngModel)]="joinHouseholdLater">
+          </div>
+        </div>
+
+        <button type="submit" class="btn rounded-btn"> Register</button>&nbsp;
+        <button type="cancel" class="btn rounded-btn" routerLink="/"> Already a User?</button>
+      </form>
+    </div>
+  </div>
 </div>

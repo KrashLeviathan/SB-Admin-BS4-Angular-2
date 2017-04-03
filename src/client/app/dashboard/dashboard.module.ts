@@ -10,7 +10,6 @@ import {DashboardComponent} from './dashboard.component';
 import {TopNavComponent} from '../shared/index';
 import {SidebarComponent} from '../shared/index';
 import {MainViewModule} from './main-view/main-view.module';
-import {LogoutModule} from './logout/logout.module';
 import {UserSettingsModule} from './user-settings/userSettings.module';
 import {HouseholdSettingsModule} from './household-settings/householdSettings.module';
 import {ServicesModule} from './services/services.module';
@@ -28,7 +27,6 @@ import {PopoverControllerComponent} from '../shared/popover-controller/popover-c
     ModalModule,
     HomeModule,
     MainViewModule,
-    LogoutModule,
     UserSettingsModule,
     HouseholdSettingsModule,
     ServiceDetailModule,
