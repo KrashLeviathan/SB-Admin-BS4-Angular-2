@@ -290,14 +290,14 @@ export class UserService {
   getUserPreferences(userId: number): Promise<UserPreferences> {
     return new Promise(resolve => {
       Promise.all([
-        this.getUserDragPositions(userId),
         this.http.get(`http://localhost:8000/users/` + userId + `/preferences`).toPromise()
+        // this.getUserDragPositions(userId)
       ]).then( response => {
         //TODO fix the way colorScheme is used.
         //Might need to create a new object to send as json as a hybrid of pref and color
           let pref = new UserPreferences();
           let color = new ColorScheme();
-          let resp = response[1].json();
+          let resp = response[0].json();
           color.primaryColor = resp.primaryColor;
           color.secondaryColor = resp.secondaryColor;
           color.neutralDarkColor = resp.neutralDarkColor;

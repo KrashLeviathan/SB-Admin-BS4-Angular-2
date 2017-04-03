@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Service} from '../../shared/service/service';
 import {ServiceService} from '../../shared/service/service.service';
@@ -27,7 +27,7 @@ const DATA_ITEM_ATTRIBUTE: string = 'data-item-id';
   styleUrls: ['./main-view.component.css']
 })
 
-export class MainViewComponent implements OnInit {
+export class MainViewComponent implements AfterViewInit, OnInit {
   packery: any;
 
   editModeActive: boolean = false;
@@ -56,16 +56,20 @@ export class MainViewComponent implements OnInit {
             .then(services => {
               this.services = services;
               this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
-              this.initPackery();
+              setTimeout(() => this.initPackery(), 100);
             });
         });
       });
   }
 
+  ngAfterViewInit() {
+    // TODO
+  }
+
   initPackery(): any {
     // TODO: Use userId -- Actually, the getting of services and user prefs could probably
     // be done together.
-    this.userService.getUserPreferences(UserService.activeUser.userId)
+    this.userService.getUserDragPositions(UserService.activeUser.userId)
       .then(initPositions => {
         //TODO getUserPreferences will need to return colors and dragPositions.
         this.packery = new Packery(this.grid, PACKERY_OPTIONS);

@@ -10,9 +10,10 @@ export class ServiceService {
   // TODO: Remove this counter once the server-side solution is in place.
   // The server should be the one generating serviceId's
   static idCounter: number = 10;
-  constructor (
-    private http: Http,
-  ) {}
+
+  constructor(private http: Http) {
+  }
+
   /**
    * Sends a request to the server to get a specific service for the account.
    * @param serviceId
@@ -40,17 +41,25 @@ export class ServiceService {
    */
   getServices(): Promise<Service[]> {
     return new Promise(resolve => {
-      this.http.get(`http://localhost:8000/households/`+ HouseholdService.activeHousehold.householdId +`/services`).toPromise().then(response => {
-        let json = response.json();
-        let services: Service[] = [];
-        //TODO instead of returning these services, will need to do http requests to each service.
-        for(let i = 0; i< json.length; i++){
-          let service = new Service(LightComponent, json[0]);
-          services.push(service);
-        }
-        resolve(services);
-      });
+      // Simulate latency
+      setTimeout(() => {
+        resolve(SERVICES);
+      }, 250);
     });
+
+    // TODO: Fix after demo
+    // return new Promise(resolve => {
+    //   this.http.get(`http://localhost:8000/households/`+ HouseholdService.activeHousehold.householdId +`/services`).toPromise().then(response => {
+    //     let json = response.json();
+    //     let services: Service[] = [];
+    //     //TODO instead of returning these services, will need to do http requests to each service.
+    //     for(let i = 0; i< json.length; i++){
+    //       let service = new Service(LightComponent, json[0]);
+    //       services.push(service);
+    //     }
+    //     resolve(services);
+    //   });
+    // });
   }
 
   /**
