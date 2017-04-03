@@ -1,4 +1,5 @@
 import {UserPreferences} from './user-preferences';
+import {ColorScheme} from "./color-scheme";
 
 export class User {
   userId: number;

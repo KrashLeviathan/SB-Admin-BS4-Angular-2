@@ -44,8 +44,8 @@ export class UserSettingsComponent implements OnInit {
   }
 
   getTextColor(color: string): string {
-    // TODO
-    return '';
+
+    return (<any>this.formColors)[color];
   }
 
   setSelectedColor(colorName: string) {

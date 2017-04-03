@@ -14,7 +14,8 @@ export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 @Injectable()
 export class UserService {
   static activeUser: User;
-  static activeUserPrefs: UserPreferences;
+  // static activeUserPrefs: UserPreferences;
+  // static activeUserColorScheme: ColorScheme;
 
   constructor (
     private http: Http,
@@ -188,6 +189,7 @@ export class UserService {
           user.email = body.email;
           user.givenName = body.givenName;
           user.familyName = body.familyName;
+          user.displayName = body.displayName;
           user.imageURL = body.imageURL;
           user.role = body.role;
           this.getUserHousehold(user.userId).then(householdId => {
@@ -292,17 +294,16 @@ export class UserService {
           let pref = new UserPreferences();
           let color = new ColorScheme();
           let resp = response[1].json();
-          pref.primaryColor = resp.primaryColor;
-          pref.secondaryColor = resp.secondaryColor;
-          pref.neutralDarkColor = resp.neutralDark;
-          pref.neutralLightColor = resp.neutralLight;
-          pref.accentColor = resp.accent;
+          color.primaryColor = resp.primaryColor;
+          color.secondaryColor = resp.secondaryColor;
+          color.neutralDarkColor = resp.neutralDarkColor;
+          color.neutralLightColor = resp.neutralLightColor;
+          color.accentColor = resp.accentColor;
           pref.id = resp.id;
           pref.name = resp.name;
           pref.userId = resp.userId;
           pref.colorScheme = color;
-          UserService.activeUserPrefs = pref;
-          resolve(response[0]);
+          resolve(pref);
         })
 
     });
@@ -338,16 +339,16 @@ export class UserService {
     //TODO need to fix the way colorScheme is used.
     //Might need to create a new object to send as json as a hybrid of pref and color
     let user = UserService.activeUser;
-    let pref = UserService.activeUserPrefs;
-    let color = new ColorScheme();
-    pref.accentColor = formData['accent'];
-    pref.neutralLightColor = formData['neutralLight'];
-    pref.neutralDarkColor = formData['neutralDark'];
-    pref.primaryColor = formData['primary'];
-    pref.secondaryColor = formData['secondary'];
-    pref.colorScheme = color;
-    user.preferences = pref;
-    user.displayName = formData['displayName'];
+    let pref = {"accentColor":(<any>formData)['accent'],
+      "neutralLightColor": (<any>formData)['neutralLight'],
+      "neutralDarkColor": (<any>formData)['neutralDark'],
+      "primaryColor": (<any>formData)['primary'],
+      "secondaryColor": (<any>formData)['secondary'],
+      "name": user.preferences.name,
+      "userId": user.userId,
+      "id":user.preferences.id
+    };
+    user.displayName = (<any>formData)['displayName'];
 
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers});
@@ -411,17 +412,15 @@ export class UserService {
    */
   giveAdminPrivileges(userId: number): Promise<boolean> {
     return new Promise(resolve => {
-      let json = new User();
-      json.userId = userId; // the user being given privileges
-      json.role = '1';      // tells the server an admin is making the request
-      // TODO: The security on this part should be improved...
-
-      this.http.post(`http://localhost:8000/users/createAdmin`, JSON.stringify(json), UserService.jsonHeader()).toPromise()
-        .then(() => resolve(true))
-        .catch(response => {
-          UserService.handleError(response);
-          resolve(false);
-        });
+      this.getUser(userId).then(user => {
+        user.role = "1";
+        this.http.put(`http://localhost:8000/users/`, JSON.stringify(user), UserService.jsonHeader()).toPromise()
+          .then(() => resolve(true))
+          .catch(response => {
+            UserService.handleError(response);
+            resolve(false);
+          });
+      })
     });
   }
 
@@ -433,16 +432,16 @@ export class UserService {
    */
   revokeAdminPrivileges(userId: number): Promise<boolean> {
     return new Promise(resolve => {
-      let json = new User();
-      json.userId = userId; // the user being given privileges
-      json.role = '1';      // tells the server an admin is making the request
-      // TODO: The security on this part should be improved...
-      this.http.post(`http://localhost:8000/users/removeAdmin`, JSON.stringify(json), UserService.jsonHeader()).toPromise()
-        .then(() => resolve(true))
-        .catch(response => {
-          UserService.handleError(response);
-          resolve(false);
-        });
+      this.getUser(userId).then(user => {
+        user.role = "0";
+        // TODO: The security on this part should be improved...
+        this.http.put(`http://localhost:8000/users/`, JSON.stringify(user), UserService.jsonHeader()).toPromise()
+          .then(() => resolve(true))
+          .catch(response => {
+            UserService.handleError(response);
+            resolve(false);
+          });
+      })
     });
   }
 

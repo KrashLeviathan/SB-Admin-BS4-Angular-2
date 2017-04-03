@@ -27,60 +27,60 @@
             <fieldset class="form-group"
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Primary</label>
-              <input name="primary" (focus)="setSelectedColor('primary')"
-                     [ngModel]="formColors.primary" #primary="ngModel"
+              <input name="primary" (focus)="setSelectedColor('primaryColor')"
+                     [ngModel]="formColors.primaryColor" #primary="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="formColors.primary"
+                     [style.background]="formColors.primaryColor"
                      style="width: 100%; height: 11em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="formColors.primary" (keyup)="updateColor('primary',primary.value)"/>
+                     [value]="formColors.primaryColor" (keyup)="updateColor('primaryColor',primary.value)"/>
             </fieldset>
           </div>
           <div class="col-xs-4">
             <fieldset class="form-group"
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Secondary</label>
-              <input name="secondary" (focus)="setSelectedColor('secondary')"
-                     [ngModel]="formColors.secondary" #secondary="ngModel"
+              <input name="secondary" (focus)="setSelectedColor('secondaryColor')"
+                     [ngModel]="formColors.secondaryColor" #secondary="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="formColors.secondary"
+                     [style.background]="formColors.secondaryColor"
                      style="width: 100%; height: 4em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="formColors.secondary" (keyup)="updateColor('secondary',secondary.value)"/>
+                     [value]="formColors.secondaryColor" (keyup)="updateColor('secondaryColor',secondary.value)"/>
             </fieldset>
             <fieldset class="form-group"
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Accent</label>
-              <input name="accent" (focus)="setSelectedColor('accent')"
-                     [ngModel]="formColors.accent" #accent="ngModel"
+              <input name="accent" (focus)="setSelectedColor('accentColor')"
+                     [ngModel]="formColors.accentColor" #accent="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="formColors.accent" style="width: 100%; height: 4em;"
+                     [style.background]="formColors.accentColor" style="width: 100%; height: 4em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="formColors.accent" (keyup)="updateColor('accent',accent.value)"/>
+                     [value]="formColors.accentColor" (keyup)="updateColor('accentColor',accent.value)"/>
             </fieldset>
           </div>
           <div class="col-xs-4">
             <fieldset class="form-group"
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Light</label>
-              <input name="neutralLight" (focus)="setSelectedColor('neutralLight')"
-                     [ngModel]="formColors.neutralLight" #neutralLight="ngModel"
+              <input name="neutralLight" (focus)="setSelectedColor('neutralLightColor')"
+                     [ngModel]="formColors.neutralLightColor" #neutralLight="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="formColors.neutralLight"
+                     [style.background]="formColors.neutralLightColor"
                      style="width: 100%; height: 4em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="formColors.neutralLight" (keyup)="updateColor('neutralLight',neutralLight.value)"/>
+                     [value]="formColors.neutralLightColor" (keyup)="updateColor('neutralLightColor',neutralLight.value)"/>
             </fieldset>
             <fieldset class="form-group"
                       [attr.disabled]="formDisabled ? true : null">
               <label class="form-control-label">Dark</label>
-              <input name="neutralDark" (focus)="setSelectedColor('neutralDark')"
-                     [ngModel]="formColors.neutralDark" #neutralDark="ngModel"
+              <input name="neutralDark" (focus)="setSelectedColor('neutralDarkColor')"
+                     [ngModel]="formColors.neutralDarkColor" #neutralDark="ngModel"
                      required minlength=4 [attr.maxlength]="MAX_VARCHAR_LENGTH"
-                     [style.background]="formColors.neutralDark"
+                     [style.background]="formColors.neutralDarkColor"
                      style="width: 100%; height: 4em;"
                      class="form-control form-control-warning" type="text"
-                     [value]="formColors.neutralDark" (keyup)="updateColor('neutralDark',neutralDark.value)"/>
+                     [value]="formColors.neutralDarkColor" (keyup)="updateColor('neutralDarkColor',neutralDark.value)"/>
             </fieldset>
           </div>
         </div>

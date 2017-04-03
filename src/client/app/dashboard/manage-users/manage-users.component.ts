@@ -112,6 +112,10 @@ export class ManageUsersComponent implements OnInit {
           : 'revoked from';
         PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'Admin privileges were ' + msg
           + ' \'' + this.userAdminChanges.email + '\'.');
+        this.userService.getUsers(UserService.activeUser.householdId).then(response =>{
+          this.users = response;
+          this.navigationComplete();
+        });
       } else {
         PopoverControllerComponent.createAlert(AlertType.DANGER,
           'Could not make admin changes to \'' + this.userAdminChanges.email + '\'.');

@@ -6,6 +6,7 @@ export class UserPreferences {
    * The view that currently displays in the user's dashboard.
    */
   activeView: DBView;
+
   /**
    * A set of views available to the user to apply to the dashboard.
    * The user may or may not be the owner/owner of the view.
@@ -31,11 +32,6 @@ export class UserPreferences {
    */
   name: string;
 
-  primaryColor: string;
-  secondaryColor: string;
-  accentColor: string;
-  neutralLightColor: string;
-  neutralDarkColor: string;
 
 
 }
