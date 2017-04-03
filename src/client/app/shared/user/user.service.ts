@@ -2,11 +2,9 @@ import {Injectable} from '@angular/core';
 import {User} from './user';
 import {EncryptionService} from '../encryption/encryption.service';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
-import {Observable} from "rxjs";
 import {Headers, Http, RequestOptions, Response} from '@angular/http';
-import {Router} from "@angular/router";
-import {UserPreferences} from "./user-preferences";
-import {ColorScheme} from "./color-scheme";
+import {UserPreferences} from './user-preferences';
+import {AlertType, PopoverControllerComponent} from '../popover-controller/popover-controller';
 
 
 export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
@@ -14,10 +12,10 @@ export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 @Injectable()
 export class UserService {
   static activeUser: User;
-  constructor (
-    private http: Http,
-    private router: Router
-  ) {}
+
+  constructor(private http: Http) {
+  }
+
   /**
    * On login, the active user sessionId is encrypted and stored in the cookies.
    * @param sessionToken
@@ -30,21 +28,22 @@ export class UserService {
     //TODO send sessionToken to the server to save.
   }
 
-  setActiveUser(user: User){
+  setActiveUser(user: User) {
     Cookie.set('userId', user.userId.toString());
     UserService.activeUser = user;
   }
 
   getActiveUser(): Promise<User> {
-    let encryptedToken = Cookie.get('sessionToken');
-    if (!encryptedToken) {
-      // Expired token returns null active user
-      return Promise.resolve(null);
-    }
-    // Decrypt session token
-    let sessionToken = EncryptionService.decode(
-      EncryptionService.decrypt(encryptedToken)
-    );
+    // TODO: We should be storing the
+    // let encryptedToken = Cookie.get('sessionToken');
+    // if (!encryptedToken) {
+    //   // Expired token returns null active user
+    //   return Promise.resolve(null);
+    // }
+    // // Decrypt session token
+    // let sessionToken = EncryptionService.decode(
+    //   EncryptionService.decrypt(encryptedToken)
+    // );
     // Return the current active user if there's already one loaded,
     // otherwise load the active user, set it, and return it
     return new Promise(resolve => {
@@ -52,8 +51,9 @@ export class UserService {
         resolve(UserService.activeUser);
       } else {
         this.getUser(parseInt(Cookie.get('userId'))).then(result => {
+          this.setActiveUser(result);
           resolve(result);
-        })
+        });
       }
     });
   }
@@ -65,35 +65,46 @@ export class UserService {
         this.getUserHousehold(userId),
         this.getUserPreferences(userId)
       ]).then(
-          response => {
+        response => {
 
-            let body = response[0].json();
-            let user = new User();
-            user.userId = body.userId;
-            user.email = body.email;
-            user.givenName = body.givenName;
-            user.familyName = body.familyName;
-            user.imageURL = body.imageURL;
-            user.role = body.role;
-            user.householdId = response[1];
-            user.preferences = response[2];
-
-            this.setActiveUser(user);
-            if(user.role == "1"){
-              user.isAdmin = true;
-            }else{
-              user.isAdmin = false;
-            }
-            resolve(user);
-          }
-        )
-        .catch(this.handleError);
+          let body = response[0].json();
+          let user = new User();
+          user.userId = body.userId;
+          user.email = body.email;
+          user.givenName = body.givenName;
+          user.familyName = body.familyName;
+          user.imageURL = body.imageURL;
+          user.role = body.role;
+          user.householdId = response[1];
+          user.preferences = response[2];
+          user.isAdmin = (user.role == '1');
+          resolve(user);
+        }
+      )
+        .catch(response => {
+          this.handleError(response);
+          resolve(null);
+        });
     });
 
   }
 
   getUserByGoogle(googleId: string): Promise<Response> {
-    return this.http.get(`http://localhost:8000/users/google/`+ googleId).toPromise();
+    return this.http.get(`http://localhost:8000/users/google/` + googleId).toPromise();
+  }
+
+  getUserIdByEmail(email: string): Promise<number> {
+    return new Promise(resolve => {
+      let encodedEmail = encodeURIComponent(email);
+      this.http.get('http://localhost:8000/users/email/' + encodedEmail + '/').toPromise()
+        .then(response => {
+          resolve(response.json().userId);
+        })
+        .catch(response => {
+          this.handleError(response);
+          resolve(0);
+        });
+    });
   }
 
   addNewUser(myUser: User, options: RequestOptions): Promise<Response> {
@@ -108,7 +119,7 @@ export class UserService {
             let users = new Array<User>();
             let body = response.json();
             let count = 0;
-            body.forEach((currIndex:any) => {
+            body.forEach((currIndex: any) => {
               let user = new User();
               user.userId = currIndex.userId;
               user.email = currIndex.email;
@@ -117,18 +128,17 @@ export class UserService {
               user.imageURL = currIndex.imageURL;
               user.role = currIndex.role;
               user.displayName = currIndex.displayName;
-              if(user.role == "1"){
-                user.isAdmin = true;
-              }else{
-                user.isAdmin = false;
-              }
+              user.isAdmin = (user.role == '1');
               users[count] = user;
               count++;
             });
             resolve(users);
           }
         )
-        .catch(this.handleError);
+        .catch(response => {
+          this.handleError(response);
+          resolve(null);
+        });
     });
   }
 
@@ -138,7 +148,7 @@ export class UserService {
         .then(household => {
           let body = household.json();
           resolve(body.householdId);
-      });
+        });
     });
   }
 
@@ -207,7 +217,10 @@ export class UserService {
             resolve(user);
           }
         )
-        .catch(this.handleError);
+        .catch(response => {
+          this.handleError(response);
+          resolve(false);
+        });
     });
   }
 
@@ -216,20 +229,17 @@ export class UserService {
       let json = new User();
       json.userId = userId;
       json.role = '1';
-      let headers = new Headers({ 'Content-Type': 'application/json'});
-      let options = new RequestOptions({ headers: headers });
 
-      this.http.post(`http://localhost:8000/users/createAdmin`, JSON.stringify(json), options).toPromise()
+      this.http.post(`http://localhost:8000/users/createAdmin`, JSON.stringify(json), this.jsonHeader()).toPromise()
         .then(
           response => {
-            let body = response.json();
-            if(body.role == 1){
-              resolve(true);
-            }
-            resolve(false);
+            resolve(true);
           }
         )
-        .catch(this.handleError);
+        .catch(response => {
+          this.handleError(response);
+          resolve(false);
+        });
     });
   }
 
@@ -238,10 +248,8 @@ export class UserService {
       let json = new User();
       json.userId = userId;
       json.role = '1';
-      let headers = new Headers({ 'Content-Type': 'application/json'});
-      let options = new RequestOptions({ headers: headers });
 
-      this.http.post(`http://localhost:8000/users/removeAdmin`, JSON.stringify(json), options).toPromise()
+      this.http.post(`http://localhost:8000/users/removeAdmin`, JSON.stringify(json), this.jsonHeader()).toPromise()
         .then(
           response => {
             let body = response.json();
@@ -253,38 +261,70 @@ export class UserService {
             user.imageURL = body.imageURL;
             user.role = body.role;
 
-            resolve(user);
+            resolve(true);
           }
         )
-        .catch(this.handleError);
+        .catch(response => {
+          this.handleError(response);
+          resolve(false);
+        });
     });
   }
 
   inviteUserEmail(email: string): Promise<boolean> {
     return new Promise(resolve => {
-      // TODO: Ask server for the userId for that email (return false if not a user)
-      // TODO: Ask server to invite that user (return true on success, otherwise false)
-      console.log("TODO: inviteUserImail(" + email + ")");
-      resolve(true);
+      this.getUserIdByEmail(email).then(userId => {
+        if (userId === 0) {
+          // User doesn't exist for that email
+          resolve(false);
+        } else {
+          let json = {
+            userId: userId,
+            householdId: UserService.activeUser.householdId
+          };
+
+          this.http.post(`http://localhost:8000/invites`, JSON.stringify(json), this.jsonHeader()).toPromise()
+            .then(response => {
+              // Invite was successful
+              resolve(true);
+            }).catch(response => {
+            this.handleError(response);
+            resolve(false);
+          });
+        }
+      }).catch(response => {
+        this.handleError(response);
+        resolve(false);
+      });
     });
   }
 
-  private extractData(res: Response) {
-    let body = res.json();
-    console.log(body.data);
-    return body.data || { };
-  }
+  // private extractData(res: Response) {
+  //   let body = res.json();
+  //   console.log(body.data);
+  //   return body.data || {};
+  // }
 
-  private handleError (error: Response | any) {
+  private handleError(error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+      if (body.message) {
+        errMsg = body.message;
+      } else {
+        const err = body.error || JSON.stringify(body);
+        errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+      }
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
 
-    return Observable.throw(errMsg);
+    // return Observable.throw(errMsg);
+    PopoverControllerComponent.createAlert(AlertType.DANGER, errMsg, 60000);
+  }
+
+  private jsonHeader(): RequestOptions {
+    let headers = new Headers({'Content-Type': 'application/json'});
+    return new RequestOptions({headers: headers});
   }
 }
