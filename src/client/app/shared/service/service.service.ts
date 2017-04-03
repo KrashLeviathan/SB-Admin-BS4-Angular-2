@@ -42,11 +42,11 @@ export class ServiceService {
     return new Promise(resolve => {
       this.http.get(`http://localhost:8000/households/`+ HouseholdService.activeHousehold.householdId +`/services`).toPromise().then(response => {
         let json = response.json();
-        let services = new Array<Service>();
-
+        let services: Service[] = [];
+        //TODO instead of returning these services, will need to do http requests to each service.
         for(let i = 0; i< json.length; i++){
           let service = new Service(LightComponent, json[0]);
-          services[i] = service;
+          services.push(service);
         }
         resolve(services);
       });

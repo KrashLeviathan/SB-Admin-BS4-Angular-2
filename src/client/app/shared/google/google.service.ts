@@ -21,7 +21,6 @@ export class GoogleService {
     let sessionToken = googleUser.getAuthResponse().id_token;
 
     return new Promise(resolve => {
-      //TODO replace with actual email returned from google. Jack hasn't implemented that method yet.
       Promise.all([
         this.userService.getUserByGoogle(googleId),
         this.userService.getUserHouseholdByGoogle(googleId)
