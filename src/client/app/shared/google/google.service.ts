@@ -16,7 +16,6 @@ export class GoogleService {
    * @returns {Promise<boolean>}
    */
   loginUser(googleUser: any, registerNew: boolean): Promise<boolean> {
-    console.log('Logging in user');
     let profile = googleUser.getBasicProfile();
     let googleId = profile.getId();
     let sessionToken = googleUser.getAuthResponse().id_token;

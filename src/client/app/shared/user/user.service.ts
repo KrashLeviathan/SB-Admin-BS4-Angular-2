@@ -154,7 +154,11 @@ export class UserService {
   }
 
   getUserByGoogle(googleId: string): Promise<Response> {
-    return this.http.get(`http://localhost:8000/users/google/` + googleId).toPromise();
+    return this.http.get(`http://localhost:8000/users/google/` + googleId).toPromise()
+      .catch(error => {
+      console.log(error);
+      UserService.handleError(error);
+    });
   }
 
   /**
