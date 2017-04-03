@@ -12,6 +12,63 @@ export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 export class UserService {
   static activeUser: User;
 
+  /**
+   * Displays a popover with the error message. Timeout on popover is 60 seconds.
+   * @param error
+   */
+  static handleError(error: Response | any) {
+    let errMsg: string;
+    if (error instanceof Response) {
+      const body = error.json() || '';
+      if (body.message) {
+        errMsg = body.message;
+      } else {
+        const err = body.error || JSON.stringify(body);
+        errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+      }
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+
+    // return Observable.throw(errMsg);
+    PopoverControllerComponent.createAlert(AlertType.DANGER, errMsg, 60000);
+  }
+
+  /**
+   * The header for a POST request sending json data.
+   * @returns {RequestOptions}
+   */
+  static jsonHeader(): RequestOptions {
+    let headers = new Headers({'Content-Type': 'application/json'});
+    return new RequestOptions({headers: headers});
+  }
+
+  /**
+   * Creates a full User object from a partial user object (such is returned in GET requests)
+   * @param partialUser
+   * @param householdId
+   * @param preferences
+   * @returns {User}
+   */
+  static createUser(partialUser: any, householdId: number, preferences: UserPreferences): User {
+    return {
+      userId: partialUser.userId || 0,
+      googleId: partialUser.googleId || '',
+      displayName: partialUser.displayName || '',
+      fullName: partialUser.fullName || '',
+      givenName: partialUser.givenName || '',
+      familyName: partialUser.familyName || '',
+      imageURL: partialUser.imageURL || '',
+      email: partialUser.email || '',
+      householdId: householdId,
+      role: partialUser.role || '',
+      created: partialUser.created || '',
+      lastUpdated: partialUser.lastUpdated || '',
+      isAdmin: (partialUser.role == '1') || false,
+      preferences: preferences
+    };
+  }
+
   constructor(private http: Http) {
   }
 
@@ -80,10 +137,10 @@ export class UserService {
         this.getUserPreferences(userId)
       ]).then(responseArray => {
         let partialUser = responseArray[0].json();
-        let user = this.createUser(partialUser, responseArray[1], responseArray[2]);
+        let user = UserService.createUser(partialUser, responseArray[1], responseArray[2]);
         resolve(user);
       }).catch(response => {
-        this.handleError(response);
+        UserService.handleError(response);
         resolve(null);
       });
     });
@@ -107,14 +164,36 @@ export class UserService {
           resolve(response.json().userId);
         })
         .catch(response => {
-          this.handleError(response);
+          UserService.handleError(response);
           resolve(0);
         });
     });
   }
 
-  addNewUser(myUser: User, options: RequestOptions): Promise<Response> {
-    return this.http.post('http://localhost:8000/users/', JSON.stringify(myUser), options).toPromise();
+  addNewUser(partialUser: any, sessionToken: string): Promise<boolean> {
+    return new Promise(resolve => {
+      this.http.post('http://localhost:8000/users/', JSON.stringify(partialUser), UserService.jsonHeader()).toPromise()
+        .then(response => {
+          this.setActiveUserSession(sessionToken);
+
+          let user = new User();
+          let body = response.json();
+          user.userId = body.userId;
+          user.email = body.email;
+          user.givenName = body.givenName;
+          user.familyName = body.familyName;
+          user.imageURL = body.imageURL;
+          user.role = body.role;
+          this.getUserHousehold(user.userId).then(householdId => {
+            UserService.activeUser.householdId = householdId;
+          });
+          this.setActiveUser(user);
+        })
+        .catch(response => {
+          UserService.handleError(response);
+          // resolve(false);
+        });
+    });
   }
 
   /**
@@ -131,12 +210,12 @@ export class UserService {
           let users: User[] = [];
           let partialUsers = response.json();
           partialUsers.forEach((partialUser: any) => {
-            users.push(this.createUser(partialUser, householdId, null));
+            users.push(UserService.createUser(partialUser, householdId, null));
           });
           resolve(users);
         })
         .catch(response => {
-          this.handleError(response);
+          UserService.handleError(response);
           resolve(null);
         });
     });
@@ -156,7 +235,7 @@ export class UserService {
           resolve(body.householdId);
         })
         .catch(response => {
-          this.handleError(response);
+          UserService.handleError(response);
           resolve(null);
         });
     });
@@ -176,7 +255,7 @@ export class UserService {
           resolve(household.householdId);
         })
         .catch(response => {
-          this.handleError(response);
+          UserService.handleError(response);
           resolve(null);
         });
     });
@@ -249,7 +328,7 @@ export class UserService {
       this.http.delete(`http://localhost:8000/users/` + userId).toPromise()
         .then(() => resolve(true))
         .catch(response => {
-          this.handleError(response);
+          UserService.handleError(response);
           resolve(false);
         });
     });
@@ -268,10 +347,10 @@ export class UserService {
       json.role = '1';      // tells the server an admin is making the request
       // TODO: The security on this part should be improved...
 
-      this.http.post(`http://localhost:8000/users/createAdmin`, JSON.stringify(json), this.jsonHeader()).toPromise()
+      this.http.post(`http://localhost:8000/users/createAdmin`, JSON.stringify(json), UserService.jsonHeader()).toPromise()
         .then(() => resolve(true))
         .catch(response => {
-          this.handleError(response);
+          UserService.handleError(response);
           resolve(false);
         });
     });
@@ -290,10 +369,10 @@ export class UserService {
       json.role = '1';      // tells the server an admin is making the request
       // TODO: The security on this part should be improved...
 
-      this.http.post(`http://localhost:8000/users/removeAdmin`, JSON.stringify(json), this.jsonHeader()).toPromise()
+      this.http.post(`http://localhost:8000/users/removeAdmin`, JSON.stringify(json), UserService.jsonHeader()).toPromise()
         .then(() => resolve(true))
         .catch(response => {
-          this.handleError(response);
+          UserService.handleError(response);
           resolve(false);
         });
     });
@@ -320,15 +399,15 @@ export class UserService {
             householdId: UserService.activeUser.householdId
           };
 
-          this.http.post(`http://localhost:8000/invites`, JSON.stringify(json), this.jsonHeader()).toPromise()
+          this.http.post(`http://localhost:8000/invites`, JSON.stringify(json), UserService.jsonHeader()).toPromise()
             .then(() => resolve(true))
             .catch(response => {
-              this.handleError(response);
+              UserService.handleError(response);
               resolve(false);
             });
         }
       }).catch(response => {
-        this.handleError(response);
+        UserService.handleError(response);
         resolve(false);
       });
     });
@@ -340,49 +419,4 @@ export class UserService {
   //   console.log(body.data);
   //   return body.data || {};
   // }
-
-  // Displays a popover with the error message.
-  private handleError(error: Response | any) {
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      if (body.message) {
-        errMsg = body.message;
-      } else {
-        const err = body.error || JSON.stringify(body);
-        errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-      }
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-
-    // return Observable.throw(errMsg);
-    PopoverControllerComponent.createAlert(AlertType.DANGER, errMsg, 60000);
-  }
-
-  // The header attached to POST requests sending json data
-  private jsonHeader(): RequestOptions {
-    let headers = new Headers({'Content-Type': 'application/json'});
-    return new RequestOptions({headers: headers});
-  }
-
-  // Creates a full User object from a partial user object (such is returned in GET requests)
-  private createUser(partialUser: any, householdId: number, preferences: UserPreferences): User {
-    return {
-      userId: partialUser.userId || 0,
-      googleId: partialUser.googleId || '',
-      displayName: partialUser.displayName || '',
-      fullName: partialUser.fullName || '',
-      givenName: partialUser.givenName || '',
-      familyName: partialUser.familyName || '',
-      imageURL: partialUser.imageURL || '',
-      email: partialUser.email || '',
-      householdId: householdId,
-      role: partialUser.role || '',
-      created: partialUser.created || '',
-      lastUpdated: partialUser.lastUpdated || '',
-      isAdmin: (partialUser.role == '1') || false,
-      preferences: preferences
-    };
-  }
 }

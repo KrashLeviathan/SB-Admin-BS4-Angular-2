@@ -1,6 +1,5 @@
 import {Component, AfterViewInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {UserService} from '../shared/user/user.service';
 import {GoogleService} from '../shared/google/google.service';
 
 
@@ -16,7 +15,7 @@ declare const gapi: any;
 })
 
 export class LoginComponent implements AfterViewInit {
-  constructor(private router: Router, private userService: UserService, private google: GoogleService) {
+  constructor(private router: Router, private google: GoogleService) {
   }
 
   ngAfterViewInit() {
@@ -30,18 +29,10 @@ export class LoginComponent implements AfterViewInit {
     });
   }
 
-  public onSignIn(googleUser: any){
+  public onSignIn(googleUser: any) {
     //This function sends the http request to the database.
-
-    this.google.loginUser(googleUser).then(
-      response => {
-        this.router.navigate(['/dashboard', 'home'])
-      }
-    );
-
+    this.google.loginUser(googleUser)
+      .then(() => this.router.navigate(['/dashboard', 'home']));
   }
-
-
-
 }
 
