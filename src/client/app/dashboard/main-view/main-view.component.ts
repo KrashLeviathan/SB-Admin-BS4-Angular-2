@@ -5,6 +5,7 @@ import {ServiceService} from '../../shared/service/service.service';
 import {UserService} from '../../shared/user/user.service';
 import {GlobalVariables} from '../../shared/global-variables';
 import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
+import {HouseholdService} from "../../shared/household/household.service";
 
 // Packery  -  http://packery.metafizzy.co/
 declare let Packery: any;
@@ -40,24 +41,29 @@ export class MainViewComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private serviceService: ServiceService,
-              private userService: UserService) {
+              private userService: UserService,
+              private householdService: HouseholdService) {
   }
 
   ngOnInit() {
+    this.userService.getActiveUser().then(response => {
+      this.householdService.getActiveHousehold().then(result => {
+        this.getUsers();
+      });
+    });
     this.editModeActive = (this.route.data as any).value.editModeActive === true;
     this.userService.getActiveUser()
       .then(user => {
-        // TODO: Run check to see if user owns this DashboardView (user.userId == dbview.owner)
-        this.userOwnsView = true; // FIXME
-
-        this.serviceService.getServices(user.userId)
-          .then(services => {
-            this.services = services;
-            this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
-            // Add a small delay so the services can populate the DOM with *ngFor before
-            // initializing packery.
-            new Promise(resolve => setTimeout(() => resolve(this.initPackery()), 1));
-          });
+        this.householdService.getActiveHousehold().then(response => {
+          // TODO: Run check to see if user owns this DashboardView (user.userId == dbview.owner)
+          this.userOwnsView = true; // FIXME
+          this.serviceService.getServices()
+            .then(services => {
+              this.services = services;
+              this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
+              this.initPackery();
+            });
+        });
       });
   }
 

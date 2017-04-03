@@ -28,7 +28,7 @@ export class ServicesComponent implements OnInit {
   }
 
   getServices(userId: number): void {
-    this.serviceService.getServices(userId)
+    this.serviceService.getServices()
       .then(services => {
         this.services = services;
         this.navigationComplete();

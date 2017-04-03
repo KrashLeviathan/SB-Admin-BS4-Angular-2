@@ -1,13 +1,17 @@
 import {Injectable} from '@angular/core';
 import {Service, ServiceType} from './service';
 import {SERVICES} from './mock-services';
+import {Http} from "@angular/http";
+import {HouseholdService} from "../household/household.service";
 
 @Injectable()
 export class ServiceService {
   // TODO: Remove this counter once the server-side solution is in place.
   // The server should be the one generating serviceId's
   static idCounter: number = 10;
-
+  constructor (
+    private http: Http,
+  ) {}
   /**
    * Sends a request to the server to get a specific service for the account.
    * @param serviceId
@@ -33,13 +37,11 @@ export class ServiceService {
    * Returns an array of Service objects.
    * @returns {Promise<Service[]>}
    */
-  getServices(userId: number): Promise<Service[]> {
-    // TODO: Replace with HTTP request
+  getServices(): Promise<Service[]> {
     return new Promise(resolve => {
-      // Simulate latency
-      setTimeout(() => {
-        resolve(SERVICES);
-      }, 250);
+      this.http.get(`http://localhost:8000/households/`+ HouseholdService.activeHousehold +`/services`).toPromise().then(response => {
+        resolve(response);
+      });
     });
   }
 
