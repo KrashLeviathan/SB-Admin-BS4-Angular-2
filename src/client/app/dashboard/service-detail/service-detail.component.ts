@@ -7,6 +7,7 @@ import {Location} from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import {GlobalVariables} from '../../shared/global-variables';
 import {UserService} from '../../shared/user/user.service';
+import {HouseholdService} from "../../shared/household/household.service";
 
 @Component({
   moduleId: module.id,
@@ -23,24 +24,27 @@ export class ServiceDetailComponent implements OnInit {
               private userService: UserService,
               private route: ActivatedRoute,
               private router: Router,
-              private location: Location) {
+              private location: Location,
+              private householdService: HouseholdService) {
   }
 
   ngOnInit(): void {
     this.isEditing = (this.route.data as any).value.isEditing === true;
     this.userService.getActiveUser()
       .then(user => {
-        this.route.params
-          .switchMap((params: Params) => this.serviceService.getService(user.userId, +params['id']))
-          .subscribe(service => {
-            if (service) {
-              this.service = service;
-              this.navigationComplete();
-            } else {
-              console.log('Bad route: ' + this.router.url);
-              this.router.navigate(['dashboard/', 'services']);
-            }
-          });
+        this.householdService.getActiveHousehold().then(house => {
+          this.route.params
+            .switchMap((params: Params) => this.serviceService.getService(user.userId, +params['id']))
+            .subscribe(service => {
+              if (service) {
+                this.service = service;
+                this.navigationComplete();
+              } else {
+                console.log('Bad route: ' + this.router.url);
+                this.router.navigate(['dashboard/', 'services']);
+              }
+            });
+        })
       });
   }
 

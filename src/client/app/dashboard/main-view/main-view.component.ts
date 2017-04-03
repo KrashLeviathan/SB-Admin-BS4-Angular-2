@@ -46,11 +46,6 @@ export class MainViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.getActiveUser().then(response => {
-      this.householdService.getActiveHousehold().then(result => {
-        this.getUsers();
-      });
-    });
     this.editModeActive = (this.route.data as any).value.editModeActive === true;
     this.userService.getActiveUser()
       .then(user => {
@@ -121,7 +116,7 @@ export class MainViewComponent implements OnInit {
     }
     this.isAddingService = false;
     // TODO: Add service to this dashboard view at any position
-    console.log("Adding service to dashboard...");
+    console.log('Adding service to dashboard...');
     // if (success) {
     //   PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.serviceToDelete.name + '\' service ' +
     //     'was successfully deleted.');

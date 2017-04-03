@@ -27,7 +27,7 @@ import {ServiceComponent} from '../service';
       text-align: left;
       width: 22px;
     }
-    
+
     td {
       border: none;
     }
@@ -59,11 +59,11 @@ export class TodoListComponent implements ServiceComponent {
 
   addItem() {
     // TODO
-    console.log("Add item clicked!");
+    console.log('Add item clicked!');
   }
 
   removeItem(item: any) {
     // TODO
-    console.log("Remove item clicked!");
+    console.log('Remove item clicked!');
   }
 }

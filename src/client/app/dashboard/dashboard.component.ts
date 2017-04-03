@@ -7,8 +7,8 @@ import {
   NavigationEnd,
   NavigationCancel,
   NavigationError
-} from '@angular/router'
-import {NgZone, Renderer, ElementRef, ViewChild} from '@angular/core'
+} from '@angular/router';
+import {NgZone, Renderer, ElementRef, ViewChild} from '@angular/core';
 import {GlobalVariables} from '../shared/global-variables';
 
 /**
@@ -57,10 +57,10 @@ export class DashboardComponent {
         });
       },
       error => {
-        console.log("spinnerSubscription Error")
+        console.log('spinnerSubscription Error');
       },
       () => {
-        console.log("spinnerSubscription Finished")
+        console.log('spinnerSubscription Finished');
       }
     );
   }

@@ -3,6 +3,7 @@ import {Service, ServiceType} from './service';
 import {SERVICES} from './mock-services';
 import {Http} from "@angular/http";
 import {HouseholdService} from "../household/household.service";
+import {LightComponent} from "./library/light.component";
 
 @Injectable()
 export class ServiceService {
@@ -39,8 +40,15 @@ export class ServiceService {
    */
   getServices(): Promise<Service[]> {
     return new Promise(resolve => {
-      this.http.get(`http://localhost:8000/households/`+ HouseholdService.activeHousehold +`/services`).toPromise().then(response => {
-        resolve(response);
+      this.http.get(`http://localhost:8000/households/`+ HouseholdService.activeHousehold.householdId +`/services`).toPromise().then(response => {
+        let json = response.json();
+        let services = new Array<Service>();
+
+        for(let i = 0; i< json.length; i++){
+          let service = new Service(LightComponent, json[0]);
+          services[i] = service;
+        }
+        resolve(services);
       });
     });
   }

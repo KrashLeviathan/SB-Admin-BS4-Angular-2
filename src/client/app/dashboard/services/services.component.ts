@@ -4,6 +4,7 @@ import {ServiceService} from '../../shared/service/service.service';
 import {PopoverControllerComponent, AlertType} from '../../shared/popover-controller/popover-controller';
 import {UserService} from '../../shared/user/user.service';
 import {GlobalVariables} from '../../shared/global-variables';
+import {HouseholdService} from "../../shared/household/household.service";
 
 @Component({
   moduleId: module.id,
@@ -24,7 +25,7 @@ export class ServicesComponent implements OnInit {
 
   savingState: boolean = false;
 
-  constructor(private serviceService: ServiceService, private userService: UserService) {
+  constructor(private serviceService: ServiceService, private userService: UserService, private householdService: HouseholdService) {
   }
 
   getServices(userId: number): void {
@@ -37,9 +38,11 @@ export class ServicesComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.getActiveUser().then(user => {
-      this.userIsAdmin = user.isAdmin;
-      this.activeUserId = user.userId;
-      this.getServices(user.userId);
+      this.householdService.getActiveHousehold().then(house => {
+        this.userIsAdmin = user.isAdmin;
+        this.activeUserId = user.userId;
+        this.getServices(user.userId);
+      });
     });
   }
 

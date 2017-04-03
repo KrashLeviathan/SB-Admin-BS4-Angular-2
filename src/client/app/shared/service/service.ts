@@ -17,6 +17,7 @@ export class Service {
     // and a generic object containing the specific class's fields.
     //
     // E.g.   let service = new Service(WundergroundComponent, {location: 'Ames', temp: '42', ...});
+
   }
 }
 

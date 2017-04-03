@@ -18,7 +18,7 @@ export class HouseholdService {
         resolve(HouseholdService.activeHousehold);
       }else{
         this.getHousehold(UserService.activeUser.householdId).then(response => {
-          resolve(response);
+            resolve(response);
         })
       }
     });
