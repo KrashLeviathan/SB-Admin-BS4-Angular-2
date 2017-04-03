@@ -1,5 +1,8 @@
 import {Component} from '@angular/core';
 import {NgForm} from '@angular/forms';
+import {Router} from '@angular/router';
+
+declare const gapi: any;
 
 @Component({
   moduleId: module.id,
@@ -26,7 +29,7 @@ import {NgForm} from '@angular/forms';
 export class SignupComponent {
   MAX_VARCHAR_LENGTH: number = 255;
 
-  invites: string[] = ['Workiva', 'Leidos', 'Google'];
+  invites: string[] = ['XYZ Corporation', 'The Smiths', 'Google X'];
 
   // Form data
   displayName: string = '';
@@ -35,9 +38,12 @@ export class SignupComponent {
   selectedInvite: string = '';
   joinHouseholdLater: boolean = true;
 
+  constructor(private router: Router) {
+  }
+
   onSubmit(f: NgForm): void {
-    // TODO
-    console.log(f.value);
+    // TODO: Use form values as route parameters to pass to the LoginComponent
+    this.router.navigate(['/createnewuser']);
   }
 
   onClickInvite(invite: string): void {

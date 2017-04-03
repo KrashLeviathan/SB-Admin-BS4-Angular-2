@@ -9,12 +9,13 @@ export class GoogleService {
   }
 
   /**
-   * Logs the user into SmartSync, returning true if the user exists
+   * Logs the user into SmartSync, returning true if the user exists (or new)
    * and false if he doesn't.
    * @param googleUser
+   * @param registerNew
    * @returns {Promise<boolean>}
    */
-  loginUser(googleUser: any): Promise<boolean> {
+  loginUser(googleUser: any, registerNew: boolean): Promise<boolean> {
     console.log('Logging in user');
     let profile = googleUser.getBasicProfile();
     let googleId = profile.getId();
@@ -31,8 +32,13 @@ export class GoogleService {
         this.acceptUser(partialUser, response[1]);
         resolve(true);
       }).catch(() => {
-        this.handleUserNotExist(profile, sessionToken)
-          .then(() => resolve(false));
+        if (registerNew) {
+          this.addNewUser(profile, sessionToken)
+            .then(() => resolve(true));
+        } else {
+          this.handleUserNotExist();
+          resolve(false);
+        }
       });
     });
   }
@@ -42,8 +48,7 @@ export class GoogleService {
     this.userService.setActiveUser(user);
   }
 
-  private handleUserNotExist(profile: any, sessionToken: string): Promise<boolean> {
-    // TODO: Route to registration page instead of just automatically adding them as user
+  private addNewUser(profile: any, sessionToken: string): Promise<boolean> {
     let partialUser = {
       googleId: profile.getId(),
       givenName: profile.getGivenName(),
@@ -54,5 +59,10 @@ export class GoogleService {
       role: '0'
     };
     return this.userService.addNewUser(partialUser, sessionToken);
+  }
+
+  private handleUserNotExist() {
+    // TODO
+    console.log('User doesn\'t exist!');
   }
 }

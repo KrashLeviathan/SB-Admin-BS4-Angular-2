@@ -1,11 +1,7 @@
 import {Component, AfterViewInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {GoogleService} from '../shared/google/google.service';
 
-
-/**
- *  This class represents the lazy loaded LoginComponent.
- */
 declare const gapi: any;
 
 @Component({
@@ -15,24 +11,34 @@ declare const gapi: any;
 })
 
 export class LoginComponent implements AfterViewInit {
-  constructor(private router: Router, private google: GoogleService) {
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private google: GoogleService) {
   }
 
   ngAfterViewInit() {
+    let createNewUser = (this.route.data as any).value.addNewUser === true;
     gapi.signin2.render('googleBtn', {
       'scope': 'profile email',
       'width': 240,
       'height': 50,
       'longtitle': true,
       'theme': 'dark',
-      'onsuccess': (param: any) => this.onSignIn(param)
+      'onsuccess': (param: any) => this.onSignIn(param, createNewUser)
     });
   }
 
-  public onSignIn(googleUser: any) {
+  public onSignIn(googleUser: any, createNewUser: boolean) {
     //This function sends the http request to the database.
-    this.google.loginUser(googleUser)
-      .then(() => this.router.navigate(['/dashboard', 'home']));
+    this.google.loginUser(googleUser, createNewUser)
+      .then((success) => {
+        if (success) {
+          this.router.navigate(['/dashboard', 'home']);
+        } else {
+          // TODO: Pretty this up later
+          alert('Not a valid user! Register a new SmartSync account first.')
+        }
+      });
   }
 }
 
