@@ -11,6 +11,7 @@
 
   <div *ngIf="activeUser" class="row">
     <div class="col-md-9 col-lg-7 col-xl-6">
+      <img class="user-settings-image" src="{{activeUser.imageURL}}">
 
       <form #f="ngForm" (ngSubmit)="onSubmit(f)" role="form" novalidate class="buffer-bottom">
         <fieldset class="form-group"

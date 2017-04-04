@@ -9,7 +9,16 @@ import {GlobalVariables} from '../../shared/global-variables';
 @Component({
   moduleId: module.id,
   selector: 'user-settings',
-  templateUrl: './userSettings.component.html'
+  templateUrl: './userSettings.component.html',
+  styles: [`
+    .user-settings-image {
+      width: 96px;
+      margin: 0 0 0 auto;
+      border: solid 1px #151515;
+      border-radius: 5px;
+      display: block;
+    }
+  `]
 })
 
 export class UserSettingsComponent implements OnInit {
