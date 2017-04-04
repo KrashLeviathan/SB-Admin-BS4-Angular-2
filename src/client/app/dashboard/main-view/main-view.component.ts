@@ -5,7 +5,7 @@ import {ServiceService} from '../../shared/service/service.service';
 import {UserService} from '../../shared/user/user.service';
 import {GlobalVariables} from '../../shared/global-variables';
 import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
-import {HouseholdService} from "../../shared/household/household.service";
+import {HouseholdService} from '../../shared/household/household.service';
 
 // Packery  -  http://packery.metafizzy.co/
 declare let Packery: any;

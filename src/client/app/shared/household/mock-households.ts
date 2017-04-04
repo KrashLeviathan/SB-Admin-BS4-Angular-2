@@ -2,6 +2,7 @@ import {Household} from './household';
 
 export const HOUSEHOLDS: Household[] = [{
   householdId: 1,
+  ownerId: 1,
   householdName: 'Team SmartSync',
   firstAddressLine: '2434 Osborn Drive',
   secondAddressLine: 'Room 125',

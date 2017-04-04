@@ -1,32 +1,32 @@
 import {Injectable} from '@angular/core';
 import {Household} from './household';
-import {HOUSEHOLDS} from './mock-households';
-import {Http, RequestOptions, Headers} from "@angular/http";
-import {UserService} from "../user/user.service";
-import {User} from "../user/user";
+import {Http, RequestOptions, Headers} from '@angular/http';
+import {UserService} from '../user/user.service';
+import {User} from '../user/user';
+import {GlobalVariables} from '../global-variables';
 
 @Injectable()
 export class HouseholdService {
   static activeHousehold: Household;
-  constructor (
-    private http: Http
-  ) {}
 
-  getActiveHousehold(): Promise<Household>{
+  constructor(private http: Http) {
+  }
+
+  getActiveHousehold(): Promise<Household> {
     return new Promise(resolve => {
-      if(HouseholdService.activeHousehold){
+      if (HouseholdService.activeHousehold) {
         resolve(HouseholdService.activeHousehold);
-      }else{
+      } else {
         this.getHousehold(UserService.activeUser.householdId).then(response => {
-            resolve(response);
-        })
+          resolve(response);
+        });
       }
     });
   }
 
   getHousehold(householdId: number): Promise<Household> {
     return new Promise(resolve => {
-      this.http.get(`http://localhost:8000/households/`+householdId).toPromise().then(response => {
+      this.http.get(GlobalVariables.BASE_URL + `/households/` + householdId).toPromise().then(response => {
         let house = new Household();
         let body = response.json();
         house.householdId = body.householdId;
@@ -41,12 +41,11 @@ export class HouseholdService {
         house.created = body.created;
         HouseholdService.activeHousehold = house;
         resolve(house);
-      })
-
+      });
     });
   }
 
-  saveHousehold(formData: Object): Promise<boolean> {
+  saveHousehold(formData: any): Promise<boolean> {
     return new Promise(resolve => {
       let house = new Household();
       house.householdId = UserService.activeUser.householdId;
@@ -60,7 +59,7 @@ export class HouseholdService {
       let headers = new Headers({'Content-Type': 'application/json'});
       let options = new RequestOptions({headers: headers});
 
-      this.http.put(`http://localhost:8000/households`, JSON.stringify(house), options).toPromise().then(
+      this.http.put(GlobalVariables.BASE_URL + `/households`, JSON.stringify(house), options).toPromise().then(
         response => {
           resolve(true);
         }
@@ -68,12 +67,12 @@ export class HouseholdService {
     });
   }
 
-  addUser(userId: number): Promise<User>{
-    return new Promise(resolve =>{
+  addUser(userId: number): Promise<User> {
+    return new Promise(resolve => {
       let headers = new Headers({'Content-Type': 'application/json'});
       let options = new RequestOptions({headers: headers});
       let body = {'userId': userId, 'householdId': HouseholdService.activeHousehold.householdId};
-      this.http.post(`http://localhost:8000/households`, JSON.stringify(body), options)
+      this.http.post(GlobalVariables.BASE_URL + `/households`, JSON.stringify(body), options);
     });
   }
 }

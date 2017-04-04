@@ -4,7 +4,7 @@ import {ServiceService} from '../../shared/service/service.service';
 import {PopoverControllerComponent, AlertType} from '../../shared/popover-controller/popover-controller';
 import {UserService} from '../../shared/user/user.service';
 import {GlobalVariables} from '../../shared/global-variables';
-import {HouseholdService} from "../../shared/household/household.service";
+import {HouseholdService} from '../../shared/household/household.service';
 
 @Component({
   moduleId: module.id,

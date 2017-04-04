@@ -3,7 +3,7 @@ import {User} from '../../shared/user/user';
 import {UserService} from '../../shared/user/user.service';
 import {AlertType, PopoverControllerComponent} from '../../shared/popover-controller/popover-controller';
 import {GlobalVariables} from '../../shared/global-variables';
-import {HouseholdService} from "../../shared/household/household.service";
+import {HouseholdService} from '../../shared/household/household.service';
 import {NgForm} from '@angular/forms';
 
 @Component({
@@ -66,7 +66,7 @@ export class ManageUsersComponent implements OnInit {
         if (success) {
           PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.userToDelete.email + '\' was ' +
             'successfully removed from the account.');
-          this.userService.getUsers(UserService.activeUser.householdId).then(response =>{
+          this.userService.getUsers(UserService.activeUser.householdId).then(response => {
             this.users = response;
             this.navigationComplete();
           });
@@ -112,7 +112,7 @@ export class ManageUsersComponent implements OnInit {
           : 'revoked from';
         PopoverControllerComponent.createAlert(AlertType.SUCCESS, 'Admin privileges were ' + msg
           + ' \'' + this.userAdminChanges.email + '\'.');
-        this.userService.getUsers(UserService.activeUser.householdId).then(response =>{
+        this.userService.getUsers(UserService.activeUser.householdId).then(response => {
           this.users = response;
           this.navigationComplete();
         });

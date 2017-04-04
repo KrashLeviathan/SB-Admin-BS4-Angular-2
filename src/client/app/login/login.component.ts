@@ -36,7 +36,7 @@ export class LoginComponent implements AfterViewInit {
           this.router.navigate(['/dashboard', 'home']);
         } else {
           // TODO: Pretty this up later
-          alert('Not a valid user! Register a new SmartSync account first.')
+          alert('Not a valid user! Register a new SmartSync account first.');
         }
       });
   }

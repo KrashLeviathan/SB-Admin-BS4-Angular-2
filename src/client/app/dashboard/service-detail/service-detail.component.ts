@@ -7,7 +7,7 @@ import {Location} from '@angular/common';
 import 'rxjs/add/operator/switchMap';
 import {GlobalVariables} from '../../shared/global-variables';
 import {UserService} from '../../shared/user/user.service';
-import {HouseholdService} from "../../shared/household/household.service";
+import {HouseholdService} from '../../shared/household/household.service';
 
 @Component({
   moduleId: module.id,
@@ -44,7 +44,7 @@ export class ServiceDetailComponent implements OnInit {
                 this.router.navigate(['dashboard/', 'services']);
               }
             });
-        })
+        });
       });
   }
 

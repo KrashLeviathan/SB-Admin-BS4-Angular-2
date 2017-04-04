@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Service, ServiceType} from './service';
 import {SERVICES} from './mock-services';
-import {Http} from "@angular/http";
-import {HouseholdService} from "../household/household.service";
-import {LightComponent} from "./library/light.component";
+import {Http} from '@angular/http';
 
 @Injectable()
 export class ServiceService {
@@ -49,7 +47,8 @@ export class ServiceService {
 
     // TODO: Fix after demo
     // return new Promise(resolve => {
-    //   this.http.get(`http://localhost:8000/households/`+ HouseholdService.activeHousehold.householdId +`/services`).toPromise().then(response => {
+    //   this.http.get(GlobalVariables.BASE_URL + `/households/`+ HouseholdService.activeHousehold.householdId
+    // +`/services`).toPromise().then(response => {
     //     let json = response.json();
     //     let services: Service[] = [];
     //     //TODO instead of returning these services, will need to do http requests to each service.

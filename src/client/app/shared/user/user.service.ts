@@ -3,11 +3,11 @@ import {User} from './user';
 import {EncryptionService} from '../encryption/encryption.service';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {Headers, Http, RequestOptions, Response} from '@angular/http';
-import {Router} from "@angular/router";
-import {UserPreferences} from "./user-preferences";
-import {ColorScheme} from "./color-scheme";
-import {HouseholdService} from "../household/household.service";
+import {UserPreferences} from './user-preferences';
+import {ColorScheme} from './color-scheme';
+import {HouseholdService} from '../household/household.service';
 import {AlertType, PopoverControllerComponent} from '../popover-controller/popover-controller';
+import {GlobalVariables} from '../global-variables';
 
 export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 
@@ -16,10 +16,6 @@ export class UserService {
   static activeUser: User;
   // static activeUserPrefs: UserPreferences;
   // static activeUserColorScheme: ColorScheme;
-
-  constructor (
-    private http: Http,
-  ) {}
 
   /**
    * Displays a popover with the error message. Timeout on popover is 60 seconds.
@@ -78,6 +74,8 @@ export class UserService {
     };
   }
 
+  constructor(private http: Http,) {
+  }
 
   /**
    * On login, the active user sessionId is encrypted and stored in the cookies.
@@ -139,7 +137,7 @@ export class UserService {
   getUser(userId: number): Promise<User> {
     return new Promise(resolve => {
       Promise.all([
-        this.http.get(`http://localhost:8000/users/` + userId).toPromise(),
+        this.http.get(GlobalVariables.BASE_URL + `/users/` + userId).toPromise(),
         this.getUserHousehold(userId),
         this.getUserPreferences(userId)
       ]).then(responseArray => {
@@ -154,11 +152,11 @@ export class UserService {
   }
 
   getUserByGoogle(googleId: string): Promise<Response> {
-    return this.http.get(`http://localhost:8000/users/google/` + googleId).toPromise()
+    return this.http.get(GlobalVariables.BASE_URL + `/users/google/` + googleId).toPromise()
       .catch(error => {
-      console.log(error);
-      UserService.handleError(error);
-    });
+        console.log(error);
+        UserService.handleError(error);
+      });
   }
 
   /**
@@ -170,7 +168,7 @@ export class UserService {
   getUserIdByEmail(email: string): Promise<number> {
     return new Promise(resolve => {
       let encodedEmail = encodeURIComponent(email);
-      this.http.get('http://localhost:8000/users/email/' + encodedEmail + '/').toPromise()
+      this.http.get(GlobalVariables.BASE_URL + '/users/email/' + encodedEmail + '/').toPromise()
         .then(response => {
           resolve(response.json().userId);
         })
@@ -183,7 +181,7 @@ export class UserService {
 
   addNewUser(partialUser: any, sessionToken: string): Promise<boolean> {
     return new Promise(resolve => {
-      this.http.post('http://localhost:8000/users/', JSON.stringify(partialUser), UserService.jsonHeader()).toPromise()
+      this.http.post(GlobalVariables.BASE_URL + '/users/', JSON.stringify(partialUser), UserService.jsonHeader()).toPromise()
         .then(response => {
           this.setActiveUserSession(sessionToken);
 
@@ -217,7 +215,7 @@ export class UserService {
    */
   getUsers(householdId: number): Promise<User[]> {
     return new Promise(resolve => {
-      this.http.get(`http://localhost:8000/households/` + householdId + `/users`).toPromise()
+      this.http.get(GlobalVariables.BASE_URL + `/households/` + householdId + `/users`).toPromise()
         .then(response => {
           let users: User[] = [];
           let partialUsers = response.json();
@@ -241,7 +239,7 @@ export class UserService {
    */
   getUserHousehold(userId: number): Promise<number> {
     return new Promise(resolve => {
-      this.http.get(`http://localhost:8000/users/` + userId + `/household`).toPromise()
+      this.http.get(GlobalVariables.BASE_URL + `/users/` + userId + `/household`).toPromise()
         .then(household => {
           let body = household.json();
           resolve(body.householdId);
@@ -261,7 +259,7 @@ export class UserService {
    */
   getUserHouseholdByGoogle(googleId: string): Promise<number> {
     return new Promise(resolve => {
-      this.http.get(`http://localhost:8000/users/google/` + googleId + `/household`).toPromise()
+      this.http.get(GlobalVariables.BASE_URL + `/users/google/` + googleId + `/household`).toPromise()
         .then(response => {
           let household = response.json();
           resolve(household.householdId);
@@ -274,11 +272,11 @@ export class UserService {
   }
 
 
-  getUserDragPositions(userId: number): Promise<UserPreferences>{
+  getUserDragPositions(userId: number): Promise<UserPreferences> {
     //TODO: Currently just getting drag positions
     return new Promise(resolve => {
       resolve(localStorage.getItem('dragPositions'));
-    })
+    });
   }
 
   /**
@@ -290,25 +288,25 @@ export class UserService {
   getUserPreferences(userId: number): Promise<UserPreferences> {
     return new Promise(resolve => {
       Promise.all([
-        this.http.get(`http://localhost:8000/users/` + userId + `/preferences`).toPromise()
+        this.http.get(GlobalVariables.BASE_URL + `/users/` + userId + `/preferences`).toPromise()
         // this.getUserDragPositions(userId)
-      ]).then( response => {
+      ]).then(response => {
         //TODO fix the way colorScheme is used.
         //Might need to create a new object to send as json as a hybrid of pref and color
-          let pref = new UserPreferences();
-          let color = new ColorScheme();
-          let resp = response[0].json();
-          color.primaryColor = resp.primaryColor;
-          color.secondaryColor = resp.secondaryColor;
-          color.neutralDarkColor = resp.neutralDarkColor;
-          color.neutralLightColor = resp.neutralLightColor;
-          color.accentColor = resp.accentColor;
-          pref.id = resp.id;
-          pref.name = resp.name;
-          pref.userId = resp.userId;
-          pref.colorScheme = color;
-          resolve(pref);
-        })
+        let pref = new UserPreferences();
+        let color = new ColorScheme();
+        let resp = response[0].json();
+        color.primaryColor = resp.primaryColor;
+        color.secondaryColor = resp.secondaryColor;
+        color.neutralDarkColor = resp.neutralDarkColor;
+        color.neutralLightColor = resp.neutralLightColor;
+        color.accentColor = resp.accentColor;
+        pref.id = resp.id;
+        pref.name = resp.name;
+        pref.userId = resp.userId;
+        pref.colorScheme = color;
+        resolve(pref);
+      });
 
     });
   }
@@ -343,14 +341,15 @@ export class UserService {
     //TODO need to fix the way colorScheme is used.
     //Might need to create a new object to send as json as a hybrid of pref and color
     let user = UserService.activeUser;
-    let pref = {"accentColor":(<any>formData)['accent'],
-      "neutralLightColor": (<any>formData)['neutralLight'],
-      "neutralDarkColor": (<any>formData)['neutralDark'],
-      "primaryColor": (<any>formData)['primary'],
-      "secondaryColor": (<any>formData)['secondary'],
-      "name": user.preferences.name,
-      "userId": user.userId,
-      "id":user.preferences.id
+    let pref = {
+      'accentColor': (<any>formData)['accent'],
+      'neutralLightColor': (<any>formData)['neutralLight'],
+      'neutralDarkColor': (<any>formData)['neutralDark'],
+      'primaryColor': (<any>formData)['primary'],
+      'secondaryColor': (<any>formData)['secondary'],
+      'name': user.preferences.name,
+      'userId': user.userId,
+      'id': user.preferences.id
     };
     user.displayName = (<any>formData)['displayName'];
 
@@ -359,11 +358,11 @@ export class UserService {
 
     return new Promise(resolve => {
       Promise.all([
-        this.http.put(`http://localhost:8000/users`, JSON.stringify(user), options).toPromise(),
-        this.http.put(`http://localhost:8000/users/preferences`, JSON.stringify(pref), options).toPromise()
-      ]).then(response =>{
-            resolve(true);
-          }
+        this.http.put(GlobalVariables.BASE_URL + `/users`, JSON.stringify(user), options).toPromise(),
+        this.http.put(GlobalVariables.BASE_URL + `/users/preferences`, JSON.stringify(pref), options).toPromise()
+      ]).then(response => {
+          resolve(true);
+        }
       );
     });
 
@@ -377,7 +376,7 @@ export class UserService {
    */
   deleteUser(userId: number): Promise<boolean> {
     return new Promise(resolve => {
-      this.http.delete(`http://localhost:8000/users/` + userId).toPromise()
+      this.http.delete(GlobalVariables.BASE_URL + `/users/` + userId).toPromise()
         .then(() => resolve(true))
         .catch(response => {
           UserService.handleError(response);
@@ -389,7 +388,8 @@ export class UserService {
   removeUserFromHousehold(userId: number): Promise<boolean> {
 
     return new Promise(resolve => {
-      this.http.delete(`http://localhost:8000/households/` + HouseholdService.activeHousehold.householdId + `/users/` + userId).toPromise()
+      this.http.delete(GlobalVariables.BASE_URL + `/households/`
+        + HouseholdService.activeHousehold.householdId + `/users/` + userId).toPromise()
         .then(
           response => {
             // let body = response.json();
@@ -405,9 +405,10 @@ export class UserService {
         .catch(response => {
           UserService.handleError(response);
           resolve(false);
-      })
-    })
+        });
+    });
   }
+
   /**
    * Makes the user an admin. Returns true on success.
    * On failure, it displays the error message popover and returns false.
@@ -417,14 +418,14 @@ export class UserService {
   giveAdminPrivileges(userId: number): Promise<boolean> {
     return new Promise(resolve => {
       this.getUser(userId).then(user => {
-        user.role = "1";
-        this.http.put(`http://localhost:8000/users/`, JSON.stringify(user), UserService.jsonHeader()).toPromise()
+        user.role = '1';
+        this.http.put(GlobalVariables.BASE_URL + `/users/`, JSON.stringify(user), UserService.jsonHeader()).toPromise()
           .then(() => resolve(true))
           .catch(response => {
             UserService.handleError(response);
             resolve(false);
           });
-      })
+      });
     });
   }
 
@@ -437,21 +438,21 @@ export class UserService {
   revokeAdminPrivileges(userId: number): Promise<boolean> {
     return new Promise(resolve => {
       this.getUser(userId).then(user => {
-        user.role = "0";
+        user.role = '0';
         // TODO: The security on this part should be improved...
-        this.http.put(`http://localhost:8000/users/`, JSON.stringify(user), UserService.jsonHeader()).toPromise()
+        this.http.put(GlobalVariables.BASE_URL + `/users/`, JSON.stringify(user), UserService.jsonHeader()).toPromise()
           .then(() => resolve(true))
           .catch(response => {
             UserService.handleError(response);
             resolve(false);
           });
-      })
+      });
     });
   }
 
   // giveAdminPrivileges(userId: number): Promise<boolean> {
   //   return new Promise(resolve => {
-  //     this.http.get(`http://localhost:8000/users/`+userId).toPromise().then(response => {
+  //     this.http.get(GlobalVariables.BASE_URL + `/users/`+userId).toPromise().then(response => {
   //       let json = new User();
   //       let body = response.json();
   //       json.userId = userId;
@@ -465,7 +466,7 @@ export class UserService {
   //       let headers = new Headers({ 'Content-Type': 'application/json'});
   //       let options = new RequestOptions({ headers: headers });
   //
-  //       this.http.post(`http://localhost:8000/users/`, JSON.stringify(json), options).toPromise()
+  //       this.http.post(GlobalVariables.BASE_URL + `/users/`, JSON.stringify(json), options).toPromise()
   //         .then(
   //           response => {
   //             let body = response.json();
@@ -487,7 +488,7 @@ export class UserService {
 
   // revokeAdminPrivileges(userId: number): Promise<boolean> {
   //   return new Promise(resolve => {
-  //     this.http.get(`http://localhost:8000/users/`+userId).toPromise().then(response => {
+  //     this.http.get(GlobalVariables.BASE_URL + `/users/`+userId).toPromise().then(response => {
   //       let json = new User();
   //       let body = response.json();
   //       json.userId = userId;
@@ -501,7 +502,7 @@ export class UserService {
   //       let headers = new Headers({ 'Content-Type': 'application/json'});
   //       let options = new RequestOptions({ headers: headers });
   //
-  //       this.http.post(`http://localhost:8000/users/`, JSON.stringify(json), options).toPromise()
+  //       this.http.post(GlobalVariables.BASE_URL + `/users/`, JSON.stringify(json), options).toPromise()
   //         .then(
   //           response => {
   //             let body = response.json();
@@ -542,7 +543,7 @@ export class UserService {
             householdId: UserService.activeUser.householdId
           };
 
-          this.http.post(`http://localhost:8000/invites`, JSON.stringify(json), UserService.jsonHeader()).toPromise()
+          this.http.post(GlobalVariables.BASE_URL + `/invites`, JSON.stringify(json), UserService.jsonHeader()).toPromise()
             .then(() => resolve(true))
             .catch(response => {
               UserService.handleError(response);

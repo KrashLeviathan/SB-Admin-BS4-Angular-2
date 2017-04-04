@@ -30,13 +30,14 @@ export class GoogleService {
         this.acceptUser(partialUser, response[1]);
         resolve(true);
       }).catch(() => {
-        if (registerNew) {
-          this.addNewUser(profile, sessionToken)
-            .then(() => resolve(true));
-        } else {
-          this.handleUserNotExist();
-          resolve(false);
-        }
+        // TODO: Fixme
+        // if (registerNew) {
+        this.addNewUser(profile, sessionToken)
+          .then(() => resolve(true));
+        // } else {
+        //   this.handleUserNotExist();
+        //   resolve(false);
+        // }
       });
     });
   }
