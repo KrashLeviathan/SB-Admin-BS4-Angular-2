@@ -42,8 +42,11 @@ export class GoogleService {
   }
 
   private acceptUser(partialUser: any, householdId: number) {
-    let user = UserService.createUser(partialUser, householdId, null);
-    this.userService.setActiveUser(user);
+    this.userService.getUserPreferences(partialUser.userId)
+      .then(userPrefs => {
+        let user = UserService.createUser(partialUser, householdId, userPrefs);
+        this.userService.setActiveUser(user);
+      });
   }
 
   private addNewUser(profile: any, sessionToken: string): Promise<boolean> {

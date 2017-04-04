@@ -4,7 +4,8 @@
     <ul class="nav navbar-nav top-nav navbar-right pull-xs-right top-right-nav">
       <li class="dropdown nav-item">
         <a *ngIf="activeUserName" class="nav-link" [routerLink]="['/dashboard','user-settings']">
-          {{activeUserName}} &nbsp; <i class="fa fa-user"></i> &nbsp;
+          <span class="topnav-user-name">{{activeUserName}}</span>
+          <img class="user-image" src="{{activeUserImageUrl}}">
         </a>
       </li>
     </ul>

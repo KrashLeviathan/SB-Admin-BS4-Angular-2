@@ -3,8 +3,6 @@ import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
 import {DropdownModule, AlertModule, ModalModule} from 'ng2-bootstrap/ng2-bootstrap';
 
-import {HomeModule} from './home/home.module';
-
 import {DashboardComponent} from './dashboard.component';
 
 import {TopNavComponent} from '../shared/index';
@@ -25,7 +23,6 @@ import {PopoverControllerComponent} from '../shared/popover-controller/popover-c
     RouterModule,
     DropdownModule,
     ModalModule,
-    HomeModule,
     MainViewModule,
     UserSettingsModule,
     HouseholdSettingsModule,

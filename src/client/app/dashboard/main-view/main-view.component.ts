@@ -72,20 +72,22 @@ export class MainViewComponent implements AfterViewInit, OnInit {
     this.userService.getUserDragPositions(UserService.activeUser.userId)
       .then(initPositions => {
         //TODO getUserPreferences will need to return colors and dragPositions.
-        this.packery = new Packery(this.grid, PACKERY_OPTIONS);
-        // init layout with saved positions
-        this.packery.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
-        let thisObj = this;
-        this.packery.getItemElements().forEach(function (itemElem: any) {
-          let draggie = new Draggabilly(itemElem);
-          thisObj.packery.bindDraggabillyEvents(draggie);
-          if (!thisObj.editModeActive) {
-            draggie.disable();
-          }
-          // The elements remain invisible until they're finished initializing.
-          thisObj.finishedInitializing = true;
-        });
-        this.navigationComplete();
+        if (this.grid.children.length !== 0) {
+          this.packery = new Packery(this.grid, PACKERY_OPTIONS);
+          // init layout with saved positions
+          this.packery.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
+          let thisObj = this;
+          this.packery.getItemElements().forEach(function (itemElem: any) {
+            let draggie = new Draggabilly(itemElem);
+            thisObj.packery.bindDraggabillyEvents(draggie);
+            if (!thisObj.editModeActive) {
+              draggie.disable();
+            }
+            // The elements remain invisible until they're finished initializing.
+            thisObj.finishedInitializing = true;
+          });
+          this.navigationComplete();
+        }
       });
   }
 
