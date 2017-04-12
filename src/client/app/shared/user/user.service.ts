@@ -8,6 +8,8 @@ import {ColorScheme} from './color-scheme';
 import {HouseholdService} from '../household/household.service';
 import {AlertType, PopoverControllerComponent} from '../popover-controller/popover-controller';
 import {GlobalVariables} from '../global-variables';
+import {Router} from "@angular/router";
+import {Household} from "../household/household";
 
 export const DAYS_UNTIL_SESSION_EXPIRATION = 7;
 
@@ -16,6 +18,7 @@ export class UserService {
   static activeUser: User;
   // static activeUserPrefs: UserPreferences;
   // static activeUserColorScheme: ColorScheme;
+
 
   /**
    * Displays a popover with the error message. Timeout on popover is 60 seconds.
@@ -74,7 +77,7 @@ export class UserService {
     };
   }
 
-  constructor(private http: Http,) {
+  constructor(private http: Http, private router: Router) {
   }
 
   /**
@@ -93,7 +96,7 @@ export class UserService {
    * Caches the currently logged in user and updates the Cookie.
    * @param user
    */
-  setActiveUser(user: User): void {
+  setActiveUser(user: User): void{
     Cookie.set('userId', user.userId.toString());
     UserService.activeUser = user;
   }
@@ -128,6 +131,18 @@ export class UserService {
     });
   }
 
+  acceptInvite(inviteId: number): Promise<any>{
+    return new Promise(resolve => {
+
+      this.http.post(GlobalVariables.BASE_URL + `/invites/` + inviteId +`/accept`,null, UserService.jsonHeader()).toPromise().then(
+        response => {
+          let body = response.json();
+          resolve(body);
+        }
+      )
+    })
+  }
+
   /**
    * Gets the User with the given userId.
    * On failure, it displays the error message popover and returns null.
@@ -151,13 +166,34 @@ export class UserService {
     });
   }
 
-  getUserByGoogle(googleId: string): Promise<Response> {
-    return this.http.get(GlobalVariables.BASE_URL + `/users/google/` + googleId).toPromise()
-      .catch(error => {
-        console.log(error);
-        UserService.handleError(error);
-      });
+  getUserByGoogle(googleProfile: any, sessionToken: string): Promise<Response> {
+    let googleId = googleProfile.getId();
+    return new Promise(resolve => {
+      this.http.get(GlobalVariables.BASE_URL + `/users/google/` + googleId).toPromise().then(response => {
+          resolve(response);
+      }).catch(error => {
+          // UserService.handleError(error);
+          this.addNewUserByGoogle(googleProfile, sessionToken).then(user => {
+            resolve(user);
+          })
+        });
+    })
   }
+
+
+  private addNewUserByGoogle(profile: any, sessionToken: string): Promise<Response> {
+    let partialUser = {
+      googleId: profile.getId(),
+      givenName: profile.getGivenName(),
+      fullName: profile.getName(),
+      familyName: profile.getFamilyName(),
+      imageURL: profile.getImageUrl(),
+      email: profile.getEmail(),
+      role: '0'
+    };
+    return this.addNewUser(partialUser, sessionToken);
+  }
+
 
   /**
    * Returns the userId for the given email address.
@@ -179,7 +215,7 @@ export class UserService {
     });
   }
 
-  addNewUser(partialUser: any, sessionToken: string): Promise<boolean> {
+  addNewUser(partialUser: any, sessionToken: string): Promise<Response> {
     return new Promise(resolve => {
       this.http.post(GlobalVariables.BASE_URL + '/users/', JSON.stringify(partialUser), UserService.jsonHeader()).toPromise()
         .then(response => {
@@ -198,6 +234,7 @@ export class UserService {
             UserService.activeUser.householdId = householdId;
           });
           this.setActiveUser(user);
+          resolve(user);
         })
         .catch(response => {
           UserService.handleError(response);
@@ -225,7 +262,8 @@ export class UserService {
           resolve(users);
         })
         .catch(response => {
-          UserService.handleError(response);
+          this.router.navigate(['/signup']);
+          // UserService.handleError(response);
           resolve(null);
         });
     });
@@ -245,8 +283,8 @@ export class UserService {
           resolve(body.householdId);
         })
         .catch(response => {
-          UserService.handleError(response);
-          resolve(null);
+          // UserService.handleError(response);
+          resolve(0);
         });
     });
   }
@@ -265,8 +303,8 @@ export class UserService {
           resolve(household.householdId);
         })
         .catch(response => {
-          UserService.handleError(response);
-          resolve(null);
+          // UserService.handleError(response);
+          resolve(0);
         });
     });
   }
@@ -557,6 +595,15 @@ export class UserService {
     });
   }
 
+  getUserInvites(): Promise<any[]> {
+    return new Promise(resolve => {
+      this.http.get(GlobalVariables.BASE_URL + `/invites/users/` + UserService.activeUser.userId).toPromise()
+        .then(response => {
+          let json = response.json();
+          resolve(json);
+        });
+    })
+  }
   // Possible cruft to clean up later...
   // private extractData(res: Response) {
   //   let body = res.json();

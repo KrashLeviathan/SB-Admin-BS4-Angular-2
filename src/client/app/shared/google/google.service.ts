@@ -2,6 +2,9 @@ import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import {UserService} from '../user/user.service';
+import {User} from "../user/user";
+import {Response} from '@angular/http';
+
 
 @Injectable()
 export class GoogleService {
@@ -21,36 +24,59 @@ export class GoogleService {
     let sessionToken = googleUser.getAuthResponse().id_token;
 
     return new Promise(resolve => {
-      Promise.all([
-        this.userService.getUserByGoogle(googleId),
-        this.userService.getUserHouseholdByGoogle(googleId)
-      ]).then(response => {
-        this.userService.setActiveUserSession(sessionToken);
-        let partialUser = response[0].json();
-        this.acceptUser(partialUser, response[1]);
-        resolve(true);
-      }).catch(() => {
-        // TODO: Fixme
-        // if (registerNew) {
-        this.addNewUser(profile, sessionToken)
-          .then(() => resolve(true));
-        // } else {
-        //   this.handleUserNotExist();
-        //   resolve(false);
-        // }
-      });
+      this.userService.getUserByGoogle(profile, sessionToken)
+        .then(response => {
+          this.userService.getUserHouseholdByGoogle(googleId).then(household => {
+            if(household != 0){
+              this.userService.setActiveUserSession(sessionToken);
+              this.acceptUser(response, household).then(success => {
+
+                resolve(success);
+              })
+            }else{
+              this.userService.setActiveUserSession(sessionToken);
+              let body = response.json();
+              this.userService.getUser(body.userId).then(user => {
+                this.userService.setActiveUser(user);
+                resolve(false);
+              });
+            }
+          }).catch(() => {
+            this.userService.setActiveUserSession(sessionToken);
+            // let body = response.json();
+            // console.log(response);
+            this.userService.getUser(response.userId).then(user => {
+              this.userService.setActiveUser(user);
+              resolve(false);
+            });
+          })
+        }).catch(() =>{
+          this.addNewUser(profile, sessionToken)
+            .then(() => {
+              resolve(false);
+            });
+      })
     });
   }
 
-  private acceptUser(partialUser: any, householdId: number) {
-    this.userService.getUserPreferences(partialUser.userId)
-      .then(userPrefs => {
-        let user = UserService.createUser(partialUser, householdId, userPrefs);
-        this.userService.setActiveUser(user);
+  private acceptUser(partialUser: any, householdId: number): Promise<boolean> {
+    return new Promise(resolve => {
+      let partial = partialUser.json();
+      this.userService.getUserPreferences(partial.userId)
+        .then(userPrefs => {
+          let user = UserService.createUser(partial, householdId, userPrefs);
+          this.userService.setActiveUser(user);
+          resolve(true);
+        }).catch(() => {
+        this.userService.getUser(partial.userId).then(user => {
+          this.userService.setActiveUser(user);
+          resolve(false);
+        });
       });
+    })
   }
 
-  private addNewUser(profile: any, sessionToken: string): Promise<boolean> {
+  private addNewUser(profile: any, sessionToken: string): Promise<Response> {
     let partialUser = {
       googleId: profile.getId(),
       givenName: profile.getGivenName(),

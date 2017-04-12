@@ -27,34 +27,43 @@ export class HouseholdService {
   getHousehold(householdId: number): Promise<Household> {
     return new Promise(resolve => {
       this.http.get(GlobalVariables.BASE_URL + `/households/` + householdId).toPromise().then(response => {
-        let house = new Household();
         let body = response.json();
-        house.householdId = body.householdId;
-        house.householdName = body.householdName;
-        house.ownerId = body.ownerId;
-        house.firstAddressLine = body.firstAddressLine;
-        house.secondAddressLine = body.secondAddressLine;
-        house.city = body.city;
-        house.state = body.state;
-        house.zipCode = body.zipCode;
-        house.lastUpdated = body.lastUpdated;
-        house.created = body.created;
+        let house = new Household(body);
+
         HouseholdService.activeHousehold = house;
         resolve(house);
       });
     });
   }
 
+  getAllHouseholds(): Promise<Household[]> {
+    return new Promise(resolve => {
+      this.http.get(GlobalVariables.BASE_URL + `/households`).toPromise().then(response => {
+        let houses :Household[] = [];
+        let list = response.json();
+        for(let i = 0; i< list.length; i++){
+          let currHouse = new Household(list[i]);
+          houses.push(currHouse);
+        }
+        resolve(houses);
+      })
+    })
+  }
+
   saveHousehold(formData: any): Promise<boolean> {
     return new Promise(resolve => {
-      let house = new Household();
-      house.householdId = UserService.activeUser.householdId;
-      house.householdName = formData['householdName'];
-      house.ownerId = HouseholdService.activeHousehold.ownerId;
-      house.city = formData['city'];
-      house.zipCode = formData['zipCode'];
-      house.state = formData['state'];
-      house.firstAddressLine = formData['firstAddressLine'];
+      let data = {
+        "householdId": UserService.activeUser.householdId,
+        "householdName": formData['householdName'],
+        "ownerId": HouseholdService.activeHousehold.ownerId,
+        "city": formData['city'],
+        "zipCode": formData['zipCode'],
+        "state": formData['state'],
+        "firstAddressLine": formData['firstAddressLine'],
+        "secondAddressLine": formData['secondAddressLine']
+      };
+
+      let house = new Household(data);
 
       let headers = new Headers({'Content-Type': 'application/json'});
       let options = new RequestOptions({headers: headers});

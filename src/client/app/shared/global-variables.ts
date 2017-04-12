@@ -11,6 +11,6 @@ export class GlobalVariables {
    */
   static navigationState: Subject<boolean> = new Subject<boolean>();
 
-  static BASE_URL: string = 'http://proj-339-smartsync.ece.iastate.edu:8000';
-  // static BASE_URL: string = 'localhost:8000';
+  // static BASE_URL: string = 'http://proj-339-smartsync.ece.iastate.edu:8000';
+  static BASE_URL: string = 'http://localhost:8000';
 }

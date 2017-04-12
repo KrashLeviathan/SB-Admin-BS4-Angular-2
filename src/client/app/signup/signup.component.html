@@ -21,8 +21,8 @@
             <label>Accept an Invite to a Household<br>
               <div class="btn-group-vertical buffer-top invite-list" role="group" aria-label="Select Invite">
                 <button type="button" class="btn rounded-btn"
-                        *ngFor="let invite of invites" [class.active]="invite === selectedInvite"
-                        (click)="onClickInvite(invite)">{{invite}}
+                        *ngFor="let invite of invites" [class.active]="invite.inviteId === selectedInvite"
+                        (click)="onClickInvite(invite.inviteId)">{{invite.householdName}}
                 </button>
               </div>
               <input type="hidden" name="invite" [(ngModel)]="selectedInvite">
