@@ -166,7 +166,7 @@ export class UserService {
     });
   }
 
-  getUserByGoogle(googleProfile: any, sessionToken: string): Promise<Response> {
+  getUserByGoogle(googleProfile: any, sessionToken: string): Promise<any> {
     let googleId = googleProfile.getId();
     return new Promise(resolve => {
       this.http.get(GlobalVariables.BASE_URL + `/users/google/` + googleId).toPromise().then(response => {

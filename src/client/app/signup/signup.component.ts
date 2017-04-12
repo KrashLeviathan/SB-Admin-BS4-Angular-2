@@ -86,6 +86,7 @@ export class SignupComponent {
       });
     }else if(this.joinHouseholdLater){
       //TODO later
+      //TODO I might not allow this because it will make loading the dashboard page super difficult
     }else{
       //TODO create new household.
     }
