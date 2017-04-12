@@ -55,6 +55,9 @@ export class MainViewComponent implements AfterViewInit, OnInit {
           this.serviceService.getServices()
             .then(services => {
               this.services = services;
+              for(let i = 0; i< this.services.length; i++){
+                console.log(this.services[i].name);
+              }
               this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
               setTimeout(() => this.initPackery(), 100);
             });

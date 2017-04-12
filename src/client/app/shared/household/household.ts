@@ -13,7 +13,7 @@ export class Household {
   constructor(public data: any) {
 
     this.householdId = data.householdId;
-    this.ownerId = data.ownderId;
+    this.ownerId = data.ownerId;
     this.householdName = data.householdName;
     this.firstAddressLine = data.firstAddressLine;
     this.secondAddressLine = data.secondAddressLine;

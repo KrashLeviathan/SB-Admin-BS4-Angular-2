@@ -2,6 +2,9 @@ import {Injectable} from '@angular/core';
 import {Service, ServiceType} from './service';
 import {SERVICES} from './mock-services';
 import {Http} from '@angular/http';
+import {GlobalVariables} from "../global-variables";
+import {HouseholdService} from "../household/household.service";
+import {LightComponent} from "./library/light.component";
 
 @Injectable()
 export class ServiceService {
@@ -53,7 +56,8 @@ export class ServiceService {
     //     let services: Service[] = [];
     //     //TODO instead of returning these services, will need to do http requests to each service.
     //     for(let i = 0; i< json.length; i++){
-    //       let service = new Service(LightComponent, json[0]);
+    //       let service = new Service(LightComponent ,json[0]);
+    //       console.log(service.name);
     //       services.push(service);
     //     }
     //     resolve(services);

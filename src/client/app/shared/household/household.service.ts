@@ -50,6 +50,19 @@ export class HouseholdService {
     })
   }
 
+  addHousehold(house: Household): Promise<Household>{
+
+    return new Promise(resolve => {
+      this.http.post(GlobalVariables.BASE_URL + `/households/`, JSON.stringify(house), UserService.jsonHeader()).toPromise()
+        .then(response => {
+          let data = response.json();
+          let house = new Household(data);
+          resolve(house);
+      })
+    })
+
+  }
+
   saveHousehold(formData: any): Promise<boolean> {
     return new Promise(resolve => {
       let data = {

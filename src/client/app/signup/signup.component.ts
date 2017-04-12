@@ -40,6 +40,12 @@ export class SignupComponent {
   acceptingInvite = false;
   selectedInvite: number = null;
   joinHouseholdLater: boolean = true;
+  householdFirstAddressLine = '';
+  householdSecondAddressLine = '';
+  householdCity = '';
+  householdState = '';
+  householdZip = '';
+  householdInputs = true;
 
   constructor(private router: Router, private userService: UserService, private householdService: HouseholdService) {
   }
@@ -88,7 +94,38 @@ export class SignupComponent {
       //TODO later
       //TODO I might not allow this because it will make loading the dashboard page super difficult
     }else{
-      //TODO create new household.
+      let data = {
+        'ownerId': UserService.activeUser.userId,
+        'householdName': this.householdName,
+        'firstAddressLine': this.householdFirstAddressLine,
+        'secondAddressLine': this.householdSecondAddressLine,
+        'city': this.householdCity,
+        'state': this.householdState,
+        'zipCode': this.householdZip
+      }
+      let house = new Household(data);
+      this.householdService.addHousehold(house).then(response => {
+          UserService.activeUser.householdId = response.householdId;
+
+          this.userService.giveAdminPrivileges(UserService.activeUser.userId).then(() => {
+            UserService.activeUser.role = '1';
+            UserService.activeUser.isAdmin = true;
+            let data = {
+              "displayName": this.displayName,
+              "accent": "#00ffab",
+              "neutralLight": "#969696",
+              "neutralDark": "#313131",
+              "primary": "#345cb2",
+              "secondary": "#3b5156"
+            };
+            this.userService.saveUser(data).then(result => {
+
+              this.router.navigate(['/dashboard', 'home']);
+            })
+
+          })
+        }
+      )
     }
 
   }
@@ -98,12 +135,14 @@ export class SignupComponent {
     this.selectedInvite = invite;
     this.joinHouseholdLater = false;
     this.householdName = '';
+    this.householdInputs = true;
   }
 
   onFocusHousehold(): void {
     this.selectedInvite = null;
     this.acceptingInvite = false;
     this.joinHouseholdLater = false;
+    this.householdInputs = false;
   }
 
   onClickJoinLater(): void {
