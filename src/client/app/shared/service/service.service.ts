@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Service, ServiceType} from './service';
+import {ALL_SERVICE_TYPES, Service, ServiceType} from './service';
 import {SERVICES} from './mock-services';
 import {Http} from '@angular/http';
 import {GlobalVariables} from "../global-variables";
@@ -41,28 +41,40 @@ export class ServiceService {
    * @returns {Promise<Service[]>}
    */
   getServices(): Promise<Service[]> {
-    return new Promise(resolve => {
-      // Simulate latency
-      setTimeout(() => {
-        resolve(SERVICES);
-      }, 250);
-    });
+    // return new Promise(resolve => {
+    //   // Simulate latency
+    //   setTimeout(() => {
+    //     resolve(SERVICES);
+    //   }, 250);
+    // });
 
     // TODO: Fix after demo
-    // return new Promise(resolve => {
-    //   this.http.get(GlobalVariables.BASE_URL + `/households/`+ HouseholdService.activeHousehold.householdId
-    // +`/services`).toPromise().then(response => {
-    //     let json = response.json();
-    //     let services: Service[] = [];
-    //     //TODO instead of returning these services, will need to do http requests to each service.
-    //     for(let i = 0; i< json.length; i++){
-    //       let service = new Service(LightComponent ,json[0]);
-    //       console.log(service.name);
-    //       services.push(service);
-    //     }
-    //     resolve(services);
-    //   });
-    // });
+    return new Promise(resolve => {
+      this.http.get(GlobalVariables.BASE_URL + `/households/`+ HouseholdService.activeHousehold.householdId
+    +`/services`).toPromise().then(response => {
+        let json = response.json();
+        let services: any[] = [];
+        //TODO instead of returning these services, will need to do http requests to each service.
+        for(let i = 0; i< json.length; i++){
+          // let service = new Service(LightComponent ,json[0]);
+          let service = {
+            serviceId: 1,
+            name: 'OttoLights',
+            description: 'The lights in Otto\'s bedroom',
+            serviceType: ALL_SERVICE_TYPES[0],
+            component: LightComponent,
+            status: 'up',
+            wide: false,
+            tall: false,
+            data: {turnedOn: false}
+          }
+          services.push(service);
+        }
+        // console.log(SERVICES);
+        // console.log(services);
+        resolve(SERVICES);
+      });
+    });
   }
 
   /**

@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../user/user.service';
+import {Cookie} from "ng2-cookies/ng2-cookies";
 
 @Component({
   moduleId: module.id,

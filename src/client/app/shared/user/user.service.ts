@@ -97,7 +97,7 @@ export class UserService {
    * @param user
    */
   setActiveUser(user: User): void{
-    Cookie.set('userId', user.userId.toString());
+    localStorage.setItem('userId', user.userId.toString());
     UserService.activeUser = user;
   }
 
@@ -123,7 +123,7 @@ export class UserService {
       if (UserService.activeUser) {
         resolve(UserService.activeUser);
       } else {
-        this.getUser(parseInt(Cookie.get('userId'))).then(result => {
+        this.getUser(parseInt(localStorage.getItem('userId'))).then(result => {
           this.setActiveUser(result);
           resolve(result);
         });
