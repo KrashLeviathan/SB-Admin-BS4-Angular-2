@@ -34,6 +34,7 @@ export class LoginComponent implements AfterViewInit {
       .then((success) => {
         if (success) {
           this.router.navigate(['/dashboard', 'home']);
+          localStorage.setItem('isRefreshed', "false");
         } else {
           this.router.navigate(['/signup']);
         }

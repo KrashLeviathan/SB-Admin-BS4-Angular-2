@@ -46,6 +46,12 @@ export class MainViewComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+    if(localStorage.getItem('isRefreshed') == 'false'){
+      localStorage.setItem('isRefreshed', 'true');
+      window.location.reload();
+    }
+    //TODO go through each ngOnInit and check if the session ID is valid.
+    //TODO Add the session id to each http header.
     this.editModeActive = (this.route.data as any).value.editModeActive === true;
     this.userService.getActiveUser()
       .then(user => {
@@ -57,14 +63,15 @@ export class MainViewComponent implements AfterViewInit, OnInit {
               this.services = services;
               console.log(this.services);
               this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
-              setTimeout(() => this.initPackery(), 100);
+              setTimeout(() => this.initPackery(), 1000);
+
             });
         });
       });
   }
 
   ngAfterViewInit() {
-    // TODO
+    //TODO
   }
 
   initPackery(): any {
@@ -72,12 +79,16 @@ export class MainViewComponent implements AfterViewInit, OnInit {
     // be done together.
     this.userService.getUserDragPositions(UserService.activeUser.userId)
       .then(initPositions => {
+        console.log("Got drag positions");
         //TODO getUserPreferences will need to return colors and dragPositions.
         if (this.grid.children.length !== 0) {
+          console.log("grid has children");
           this.packery = new Packery(this.grid, PACKERY_OPTIONS);
           // init layout with saved positions
+          console.log("init shift layout");
           this.packery.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
           let thisObj = this;
+          console.log("Getting packery elements");
           this.packery.getItemElements().forEach(function (itemElem: any) {
             let draggie = new Draggabilly(itemElem);
             thisObj.packery.bindDraggabillyEvents(draggie);
@@ -87,7 +98,10 @@ export class MainViewComponent implements AfterViewInit, OnInit {
             // The elements remain invisible until they're finished initializing.
             thisObj.finishedInitializing = true;
           });
+          console.log("Navigation Complete");
           this.navigationComplete();
+        }else{
+          console.log("this.grid has no children");
         }
       });
   }

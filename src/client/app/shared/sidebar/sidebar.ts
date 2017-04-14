@@ -38,7 +38,8 @@ export class SidebarComponent implements OnInit {
     UserService.activeUser = null;
     HouseholdService.activeHousehold = null;
     Cookie.delete('sessionToken');
-    Cookie.delete('userId');
+    localStorage.removeItem('userId');
     window.location.href = "https://accounts.google.com/logout";
   }
+
 }

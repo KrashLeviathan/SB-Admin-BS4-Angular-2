@@ -5,6 +5,7 @@ import {Http} from '@angular/http';
 import {GlobalVariables} from "../global-variables";
 import {HouseholdService} from "../household/household.service";
 import {LightComponent} from "./library/light.component";
+import {Glob} from "micromatch";
 
 @Injectable()
 export class ServiceService {
@@ -41,38 +42,36 @@ export class ServiceService {
    * @returns {Promise<Service[]>}
    */
   getServices(): Promise<Service[]> {
-    // return new Promise(resolve => {
-    //   // Simulate latency
-    //   setTimeout(() => {
-    //     resolve(SERVICES);
-    //   }, 250);
-    // });
 
     // TODO: Fix after demo
     return new Promise(resolve => {
       this.http.get(GlobalVariables.BASE_URL + `/households/`+ HouseholdService.activeHousehold.householdId
     +`/services`).toPromise().then(response => {
+
         let json = response.json();
-        let services: any[] = [];
+        let services: Service[] = [];
         //TODO instead of returning these services, will need to do http requests to each service.
         for(let i = 0; i< json.length; i++){
-          // let service = new Service(LightComponent ,json[0]);
-          let service = {
-            serviceId: 1,
-            name: 'OttoLights',
-            description: 'The lights in Otto\'s bedroom',
-            serviceType: ALL_SERVICE_TYPES[0],
-            component: LightComponent,
-            status: 'up',
-            wide: false,
-            tall: false,
-            data: {turnedOn: false}
-          }
-          services.push(service);
+          this.http.get(GlobalVariables.BASE_URL + `/services/` + json[i].serviceId + `/types/`).toPromise()
+            .then(serviceType => {
+              let type = serviceType.json();
+              let data = {
+                serviceId: json[i].serviceId,
+                  name: json[i].name,
+                description: json[i].description,
+                serviceType: type.serviceTypeId,
+                component: ALL_SERVICE_TYPES[type.serviceTypeId].component,
+                status: json[i].status,
+                wide: false,
+                tall: false,
+                data: {turnedOn: false}
+              };
+              let service = new Service(ALL_SERVICE_TYPES[type.serviceTypeId].component, data);
+              services.push(service);
+            });
         }
-        // console.log(SERVICES);
-        // console.log(services);
-        resolve(SERVICES);
+        console.log(services);
+        resolve(services);
       });
     });
   }

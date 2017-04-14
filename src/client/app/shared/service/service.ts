@@ -20,7 +20,7 @@ export class Service {
     this.serviceId = data.serviceId;
     this.name = data.name;
     this.description = data.description;
-    this.status = data.status;
+    this.status = data.isActive;
     this.wide = data.wide;
     this.tall = data.tall;
   }
@@ -33,7 +33,7 @@ export interface ServiceComponent {
 }
 
 export class ServiceType {
-  serviceTypeId: string;
+  serviceTypeId: number;
   name: string;
   description: string;
   component: Type<any>;
@@ -41,20 +41,20 @@ export class ServiceType {
 
 export const ALL_SERVICE_TYPES: ServiceType[] = [
   {
-    serviceTypeId: 'dimmable_a19_e26_rgb_led_bulb',
+    serviceTypeId: 0,
     name: 'Dimmable RGB LED Bulb',
     description: 'Dimmable A19 E26 RGB LED Bulb, Color Changing, 160 degree Beam Angle, ' +
     '5W, 16 Color Choice, Remote Controller Included, LED Light Bulb',
     component: LightComponent
   },
   {
-    serviceTypeId: 'wunderground_api',
+    serviceTypeId: 1,
     name: 'Weather Underground',
     description: 'A weather service for reporting weather forecasts.',
     component: WundergroundComponent
   },
   {
-    serviceTypeId: 'todo_list',
+    serviceTypeId: 2,
     name: 'TODO List',
     description: 'Keeps track of things you need to do in a list. Items can be checked ' +
     'off when completed.',

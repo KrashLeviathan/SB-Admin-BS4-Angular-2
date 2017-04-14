@@ -49,9 +49,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="clickable" *ngFor="let service of services" (click)="completeAddService(service)">
+            <tr class="clickable" *ngFor="let service of services" (click)="completeAddService(service)" >
               <td>{{service.name}}</td>
-              <td class="text-center">{{service.serviceType.name}}</td>
+              <td *ngIf='last' class="text-center">{{service.serviceType.name}}</td>
             </tr>
             </tbody>
           </table>
