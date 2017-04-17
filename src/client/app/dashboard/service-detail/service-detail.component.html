@@ -15,8 +15,8 @@
           <p><span class="font-weight-bold">Description:&nbsp;&nbsp;</span>{{service.description}}</p>
           <p><span class="font-weight-bold">Type:&nbsp;&nbsp;</span>{{service.serviceType.name}}</p>
           <p><span class="font-weight-bold">Status:&nbsp;&nbsp;</span>
-            <i class="fa fa-lg fa-arrow-up text-success" [hidden]="service.status !== 'up'"></i>
-            <i class="fa fa-lg fa-arrow-down text-danger" [hidden]="service.status !=='down'"></i>
+            <i class="fa fa-lg fa-arrow-up text-success" [hidden]="service.status != 1"></i>
+            <i class="fa fa-lg fa-arrow-down text-danger" [hidden]="service.status != 0"></i>
             <i class="fa fa-lg fa-question" [hidden]="service.status !== 'unknown'"></i></p>
         </div>
       </div>

@@ -22,7 +22,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let service of services">
+          <tr *ngFor="let service of householdServices">
             <td class="clickable text-primary" [routerLink]="['../','service',service.serviceId]"
                 [routerLinkActive]="['router-link-active']">{{service.name}}
             </td>
@@ -30,10 +30,10 @@
             <td class="text-center">{{service.serviceType.name}}</td>
             <td class="text-center"><i class="fa fa-lg"
                                        [ngClass]="{
-                   'text-success': service.status === 'up',
-                   'fa-arrow-up': service.status === 'up',
-                   'text-danger': service.status === 'down',
-                   'fa-arrow-down': service.status === 'down',
+                   'text-success': service.status == 1,
+                   'fa-arrow-up': service.status == 1,
+                   'text-danger': service.status == 0,
+                   'fa-arrow-down': service.status == 0,
                    'fa-question': service.status === 'unknown'
                    }"></i></td>
             <td class="text-center">

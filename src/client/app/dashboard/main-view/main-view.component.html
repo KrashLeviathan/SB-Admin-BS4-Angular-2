@@ -19,7 +19,7 @@
   <div class="row">
     <div class="col-lg-12">
       <div id="dashboard-grid" class="grid">
-        <service-component *ngFor="let service of services"
+        <service-component *ngFor="let service of householdServices"
                            [attr.data-item-id]="service.serviceId" [service]="service"
                            class="grid-item" [ngClass]="{'is-editable': editModeActive, 'invisible': !finishedInitializing,
                      'grid-item--width2': service.wide, 'grid-item--height2': service.tall}"></service-component>
@@ -49,9 +49,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="clickable" *ngFor="let service of services" (click)="completeAddService(service)" >
+            <tr class="clickable" *ngFor="let service of householdServices" (click)="completeAddService(service)" >
               <td>{{service.name}}</td>
-              <td *ngIf='last' class="text-center">{{service.serviceType.name}}</td>
+              <td class="text-center">{{service.serviceType.name}}</td>
             </tr>
             </tbody>
           </table>

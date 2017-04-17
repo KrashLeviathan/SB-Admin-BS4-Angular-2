@@ -37,6 +37,7 @@ export class MainViewComponent implements AfterViewInit, OnInit {
   isAddingService: boolean = false;
 
   services: Service[];
+  householdServices: Service[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -58,16 +59,19 @@ export class MainViewComponent implements AfterViewInit, OnInit {
         this.householdService.getActiveHousehold().then(response => {
           // TODO: Run check to see if user owns this DashboardView (user.userId == dbview.owner)
           this.userOwnsView = true; // FIXME
-          this.serviceService.getServices()
+          this.serviceService.getServicesInHousehold()
             .then(services => {
-              this.services = services;
-              console.log(this.services);
+              this.householdServices = services;
               this.grid = <HTMLDivElement>document.querySelector('#dashboard-grid');
               setTimeout(() => this.initPackery(), 1000);
 
             });
         });
       });
+
+    this.serviceService.getServices().then(response => {
+      this.services = response;
+    })
   }
 
   ngAfterViewInit() {
@@ -85,8 +89,8 @@ export class MainViewComponent implements AfterViewInit, OnInit {
           console.log("grid has children");
           this.packery = new Packery(this.grid, PACKERY_OPTIONS);
           // init layout with saved positions
-          console.log("init shift layout");
-          this.packery.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
+          // console.log("init shift layout");
+          // this.packery.initShiftLayout(initPositions, DATA_ITEM_ATTRIBUTE);
           let thisObj = this;
           console.log("Getting packery elements");
           this.packery.getItemElements().forEach(function (itemElem: any) {
@@ -138,6 +142,11 @@ export class MainViewComponent implements AfterViewInit, OnInit {
     this.isAddingService = false;
     // TODO: Add service to this dashboard view at any position
     console.log('Adding service to dashboard...');
+    this.serviceService.addServiceToHousehold(service.serviceId).then(
+      services => {
+        this.householdServices = services;
+      }
+    )
     // if (success) {
     //   PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.serviceToDelete.name + '\' service ' +
     //     'was successfully deleted.');

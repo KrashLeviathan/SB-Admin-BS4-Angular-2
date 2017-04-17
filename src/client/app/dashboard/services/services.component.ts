@@ -14,6 +14,7 @@ import {HouseholdService} from '../../shared/household/household.service';
 
 export class ServicesComponent implements OnInit {
   services: Service[];
+  householdServices: Service[];
   userIsAdmin: boolean = false;
   activeUserId: number;
 
@@ -32,8 +33,13 @@ export class ServicesComponent implements OnInit {
     this.serviceService.getServices()
       .then(services => {
         this.services = services;
-        this.navigationComplete();
+        this.serviceService.getServicesInHousehold()
+          .then(householdServices => {
+            this.householdServices = householdServices;
+            this.navigationComplete();
+          })
       });
+
   }
 
   ngOnInit(): void {
@@ -42,6 +48,7 @@ export class ServicesComponent implements OnInit {
         this.userIsAdmin = user.isAdmin;
         this.activeUserId = user.userId;
         this.getServices(user.userId);
+
       });
     });
   }
@@ -52,18 +59,21 @@ export class ServicesComponent implements OnInit {
     }
     this.savingState = true;
     this.isConfirmingDelete = false;
-    this.serviceService.deleteService(this.activeUserId, this.serviceToDelete.serviceId)
+    this.serviceService.removeServiceFromHousehold(HouseholdService.activeHousehold.householdId, this.serviceToDelete.serviceId)
       .then(success => {
-        this.savingState = false;
-        if (success) {
-          PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.serviceToDelete.name + '\' service ' +
-            'was successfully deleted.');
-        } else {
-          PopoverControllerComponent.createAlert(AlertType.DANGER,
-            '\'' + this.serviceToDelete.name + '\' could not be deleted.');
-        }
-        // Call cancelDelete to reset serviceToDelete
-        this.cancelDelete();
+        this.serviceService.getServicesInHousehold().then(services => {
+          this.householdServices = services;
+          this.savingState = false;
+          if (success) {
+            PopoverControllerComponent.createAlert(AlertType.SUCCESS, '\'' + this.serviceToDelete.name + '\' service ' +
+              'was successfully deleted.');
+          } else {
+            PopoverControllerComponent.createAlert(AlertType.DANGER,
+              '\'' + this.serviceToDelete.name + '\' could not be deleted.');
+          }
+          // Call cancelDelete to reset serviceToDelete
+          this.cancelDelete();
+        })
       });
   }
 

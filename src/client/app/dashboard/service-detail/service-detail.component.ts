@@ -37,9 +37,11 @@ export class ServiceDetailComponent implements OnInit {
             .switchMap((params: Params) => this.serviceService.getService(user.userId, +params['id']))
             .subscribe(service => {
               if (service) {
+                console.log(service);
                 this.service = service;
                 this.navigationComplete();
               } else {
+                console.log(service);
                 console.log('Bad route: ' + this.router.url);
                 this.router.navigate(['dashboard/', 'services']);
               }
