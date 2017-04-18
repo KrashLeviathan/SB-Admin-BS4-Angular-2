@@ -34,8 +34,8 @@ export class ServiceService {
                 serviceId: serviceId,
                 name: json.name,
                 description: json.description,
-                serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId],
-                component: ALL_SERVICE_TYPES[curr.serviceTypeId].component,
+                serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId -1],
+                component: ALL_SERVICE_TYPES[curr.serviceTypeId -1].component,
                 status: curr.isActive,
                 wide: false,
                 tall: false,
@@ -76,8 +76,8 @@ export class ServiceService {
               serviceId: json[i].serviceId,
               name: json[i].name,
               description: json[i].description,
-              serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId],
-              component: ALL_SERVICE_TYPES[curr.serviceTypeId].component,
+              serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId -1],
+              component: ALL_SERVICE_TYPES[curr.serviceTypeId -1].component,
               status: curr.isActive,
               wide: false,
               tall: false,
@@ -119,8 +119,8 @@ export class ServiceService {
               serviceId: json[i].serviceId,
               name: json[i].name,
               description: json[i].description,
-              serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId],
-              component: ALL_SERVICE_TYPES[curr.serviceTypeId].component,
+              serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId-1],
+              component: ALL_SERVICE_TYPES[curr.serviceTypeId-1].component,
               status: curr.isActive,
               wide: false,
               tall: false,
@@ -138,7 +138,6 @@ export class ServiceService {
   }
 
   addServiceToHousehold(serviceId: number): Promise<Service[]>{
-
     return new Promise(resolve => {
       let body = {
         householdId: HouseholdService.activeHousehold.householdId,
@@ -153,18 +152,32 @@ export class ServiceService {
     })
   }
 
-  // /**
-  //  * Sends a request to the server to create a new service of type serviceType.
-  //  * The server should respond with the serviceId, which then resolves the Promise.
-  //  * Returns a -1 if there was an error and the server could not create the service.
-  //  * @param serviceType
-  //  * @returns {Promise<number>}
-  //  */
-  // createNewService(householdId: number, serviceType: ServiceType): Promise<number> {
-  //   return new Promise(resolve => {
-  //
-  //   });
-  // }
+  /**
+   * Sends a request to the server to create a new service of type serviceType.
+   * The server should respond with the serviceId, which then resolves the Promise.
+   * Returns a -1 if there was an error and the server could not create the service.
+   * @param serviceType
+   * @returns {Promise<number>}
+   */
+  createNewService(serviceType: ServiceType): Promise<number> {
+    return new Promise(resolve => {
+      let body = {
+        "name": "My New Service",
+        "serviceTypeId": serviceType.serviceTypeId,
+        "description": "Description",
+        "isActive": 1,
+        "wide": 0,
+        "tall": 0
+      }
+      this.http.post(GlobalVariables.BASE_URL + `/services/`, JSON.stringify(body), UserService.jsonHeader()).toPromise()
+        .then(response => {
+          let service = response.json();
+          this.addServiceToHousehold(service.serviceId).then(() => {
+            resolve(service.serviceId);
+          })
+        })
+    });
+  }
 
   removeServiceFromHousehold(householdId: number, serviceId: number): Promise<boolean> {
     return new Promise(resolve => {

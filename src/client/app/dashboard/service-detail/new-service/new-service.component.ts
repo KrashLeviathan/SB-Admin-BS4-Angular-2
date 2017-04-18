@@ -5,6 +5,7 @@ import {Location} from '@angular/common';
 import {ServiceService} from '../../../shared/service/service.service';
 import {UserService} from '../../../shared/user/user.service';
 import {GlobalVariables} from '../../../shared/global-variables';
+import {HouseholdService} from "../../../shared/household/household.service";
 
 @Component({
   moduleId: module.id,
@@ -23,16 +24,19 @@ export class NewServiceComponent implements OnInit {
   constructor(private serviceService: ServiceService,
               private router: Router,
               private location: Location,
-              private userService: UserService) {
+              private userService: UserService,
+              private householdService: HouseholdService) {
   }
 
   ngOnInit(): void {
     this.userService.getActiveUser().then(user => {
-      this.userIsAdmin = user.isAdmin;
-      this.activeUserId = user.userId;
-      // Confirm they're not an admin before showing them the "not authorized" message
-      this.confirmedNotAdmin = !user.isAdmin;
-      this.navigationComplete();
+      this.householdService.getActiveHousehold().then(house => {
+        this.userIsAdmin = user.isAdmin;
+        this.activeUserId = user.userId;
+        // Confirm they're not an admin before showing them the "not authorized" message
+        this.confirmedNotAdmin = !user.isAdmin;
+        this.navigationComplete();
+      })
     });
   }
 
@@ -46,7 +50,7 @@ export class NewServiceComponent implements OnInit {
       return;
     }
     this.canContinue = true;
-    this.serviceService.createNewService(this.activeUserId, this.serviceType)
+    this.serviceService.createNewService(this.serviceType)
       .then(serviceId => {
         if (serviceId === -1) {
           // TODO: On Error

@@ -41,20 +41,20 @@ export class ServiceType {
 
 export const ALL_SERVICE_TYPES: ServiceType[] = [
   {
-    serviceTypeId: 0,
+    serviceTypeId: 1,
     name: 'Dimmable RGB LED Bulb',
     description: 'Dimmable A19 E26 RGB LED Bulb, Color Changing, 160 degree Beam Angle, ' +
     '5W, 16 Color Choice, Remote Controller Included, LED Light Bulb',
     component: LightComponent
   },
   {
-    serviceTypeId: 1,
+    serviceTypeId: 2,
     name: 'Weather Underground',
     description: 'A weather service for reporting weather forecasts.',
     component: WundergroundComponent
   },
   {
-    serviceTypeId: 2,
+    serviceTypeId: 3,
     name: 'TODO List',
     description: 'Keeps track of things you need to do in a list. Items can be checked ' +
     'off when completed.',
