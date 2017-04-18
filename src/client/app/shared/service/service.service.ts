@@ -26,9 +26,8 @@ export class ServiceService {
     return new Promise(resolve => {
       this.http.get(GlobalVariables.BASE_URL + `/services/` + serviceId).toPromise().then(response => {
         let json = response.json();
-
-        this.http.get(GlobalVariables.BASE_URL + `/services/` + serviceId + `/types/`).toPromise()
-          .then(response => {
+          this.http.get(GlobalVariables.BASE_URL + `/services/` + serviceId + `/types/`).toPromise()
+            .then(response => {
               let curr = response.json();
               let data = {
                 serviceId: serviceId,
@@ -41,9 +40,8 @@ export class ServiceService {
                 tall: false,
                 data: {turnedOn: false}
               };
-            resolve(data);
-          });
-
+              resolve(data);
+            });
 
       });
     });
@@ -64,32 +62,35 @@ export class ServiceService {
 
         let json = response.json();
         let promisesArray:Array<any> = [];
-        //TODO instead of returning these services, will need to do http requests to each service.
-        for(let i = 0; i< json.length; i++){
-          promisesArray.push(this.http.get(GlobalVariables.BASE_URL + `/services/` + json[i].serviceId + `/types/`).toPromise());
-        }
-
-        Promise.all(promisesArray).then(response => {
-          for(let i = 0; i<response.length; i++){
-            let curr = response[i].json();
-            let data = {
-              serviceId: json[i].serviceId,
-              name: json[i].name,
-              description: json[i].description,
-              serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId -1],
-              component: ALL_SERVICE_TYPES[curr.serviceTypeId -1].component,
-              status: curr.isActive,
-              wide: false,
-              tall: false,
-              data: {turnedOn: false}
-            };
-            services.push(data);
+        if(json.length > 0){
+          //TODO instead of returning these services, will need to do http requests to each service.
+          for(let i = 0; i< json.length; i++){
+            promisesArray.push(this.http.get(GlobalVariables.BASE_URL + `/services/` + json[i].serviceId + `/types/`).toPromise());
           }
-          console.log(services);
+
+          Promise.all(promisesArray).then(response => {
+            for(let i = 0; i<response.length; i++){
+              let curr = response[i].json();
+              let data = {
+                serviceId: json[i].serviceId,
+                name: json[i].name,
+                description: json[i].description,
+                serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId -1],
+                component: ALL_SERVICE_TYPES[curr.serviceTypeId -1].component,
+                status: curr.isActive,
+                wide: false,
+                tall: false,
+                data: {turnedOn: false}
+              };
+              services.push(data);
+            }
+            console.log(services);
+            resolve(services);
+          });
+        }else{
+          console.log("Get services in Household: no services");
           resolve(services);
-        });
-
-
+        }
       });
     });
   }
@@ -108,30 +109,34 @@ export class ServiceService {
 
         let json = response.json();
         let promisesArray:Array<any> = [];
-        for(let i = 0; i< json.length; i++){
-          promisesArray.push(this.http.get(GlobalVariables.BASE_URL + `/services/` + json[i].serviceId + `/types/`).toPromise());
-        }
-
-        Promise.all(promisesArray).then(response => {
-          for(let i = 0; i<response.length; i++){
-            let curr = response[i].json();
-            let data = {
-              serviceId: json[i].serviceId,
-              name: json[i].name,
-              description: json[i].description,
-              serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId-1],
-              component: ALL_SERVICE_TYPES[curr.serviceTypeId-1].component,
-              status: curr.isActive,
-              wide: false,
-              tall: false,
-              data: {turnedOn: false}
-            };
-            services.push(data);
+        if(json.length > 0){
+          for(let i = 0; i< json.length; i++){
+            promisesArray.push(this.http.get(GlobalVariables.BASE_URL + `/services/` + json[i].serviceId + `/types/`).toPromise());
           }
-          console.log(services);
-          resolve(services);
-        });
 
+          Promise.all(promisesArray).then(response => {
+            for(let i = 0; i<response.length; i++){
+              let curr = response[i].json();
+              let data = {
+                serviceId: json[i].serviceId,
+                name: json[i].name,
+                description: json[i].description,
+                serviceType: ALL_SERVICE_TYPES[curr.serviceTypeId-1],
+                component: ALL_SERVICE_TYPES[curr.serviceTypeId-1].component,
+                status: curr.isActive,
+                wide: false,
+                tall: false,
+                data: {turnedOn: false}
+              };
+              services.push(data);
+            }
+            console.log(services);
+            resolve(services);
+          });
+        }else{
+          console.log("Get services: No services");
+          resolve(services);
+        }
 
       });
     });
